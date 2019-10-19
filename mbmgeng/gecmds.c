@@ -4493,8 +4493,8 @@ void FUNC ansifunc(int func) {
 }
 
 void FUNC cmd_data() {
+int i, j;
 
-    int i, j;
     if (margc != 3) {
         prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
         return;
@@ -4507,7 +4507,10 @@ void FUNC cmd_data() {
         };
     };
 
-    if (sameas(margv[2], "report")) {
+    if (
+        sameas(margv[2], "r") ||
+        sameas(margv[2], "report")
+    ) {
         prf("UD1:%s,%d,%d,%d,%d*\r",
             waruptr->userid,
             waruptr->noships,
@@ -4582,15 +4585,21 @@ void FUNC cmd_data() {
             warsptr->status); outprfge(ALWAYS, usrnum);
         return;
     }
-    if (sameas(margv[2], "scan")) {
+    if (
+        sameas(margv[2], "s") ||
+        sameas(margv[2], "scan")
+    ) {
         scan_data1();
         return;
     }
-    if (sameas(margv[2], "sector")) {
+    if (
+        sameas(margv[2], "p") ||
+        sameas(margv[2], "sector")
+    ) {
         scan_data2();
         return;
     }
-    if (sameas(margv[2], "A")) {
+    if (sameas(margv[2], "a")) {
         api_ships();
         return;
     }

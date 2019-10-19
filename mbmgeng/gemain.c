@@ -535,7 +535,7 @@ int class_tab[50];
 
     }
 
-/* load the shieldprice table */
+    /* load the shield price table */
     for (i = 0; i < TOPSHIELD; ++i) {
         logthis(spr("shieldtype %d", i));
 
@@ -543,7 +543,7 @@ int class_tab[50];
         logthis(spr("Shld #%d Price=%ld", i, shieldprice[i]));
     }
 
-/* load the phaserprice table */
+    /* load the phaser price table */
     for (i = 0; i < TOPPHASOR; ++i) {
         logthis(spr("phasertype %d", i));
 
@@ -2496,8 +2496,7 @@ clrprf();
 **************************************************************************/
 
 
-int FUNC
-ingegame(shpno)
+int FUNC ingegame(shpno)
 int shpno;
 {
 
