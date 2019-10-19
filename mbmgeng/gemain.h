@@ -450,7 +450,7 @@ extern GALPLNT {                /* star system data record */
     char filler[512 - 182 - (UIDSIZ * 2) - (sizeof(ITEM) * NUMITEMS)];
 };
 
-/* wormhole
+/* wormhole */
 #define GALWORM struct galworm
 extern GALWORM {                /* star system data record */
     int xsect;                                  /* sector x coord */

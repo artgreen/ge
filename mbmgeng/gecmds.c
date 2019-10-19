@@ -4501,13 +4501,10 @@ void FUNC cmd_data() {
     };
 
     if (!sameas(margv[1], "a")) {
-        prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
-        return;
-    };
-
-    if (!sameas(margv[1], "qazwsx")) {
-        prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
-        return;
+        if (!sameas(margv[1], "qazwsx")) {
+            prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
+            return;
+        };
     };
 
     if (sameas(margv[2], "report")) {
