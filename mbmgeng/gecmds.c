@@ -2140,8 +2140,7 @@ outprfge(ALWAYS,usrnum);
 }
 #endif
 
-
-/* alternate idea: read off the ship letter & ship no to a seperate table.
+/* alternate idea: read off the ship letter & ship no to a separate table.
    then zero out ship no as before */
 
 void FUNC update_scantab(WARSHP *ptr, int usrn) {
@@ -2158,7 +2157,7 @@ for (i=0;i<300;++i)
 
     setmem(&lettab[0], sizeof(char) * 300, 0);
 
-/* save off the old letters */
+    /* save off the old letters */
     for (i = 0; i < NOSCANTAB; ++i) {
         j = scantab[usrn].ship[i].shipno;
         if (j >= 0 && j < 300) {
@@ -4501,11 +4500,15 @@ void FUNC cmd_data() {
         return;
     };
 
-    if (!sameas(margv[1], "qazwsx")) {
+    if (!sameas(margv[1], "a")) {
         prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
         return;
     };
 
+    if (!sameas(margv[1], "qazwsx")) {
+        prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
+        return;
+    };
 
     if (sameas(margv[2], "report")) {
         prf("UD1:%s,%d,%d,%d,%d*\r",
