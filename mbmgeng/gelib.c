@@ -11,39 +11,36 @@
  *                                                                         *
  ***************************************************************************/
 
- /**************************************************************************
-  * This program is free software; you can redistribute it and/or modify   *
-  * under the terms of the GNU General Public License as published by the  *
-  * Free Software Foundation; either version 2 of the License, or (at your *
-  * option) any later version.                                             *
-  *                                                                        *
-  * This program is distributed in the hope that it will be useful,        *
-  * but WITHOUT ANY WARRANTY; without even the implied warranty of         *
-  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU       *
-  * General Public License for more details.                               *
-  *                                                                        *
-  * You should have received a copy of the GNU General Public License      *
-  * along with this program; if not, write to the Free Software Foundation,*
-  * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA            *
-  *************************************************************************/
+/**************************************************************************
+ * This program is free software; you can redistribute it and/or modify   *
+ * under the terms of the GNU General Public License as published by the  *
+ * Free Software Foundation; either version 2 of the License, or (at your *
+ * option) any later version.                                             *
+ *                                                                        *
+ * This program is distributed in the hope that it will be useful,        *
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of         *
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU       *
+ * General Public License for more details.                               *
+ *                                                                        *
+ * You should have received a copy of the GNU General Public License      *
+ * along with this program; if not, write to the Free Software Foundation,*
+ * Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA            *
+ *************************************************************************/
 
- /**************************************************************************
- * Authors Note: The source code to this program is being made available   *
- *               to the general public in the hopes that it will continue  *
- *               to live on and evolve. While I cannot provide the time    *
- *               to personally participate in its development any longer,  *
- *               I am eager to assist in the design discussions, testing   *
- *               and project discussions.                                  *
- *                                                                         *
- *               To foster a community for Galactic Empire developers I    *
- *               have created a project home page at...                    *
- *               http://mbbs.sitesage.net                                  *
- *                                                                         *
- *               I may be contacted via email at mmurdock@starphire.com    *
- ***************************************************************************/
- 
-/* NOTE: I like my tabs at 3 so if the code looks "messed up" try changing */
-/*       your tabs to 3....    MBM                                         */
+/**************************************************************************
+* Authors Note: The source code to this program is being made available   *
+*               to the general public in the hopes that it will continue  *
+*               to live on and evolve. While I cannot provide the time    *
+*               to personally participate in its development any longer,  *
+*               I am eager to assist in the design discussions, testing   *
+*               and project discussions.                                  *
+*                                                                         *
+*               To foster a community for Galactic Empire developers I    *
+*               have created a project home page at...                    *
+*               http://mbbs.sitesage.net                                  *
+*                                                                         *
+*               I may be contacted via email at mmurdock@starphire.com    *
+***************************************************************************/
 
 #ifdef PHARLAP
 #include "gcomm.h"
@@ -68,233 +65,195 @@
 /**************************************************************************
 ** Verify system
 **************************************************************************/
-void c4angle()
-
-{
-
+void c4angle() {
 extern BTVFILE *accbb;
-char  nm1[7] = {"XGrlep"};
-char  nm2[UIDSIZ];      /*BJ CHANGED TO REFLECT UIDSIZ */
+char nm1[7] = {"XGrlep"};
+char nm2[UIDSIZ];      /*BJ CHANGED TO REFLECT UIDSIZ */
 static int hap;
 
-if (hap != 1)
-	{
-	setbtv(accbb);
-	strncpy(nm2,"abcerr",UIDSIZ);
-	nm2[0] = nm1[1];
-	nm2[1] = nm1[3];
-	nm2[2] = nm1[5];
-	if (qeqbtv(nm2,0))
-		catastro("GE SYSTEM FAULT");
-	else
-		hap = 1;
-	}
+    if(hap != 1) {
+        setbtv(accbb);
+        strncpy(nm2, "abcerr", UIDSIZ);
+        nm2[0] = nm1[1];
+        nm2[1] = nm1[3];
+        nm2[2] = nm1[5];
+        if(qeqbtv(nm2, 0))
+            catastro("GE SYSTEM FAULT");
+        else
+            hap = 1;
+    }
 }
 
 /**************************************************************************
 ** Determine the smallest of two complementary angles                    **
 **************************************************************************/
-
-unsigned smallest(unsigned a1, unsigned a2)
-{
+unsigned smallest(unsigned a1, unsigned a2) {
 int a;
 
-a = abs(a1-a2);
-
-if (a > 180)
-	return (360 - a);
-else
-	return (a);
+    a = abs(a1 - a2);
+    if(a > 180)
+        return (360 - a);
+    else
+        return (a);
 }
-
 
 /**************************************************************************
 ** Generate a random number                                              **
 **************************************************************************/
-double rndm(double mod)
-{
+double rndm(double mod) {
+static randmax = (double) RAND_MAX;
 
-static randmax = (double)RAND_MAX;
-
-return(mod*(((double)((unsigned)rand()))/randmax));
+    return (mod * (((double) ((unsigned) rand())) / randmax));
 }
 
-
-unsigned int gernd()
-
-{
-return(rand());
+unsigned int gernd() {
+    return (rand());
 }
 
 /**************************************************************************
 ** Calculate ship bearing between two objects                            **
 **************************************************************************/
 
-double  cbearing(COORD *ptr1, COORD *ptr2, double heading)
-{
-double   vector(), absol(), normal();
-double   b;
+double cbearing(COORD *ptr1, COORD *ptr2, double heading) {
+    double vector(), absol(), normal();
+    double b;
 
-	ptr1->xcoord += .000001;
-	ptr1->ycoord += .000001;
+    ptr1->xcoord += .000001;
+    ptr1->ycoord += .000001;
 
-	b =  vector(ptr1,ptr2);
+    b = vector(ptr1, ptr2);
 /*	sprintf(gechrbuf,"vector = %f",b);
 	logthis(gechrbuf);*/
 
-	b =  normal(360 - heading + b);
+    b = normal(360 - heading + b);
 /*	sprintf(gechrbuf,"normal = %f",b);
 	logthis(gechrbuf);*/
 
-	if (b > 180)
-		b = b-360;
+    if(b > 180)
+        b = b - 360;
 /*	sprintf(gechrbuf,"+-180 = %f",b);
 	logthis(gechrbuf);*/
-return (b);
+    return (b);
 
 }
 
 /**************************************************************************
 ** Calculate the distance between two ships                              **
 **************************************************************************/
-double cdistance(COORD *ptr1, COORD *ptr2)
-{
-double a, b, c;
+double cdistance(COORD *ptr1, COORD *ptr2) {
+    double a, b, c;
     b = (ptr1->xcoord - ptr2->xcoord);
-c = (ptr1->ycoord - ptr2->ycoord);
-b = absol(b);
-c = absol(c);
-a = sqrt((b*b) + (c*c));
-return (a);
+    c = (ptr1->ycoord - ptr2->ycoord);
+    b = absol(b);
+    c = absol(c);
+    a = sqrt((b * b) + (c * c));
+    return (a);
 }
 
 /**************************************************************************
 ** Calculate the angle from one ship to another                          **
 **************************************************************************/
-double vector(COORD *ptr1, COORD *ptr2)
-{
-double   a;
-double   angleb(),anglec(),normal();
+double vector(COORD *ptr1, COORD *ptr2) {
+    double a;
+    double angleb(), anglec(), normal();
 
-if (ptr1->xcoord >= ptr2->xcoord && ptr1->ycoord <= ptr2->ycoord)
-	{
-	a = angleb(ptr1,ptr2);
-	a = 270.0 - a;
-	return(a);
-	}
-else
-if (ptr1->xcoord >= ptr2->xcoord && ptr1->ycoord >= ptr2->ycoord)
-	{
-	a = angleb(ptr1,ptr2);
-	a = 270.0 + a;
-	return(a);
-	}
-else
-if (ptr1->xcoord <= ptr2->xcoord && ptr1->ycoord <= ptr2->ycoord)
-	{
-	a = anglec(ptr1,ptr2);
-	a = 180.0 - a;
-	return(a);
-	}
-else
-if (ptr1->xcoord <= ptr2->xcoord && ptr1->ycoord >= ptr2->ycoord)
-	{
-	a = anglec(ptr1,ptr2);
-	a = 0.0 + a;
-	return(a);
-	}
-return(99999L);
+    if(ptr1->xcoord >= ptr2->xcoord && ptr1->ycoord <= ptr2->ycoord) {
+        a = angleb(ptr1, ptr2);
+        a = 270.0 - a;
+        return (a);
+    } else if(ptr1->xcoord >= ptr2->xcoord && ptr1->ycoord >= ptr2->ycoord) {
+        a = angleb(ptr1, ptr2);
+        a = 270.0 + a;
+        return (a);
+    } else if(ptr1->xcoord <= ptr2->xcoord && ptr1->ycoord <= ptr2->ycoord) {
+        a = anglec(ptr1, ptr2);
+        a = 180.0 - a;
+        return (a);
+    } else if(ptr1->xcoord <= ptr2->xcoord && ptr1->ycoord >= ptr2->ycoord) {
+        a = anglec(ptr1, ptr2);
+        a = 0.0 + a;
+        return (a);
+    }
+    return (99999L);
 }
 
 /**************************************************************************
 ** Calculate the angle from the center to the other ship                 **
 **************************************************************************/
-double angleb (COORD *ptr1, COORD *ptr2)
-{
-double   da,db,dc, angle;
+double angleb(COORD *ptr1, COORD *ptr2) {
+    double da, db, dc, angle;
 
-da = cdistance(ptr1, ptr2);
-dc = absol(ptr1->xcoord - ptr2->xcoord);
-db = absol(ptr1->ycoord - ptr2->ycoord);
+    da = cdistance(ptr1, ptr2);
+    dc = absol(ptr1->xcoord - ptr2->xcoord);
+    db = absol(ptr1->ycoord - ptr2->ycoord);
 
-if ((da*dc) > 0)
-	angle = (double) acos( ((da*da) + (dc*dc) - (db*db)) / (2*da*dc));
-else
-	angle = 0;
+    if((da * dc) > 0)
+        angle = (double) acos(((da * da) + (dc * dc) - (db * db)) / (2 * da * dc));
+    else
+        angle = 0;
 
-angle = radtodeg(angle);
+    angle = radtodeg(angle);
 
-return (angle);
+    return (angle);
 
 }
 
 /**************************************************************************
 ** Calculate the angle from the center to the other ship                 **
 **************************************************************************/
-double anglec (COORD *ptr1, COORD *ptr2)
-{
-double   da,db,dc, angle;
+double anglec(COORD *ptr1, COORD *ptr2) {
+    double da, db, dc, angle;
 
-da = cdistance(ptr1, ptr2);
-dc = absol(ptr1->xcoord - ptr2->xcoord);
-db = absol(ptr1->ycoord - ptr2->ycoord);
+    da = cdistance(ptr1, ptr2);
+    dc = absol(ptr1->xcoord - ptr2->xcoord);
+    db = absol(ptr1->ycoord - ptr2->ycoord);
 
-if ((da*db) > 0)
-	angle = (double) acos( ((da*da) + (db*db) - (dc*dc)) / (2*da*db));
-else
-/* this should not be 0 - figure out what rad(360) is. */
-	angle = 0;
+    if((da * db) > 0)
+        angle = (double) acos(((da * da) + (db * db) - (dc * dc)) / (2 * da * db));
+    else
+        angle = 0; /* this should not be 0 - figure out what rad(360) is. */
 
-angle = radtodeg(angle);
+    angle = radtodeg(angle);
 
-return (angle);
+    return (angle);
 
 }
 
 /**************************************************************************
 ** Bring an angle back into the range 0 - 360                            **
 **************************************************************************/
-double normal(double angle)
-{
-if (angle < 0)
-	{
-	angle = normal(angle+360);
-	}
+double normal(double angle) {
+    if(angle < 0) {
+        angle = normal(angle + 360);
+    }
 
-if (angle >= 360)
-	{
-	angle = normal(angle-360);
-	}
-return (angle);
+    if(angle >= 360) {
+        angle = normal(angle - 360);
+    }
+    return (angle);
 }
 
 /**************************************************************************
 ** convert degrees to radiuns                                            **
 **************************************************************************/
-
-double degtorad(double value)
-{
-return (value*(PI/180));
+double degtorad(double value) {
+    return (value * (PI / 180));
 }
 
 /**************************************************************************
 ** convert radiuns to degrees                                            **
 **************************************************************************/
-
-double radtodeg(double value)
-{
-return (value*(180/PI));
+double radtodeg(double value) {
+    return (value * (180 / PI));
 }
 
 /**************************************************************************
 ** double absolute function                                              **
 **************************************************************************/
+double absol(double value) {
+    c4angle();
+    if(value < 0)
+        value = value * -1;
 
-double absol(double value)
-{
-c4angle();
-if (value < 0)
-	value = value * -1;
-
-return (value);
+    return (value);
 }
