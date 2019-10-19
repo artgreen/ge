@@ -61,40 +61,40 @@
 
 /***************************************************************************/
 /* The following defines have been carefully chosen and refined to provide */
-/* a well balanced and entertaining game play. Should they be modified,    */
-/* do so with caution and consideration                                    */
+/* a well balanced and entertaining game play. Should they be modified, */
+/* do so with caution and consideration */
 /***************************************************************************/
 #define NEUTRAL_X               0
 #define NEUTRAL_Y               0
 
-#define ROTENGUSE 30          /* Energy used to rotate                     */
-#define ROTAMT   20           /* Amount of degres rotation each tick       */
+#define ROTENGUSE 30          /* Energy used to rotate */
+#define ROTAMT   20           /* Amount of degres rotation each tick */
 
-#define ACCENGAMT 120          /* Acceleration energy usage                 */
+#define ACCENGAMT 120          /* Acceleration energy usage */
 #define MOVENGMIN 3000
 #define MOVENGUSE 10
 
-#define PRELOAD  10           /* Phasor reload rate / tick                 */
-#define PMINFIRE 60           /* Minimum amount to fire phasor             */
+#define PRELOAD  10           /* Phasor reload rate / tick */
+#define PMINFIRE 60           /* Minimum amount to fire phasor */
 #define PENGUSE  57           /* Amount of energy used by phasors charging */
-#define PMINENG  500          /* minimum energy to fire                    */
-#define PHABIAS 2          /* Degrees to bias "spread" to better aim    */
+#define PMINENG  500          /* minimum energy to fire */
+#define PHABIAS 2          /* Degrees to bias "spread" to better aim */
 
 #define HPMINFIR 6000        /* Minimum energy in flux to fire Hyper phasr*/
 #define HPFIRAMT 5000
 #define HPBEAMW  5
 
-#define ENGYMAX  65000U        /* Maximum energy one can have               */
-#define ENGRECHG 1           /* Energy recharge amount / tick             */
-#define ENGYMIN  5000           /* Minimum Energy in FLUX to autoload        */
+#define ENGYMAX  65000U        /* Maximum energy one can have */
+#define ENGRECHG 1           /* Energy recharge amount / tick */
+#define ENGYMIN  5000           /* Minimum Energy in FLUX to autoload */
 
-#define SHMINPWR 200          /* Minimum power fore shields                */
-#define SHENGUSE 100          /* Energy used every tick for shields        */
-#define SHHITENG 1000         /* Energy drained when hit                   */
-#define SHMAXCHG 10           /* Max (full) charge in the shields          */
-#define SHMINCHG 5            /* Minimum charge to be effective            */
+#define SHMINPWR 200          /* Minimum power fore shields */
+#define SHENGUSE 100          /* Energy used every tick for shields */
+#define SHHITENG 1000         /* Energy drained when hit */
+#define SHMAXCHG 10           /* Max (full) charge in the shields */
+#define SHMINCHG 5            /* Minimum charge to be effective */
 
-#define SCANADJ   40           /* Adjustment factor for range scanner       */
+#define SCANADJ   40           /* Adjustment factor for range scanner */
 
 #define TONFACT 15000.0      /* divisor for ton factor */
 
@@ -127,13 +127,13 @@
 #define HYSCANRANGE 5
 
 #define DECOYTIME 15             /* times TICKTIME how long a decoy lives */
-#define TICKTIME  6             /* how often does RTKICK fire    6   */
-#define TICKTIME2 1              /* how often does RTKICK fire       */
-#define CYBTICKTIME 6           /* Cyborgs do stuff this fast       */
+#define TICKTIME  6             /* how often does RTKICK fire    6 */
+#define TICKTIME2 1              /* how often does RTKICK fire */
+#define CYBTICKTIME 6           /* Cyborgs do stuff this fast */
 #define PLANTIME  55            /* how often do planets get updated */
 
-#define FIRETICKS 10           /* how many ticks to hold a player  */
-/* when involved in battle          */
+#define FIRETICKS 10           /* how many ticks to hold a player */
+/* when involved in battle */
 
 #define  NUMITEMS       14
 
@@ -164,7 +164,7 @@
 #define CYB_GO_WARP             1
 #define CYB_MINCLASS    3   /* Minimum class a Cybertron will pick on */
 #define CYBSLO                          3   /* slows down the cyborgs reaction time */
-#define CYB_ALLOW                       35  /* how much allowance per tick          */
+#define CYB_ALLOW                       35  /* how much allowance per tick */
 #define CYB_MAXCASH     2000000L  /* maximum cash cybertrons can hold */
 #define CYB_BE_NICE             30            /* 30 kills grace before we get tough */
 #define CYB_BE_EASY             60      /* 60 kills till we get really mean */
@@ -172,7 +172,7 @@
 #define CYB_MINDAM              75      /* % of damage when cyb jams and mines */
 #define CYBS_FIGHT              FALSE   /* TRUE if Cybs fight each other */
 #define CYB_BADBAD              FALSE   /* TRUE if cybs attack anyone once they */
-                                        /* have been fired upon. FALSE if they  */
+                                        /* have been fired upon. FALSE if they */
                                         /* only attack their attacker */
 #define CYBMAXPERTICK   2               /* the number of cybs processed each tick */
 #define QUADMAXPERTICK  5               /* the number of quads processed each tick */
@@ -186,7 +186,7 @@
 #define SHOWDOC                 1
 #define RNDDOC                          6
 
-#define MINERANGE 10000        /* maximum Mine range                     */
+#define MINERANGE 10000        /* maximum Mine range */
 
 #define DESTRUCTRANGE 10000
 
@@ -241,7 +241,7 @@
 #define BLOCK                   3
 
 /*****************************************************************************/
-/* End of Defines                                                            */
+/* End of Defines */
 /*****************************************************************************/
 
 #ifndef byte
@@ -279,17 +279,17 @@ TORPEDO {
  * struct defining a user/player
  */
 #define WARUSR struct warusr
-extern WARUSR {                           /* user data blocks                       */
-    char userid[UIDSIZ];     /* userid of player                       */
-    unsigned long score;              /*   Your score               31     */
+extern WARUSR {                           /* user data blocks */
+    char userid[UIDSIZ];     /* userid of player */
+    unsigned long score;              /*   Your score               31 */
     char waste[40];
-    unsigned noships;            /*   Number of ships                      */
-    int topshipno;          /*   Top ship number used                 */
-    int kills;              /*   No kills                             */
+    unsigned noships;            /*   Number of ships */
+    int topshipno;          /*   Top ship number used */
+    int kills;              /*   No kills */
     unsigned rospos;
-    int planets;            /*   Planets owned                        */
-    unsigned long cash;               /*   cash on hand                         */
-    unsigned long debt;               /*   I owe, I owe, its off to work I go   */
+    int planets;            /*   Planets owned */
+    unsigned long cash;               /*   cash on hand */
+    unsigned long debt;               /*   I owe, I owe, its off to work I go */
     unsigned long plscore;
     unsigned long klscore;
     unsigned long population;
@@ -302,66 +302,66 @@ extern WARUSR {                           /* user data blocks                   
  * Struct for a ship
  */
 #define WARSHP struct warshp
-extern WARSHP {                        /* user data blocks         */
-    char userid[UIDSIZ];     /* userid of player                          */
-    int shipno;             /*   Ship id number                          */
-    char shipname[35];       /*   Ship name                               */
+extern WARSHP {                        /* user data blocks */
+    char userid[UIDSIZ];     /* userid of player */
+    int shipno;             /*   Ship id number */
+    char shipname[35];       /*   Ship name */
 /*32*/
-    int shpclass;           /*   Ship Class   display                    */
-    double heading;            /*   Heading of this ship                    */
+    int shpclass;           /*   Ship Class   display */
+    double heading;            /*   Heading of this ship */
 /*42*/
-    double head2b;             /*   direction rotating to                   */
-    double speed;              /*   Speed                                   */
+    double head2b;             /*   direction rotating to */
+    double speed;              /*   Speed */
 /*58*/
-    double speed2b;            /*   Speed to be                             */
+    double speed2b;            /*   Speed to be */
 /*66*/
 /*70*/
     COORD coord;
 /*86*/
-    double damage;             /*   Damage on this ship (0 - 100%)          */
+    double damage;             /*   Damage on this ship (0 - 100%) */
 /*94*/
-    double energy;             /*   Amount of energy available              */
+    double energy;             /*   Amount of energy available */
 /*102*/
-    double phasr;              /*   Phasor strength (0 - 100%)              */
+    double phasr;              /*   Phasor strength (0 - 100%) */
 /*110*/
-    byte phasrtype;          /*   Type of Phasor system                   */
-    int kills;              /*   No kills                                */
-    int lastfired;          /*   usernumber of last user to fire on you  */
-    byte shieldtype;         /*   shield type                             */
-    byte shieldstat;         /*   shield status (supposed to be up/dn)    */
-    int shield;             /*   shield charge                           */
-    int cloak;              /*   cloak flag  -1 = up 0 = down + = time   */
-    int degrees;            /*   work fields for calculating degrees     */
+    byte phasrtype;          /*   Type of Phasor system */
+    int kills;              /*   No kills */
+    int lastfired;          /*   usernumber of last user to fire on you */
+    byte shieldtype;         /*   shield type */
+    byte shieldstat;         /*   shield status (supposed to be up/dn) */
+    int shield;             /*   shield charge */
+    int cloak;              /*   cloak flag  -1 = up 0 = down + = time */
+    int degrees;            /*   work fields for calculating degrees */
 /*123*/
-    int percent;            /*   Work field for calculating percentages  */
-    int tactical;           /*   Tactical Display damage indicator       */
-    int helm;               /*   Helm Control damage indicator           */
-    int train;              /*   Training screen counter                 */
-    int where;              /*   Hyperspace flag                         */
+    int percent;            /*   Work field for calculating percentages */
+    int tactical;           /*   Tactical Display damage indicator */
+    int helm;               /*   Helm Control damage indicator */
+    int train;              /*   Training screen counter */
+    int where;              /*   Hyperspace flag */
 /*133*/
-    TORPEDO ltorps[MAXTORPS];  /*   Locked on torpedoes                     */
+    TORPEDO ltorps[MAXTORPS];  /*   Locked on torpedoes */
 /*142*/
-    MISSILE lmissl[MAXMISSL];   /*   Locked on missiles                       */
+    MISSILE lmissl[MAXMISSL];   /*   Locked on missiles */
 /*157*/
-    unsigned decout[MAXDECOY]; /*   decoys out                              */
+    unsigned decout[MAXDECOY]; /*   decoys out */
 /*177*/
-    unsigned jammer;          /*   supper time?                            */
-    unsigned freq[3];          /*   sub space, hyper space, planetary       */
+    unsigned jammer;          /*   supper time? */
+    unsigned freq[3];          /*   sub space, hyper space, planetary */
 /*185*/
-    unsigned long items[NUMITEMS]; /*   all the items                           */
+    unsigned long items[NUMITEMS]; /*   all the items */
 /*237*/
-    unsigned titem;           /*   establishing a colony mode temp item    */
-    unsigned hostile;         /*   being hostile flag                      */
-    unsigned cantexit;        /*   cannot exit counter                     */
-    unsigned repair;          /*   repairs underway flag                   */
-    unsigned hypha;           /*   hyper-phasers cooling flag              */
+    unsigned titem;           /*   establishing a colony mode temp item */
+    unsigned hostile;         /*   being hostile flag */
+    unsigned cantexit;        /*   cannot exit counter */
+    unsigned repair;          /*   repairs underway flag */
+    unsigned hypha;           /*   hyper-phasers cooling flag */
 /*247*/
-    unsigned firecntl;        /*   fire-control damage flag                */
-    byte destruct;        /*   self destruct countdown                 */
-    byte status;          /*   Status of this record                   */
-    byte cybmine;         /*   I have found me a ship to seek          */
-    byte cybskill;        /*   Cyborg skill level                      */
-    byte cybupdate;       /*   update cyborg counter                   */
+    unsigned firecntl;        /*   fire-control damage flag */
+    byte destruct;        /*   self destruct countdown */
+    byte status;          /*   Status of this record */
+    byte cybmine;         /*   I have found me a ship to seek */
+    byte cybskill;        /*   Cyborg skill level */
+    byte cybupdate;       /*   update cyborg counter */
     byte tick;            /* Ship Ticker */
     byte emulate;         /* permits cybertron emulation */
     byte minesnear;       /* set when mines are near */
@@ -369,8 +369,8 @@ extern WARSHP {                        /* user data blocks         */
     byte holdcourse;      /* Hold course ticker */
     int topspeed;
     byte warncntr;
-/*256 ---------------------v  */
-    char filler[512 - 266 - UIDSIZ]; /*   fill to 512 BJ added 20 for name   */
+/*256 ---------------------v */
+    char filler[512 - 266 - UIDSIZ]; /*   fill to 512 BJ added 20 for name */
 };
 
 /*
@@ -385,12 +385,12 @@ extern WARSHP {                        /* user data blocks         */
  */
 #define ITEM    struct item
 extern ITEM {
-    unsigned long qty;                            /* quantity on hand                                                     */
-    unsigned rate;                                           /* rate of manufacture                                          */
-    char sell;                                           /* sell to allies?                                                      */
-    unsigned reserve;                                        /* qty to reserve                                                       */
-    unsigned markup2a;                               /* mark up to allies                                                    */
-    unsigned long sold2a;                    /* # sold to allies                                                     */
+    unsigned long qty;                            /* quantity on hand */
+    unsigned rate;                                           /* rate of manufacture */
+    char sell;                                           /* sell to allies? */
+    unsigned reserve;                                        /* qty to reserve */
+    unsigned markup2a;                               /* mark up to allies */
+    unsigned long sold2a;                    /* # sold to allies */
 };
 
 #define PLNTCOORD struct _plntcoord
@@ -403,8 +403,7 @@ extern PLNTCOORD {
  * Table for planets
  */
 #define PLANETAB struct planetab
-extern
-PLANETAB {
+extern PLANETAB {
     PLNTCOORD planets[MAXPLANETS];
 };
 
@@ -412,12 +411,11 @@ PLANETAB {
  * Struct for a sector
  */
 #define GALSECT struct galsect
-extern GALSECT {                /* star system data record               */
-    int xsect;                                  /* sector x coord                       */
-    int ysect;                                  /* sector y coord                       */
+extern GALSECT {                /* star system data record */
+    int xsect;                                  /* sector x coord */
+    int ysect;                                  /* sector y coord */
     int plnum;                                  /* always 0 */
     int type;                /* type of sector */
-
     int numplan;             /* number of planetary objects */
     PLNTCOORD ptab[MAXPLANETS];
     char filler[512 - 10 - (sizeof(PLNTCOORD) * MAXPLANETS)];          /* fill to 250*/
@@ -427,23 +425,23 @@ extern GALSECT {                /* star system data record               */
  * Planet structure
  */
 #define GALPLNT struct _galplnt
-extern GALPLNT {                /* star system data record               */
-    int xsect;                                  /* sector x coord                       */
-    int ysect;                                  /* sector y coord                       */
+extern GALPLNT {                /* star system data record */
+    int xsect;                                  /* sector x coord */
+    int ysect;                                  /* sector y coord */
     int plnum;               /* planet number */
     int type;                /* type of sector */
     COORD coord;
     char userid[UIDSIZ];
     char name[20];
-    char enviorn;             /* enviornment factor                                              */
-    char resource;                               /* resources                                                                    */
-    unsigned long cash;                                           /* cash on hand                                                         */
-    unsigned long debt;                /* amount you owe                      */
-    unsigned long tax;                 /* amount of tax collected             */
-    int taxrate;             /* rate to tax population              */
-    char warnings;            /* warnings to intruders               */
-    char password[10];                   /* password for alliance               */
-    char lastattack[UIDSIZ];     /* userid of last attacker             */
+    char enviorn;             /* enviornment factor */
+    char resource;                               /* resources */
+    unsigned long cash;                                           /* cash on hand */
+    unsigned long debt;                /* amount you owe */
+    unsigned long tax;                 /* amount of tax collected */
+    int taxrate;             /* rate to tax population */
+    char warnings;            /* warnings to intruders */
+    char password[10];                   /* password for alliance */
+    char lastattack[UIDSIZ];     /* userid of last attacker */
     ITEM items[NUMITEMS]; /* 195 */
     char beacon[BEACONMSGSZ];
     char spyowner[UIDSIZ];
@@ -452,27 +450,33 @@ extern GALPLNT {                /* star system data record               */
     char filler[512 - 182 - (UIDSIZ * 2) - (sizeof(ITEM) * NUMITEMS)];
 };
 
+/* wormhole
 #define GALWORM struct galworm
-extern GALWORM {                /* star system data record               */
-    int xsect;                                  /* sector x coord                       */
-    int ysect;                                  /* sector y coord                       */
+extern GALWORM {                /* star system data record */
+    int xsect;                                  /* sector x coord */
+    int ysect;                                  /* sector y coord */
     int plnum;               /* planet number */
     int type;                /* type of sector */
     COORD coord;
-    int visible;             /* is the wormhole visible flag */
+    int visible;             /* is the wormhole visible flag */ /* AWG Note: Bitmask opportunity */
     COORD destination;
     char name[20];
     char filler[512 - 30 - (sizeof(COORD) * 2)];         /* fill to 250*/
 };
 
-
+/*
+ * Star system
+ */
 #define PKEY struct _pkey
-extern PKEY {                /* star system data record key   */
-    int xsect;                                  /* sector x coord                       */
-    int ysect;                                  /* sector y coord                       */
+extern PKEY {                /* star system data record key */
+    int xsect;                                  /* sector x coord */
+    int ysect;                                  /* sector y coord */
     int plnum;                                  /* always 0 */
 };
 
+/*
+ * Table of wormholes
+ */
 #define WORMTAB struct _wormtab
 extern WORMTAB {
     COORD coord;
@@ -517,9 +521,9 @@ extern MAILSTAT {
     char name1[25];
     int int1;
     int int2;
-    unsigned long cash;                /* cash on hand                  */
-    unsigned long debt;                /* amount you owe                      */
-    unsigned long tax;                 /* amount of tax collected             */
+    unsigned long cash;                /* cash on hand */
+    unsigned long debt;                /* amount you owe */
+    unsigned long tax;                 /* amount of tax collected */
     unsigned long itemqty[NUMITEMS];
     char filler[253 - 97 - (UIDSIZ) - (sizeof(long) * NUMITEMS)];         /* fill to 250 BJ changed size for name*/
 };
@@ -537,17 +541,17 @@ extern SHPKEY {
  * A ship
  */
 #define SHIP    struct _ship
-extern
-SHIP { char *typename;
+extern SHIP {
+    char *typename;
     char *shipname;
     unsigned char max_shlds;
     unsigned char max_phasr;
     unsigned char max_torps;
     unsigned char max_missl;
-    unsigned char has_decoy;
-    unsigned char has_jam;
-    unsigned char has_zip;
-    unsigned char has_mine;
+    unsigned char has_decoy;        /* << AWG Note: these booleans could be collapsed */
+    unsigned char has_jam;          /* << into bitmasks to make space for new fields */
+    unsigned char has_zip;          /* << */
+    unsigned char has_mine;         /* << */
     unsigned char max_attk;
     unsigned char max_cloak;
     unsigned int max_accel;
@@ -588,7 +592,7 @@ struct cmd {
 };
 
 /*
- * Table to hold a list of ships
+ * Table to hold a list of ships from a player's POV
  */
 #define SHIPTAB struct _shiptab
 extern SHIPTAB {
@@ -604,13 +608,16 @@ extern SHIPTAB {
 /*
  * Table to hold a ship's scanner sweep results
  */
-#define NOSCANTAB       15
+#define NOSCANTAB       15              /* AWG Note: limit of 15 ships? that seems low. */
 #define SCANTAB struct _scantab
 extern SCANTAB {
     SHIPTAB ship[NOSCANTAB];
 };
 
-#define S00     struct _s00
+/*
+ * This struct represents sector 0,0
+ */
+#define S00 struct _s00
 extern S00 {
     char *name;
     char *owner;
@@ -621,6 +628,9 @@ extern S00 {
     int res;
 };
 
+/*
+ * Team stuff obviously
+ */
 #define TEAM    struct _team
 extern TEAM {
     long teamcode;
@@ -632,7 +642,9 @@ extern TEAM {
     int flag;
 };
 
-
+/*
+ * Table to track beacons
+ */
 #define BEACONTAB struct _beacontab
 extern BEACONTAB {
     COORD coord;
@@ -647,9 +659,9 @@ extern BEACONTAB {
 #define METHOD 1
 #define KEY  "\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255\255"
 #define SEED "10094056"  /*Choose a unique seed for each application */
-/*            ^     ^    */
-/*            1     4    */
-/*               14 = number of day's test drive is to run   */
+/*            ^     ^ */
+/*            1     4 */
+/*               14 = number of day's test drive is to run */
 
 struct secure {
     int open_stat;  /* 0=not opened, -1=testdrive, 1=registered */

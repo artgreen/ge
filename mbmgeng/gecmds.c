@@ -4667,16 +4667,16 @@ void FUNC scan_data2() {
 }
 
 void FUNC api_ships() {
-    SCANTAB *sptr;
-    WARSHP *wptr;
-    int i, j;
-    unsigned spd;
-    char mask[] = {" %c %d %d %d %d %s %d %d %s %d %d\r"};
+SCANTAB *sptr;
+WARSHP *wptr;
+int i, j;
+unsigned spd;
+char mask[] = {" %c %d %d %d %d %s %d %d %s %d %d\r"};
 
     /* warsptr = pointer to this player's ship */
     prf(
-            "start shipscan: %s\r",
-            spr("%6ld", shipclass[warsptr->shpclass].scanrange)
+        "start shipscan: %s\r",
+        spr("%6ld", shipclass[warsptr->shpclass].scanrange)
     );
 
     /* update the scan table */
