@@ -65,9 +65,7 @@
 
 #include "majorbbs.h"
 #include "message.h"
-
 #include "gemain.h"
-
 
 #define  GECYBS   1
 
@@ -77,19 +75,13 @@
 
 char        cybname[UIDSIZ]; /*BJ REMOVED CYBORG- name*/
 int			cybhaltflg = 0;
-
-
 double		d_topspeed;
 
 /**************************************************************************
 ** Cyborg functions                                                      **
 **************************************************************************/
 
-void  FUNC cyb_init(ptr, usrn, class)
-WARSHP *ptr;
-int   usrn;
-int   class;
-
+void  FUNC cyb_init(WARSHP *ptr, int usrn, int class)
 {
 
 logthis(spr("@Cyb_init usrn=%d,class=%d",usrn,class));
@@ -195,10 +187,7 @@ else
 }
 
 
-void  FUNC cyb_lives(ptr,usrn)
-
-WARSHP *ptr;
-int           usrn;
+void  FUNC cyb_lives(WARSHP *ptr, int usrn)
 {
 
 WARSHP   *wptr;
@@ -354,9 +343,7 @@ if (ptr->tick == 255)
 
 /* look if another cyborg (or cyborgs) has this ship claimed */
 
-int FUNC notclaimed(ptr,usrn)
-WARSHP   *ptr;
-int   usrn;
+int FUNC notclaimed(WARSHP *ptr, int usrn)
 {
 WARSHP   *wptr;
 int zothusn,nc;
@@ -376,12 +363,7 @@ return (nc < shipclass[ptr->shpclass].noclaim);
 }
 
 /* ptr to sender , usrn = reciever */
-void  FUNC cyb_annoy(ptr,usrn,rnd,first,last)
-WARSHP   *ptr;
-int      usrn;
-int      rnd;
-int      first;
-int      last;
+void  FUNC cyb_annoy(WARSHP *ptr, int usrn, int rnd, int first, int last)
 {
 
 int base;
@@ -407,9 +389,7 @@ if ((gernd()%rnd) == 1)
 	}
 }
 
-int    FUNC cybwhoops(ptr,zothusn)
-WARSHP   *ptr;
-int      zothusn;
+int    FUNC cybwhoops(WARSHP *ptr, int zothusn)
 {
 
 unsigned err,i;
@@ -429,9 +409,7 @@ if ((gernd()%(int)(ptr->cybskill)) == 1)
 return(err);
 }
 
-int  FUNC gebemean(ptr,usrn)
-WARSHP   *ptr;
-int      usrn;
+int  FUNC gebemean(WARSHP *ptr, int usrn)
 {
 
 /* cyberquads are ALWAYS mean */
@@ -452,11 +430,7 @@ return(0);
 
 /* countdown to database update */
 
-void  FUNC db_update(ptr,usrn)
-
-WARSHP   *ptr;
-int      usrn;
-
+void  FUNC db_update(WARSHP *ptr, int usrn)
 {
 WARUSR	*wuptr;
 
@@ -494,18 +468,13 @@ ptr->cybupdate = 20;
 
 /**************************************************************************
 ** Attack the other player                                               **
+WARSHP   *ptr;    ptr to cyb ship
+int      usrn;    cybs ship number
+WARSHP   *wptr;   ptr to users ship
+int      zothusn; users ship number
 **************************************************************************/
-
-void  FUNC cyb_attack(ptr,usrn,wptr,zothusn)
-
-WARSHP   *ptr;    /* ptr to cyb ship*/
-int      usrn;    /* cybs ship number*/
-WARSHP   *wptr;   /* ptr to users ship*/
-int      zothusn;	/* users ship number*/
-
+void  FUNC cyb_attack(WARSHP *ptr, int usrn, WARSHP *wptr, int zothusn)
 {
-
-
 MISSILE  *mptr;
 int i,j;
 
@@ -595,10 +564,7 @@ EXTRA MESSAGES WE JUST DON'T NEED */
 ** Lay down some decoys                                                  **
 **************************************************************************/
 
-void  FUNC cyb_lay_decoys(ptr,zothusn)
-WARSHP   *ptr;
-int   zothusn;
-
+void  FUNC cyb_lay_decoys(WARSHP *ptr, int zothusn)
 {
 
 int   i;
@@ -616,10 +582,7 @@ if (!cybwhoops(ptr,zothusn))
 ** if hunting, and badly damaged dump mines, jam, and boogie             **
 **************************************************************************/
 
-void  FUNC cyb_check_damage(ptr,usrn)
-WARSHP   *ptr;
-int      usrn;
-
+void  FUNC cyb_check_damage(WARSHP *ptr, int usrn)
 {
 
 if (ptr->cybmine < 255 
@@ -646,10 +609,7 @@ if (ptr->cybmine < 255
 ** Check lockon status                                                   **
 **************************************************************************/
 
-void  FUNC cyb_check_lockon(ptr,usrn)
-WARSHP   *ptr;
-int      usrn;
-
+void  FUNC cyb_check_lockon(WARSHP *ptr, int usrn)
 {
 
 WARSHP   *wptr;
@@ -805,12 +765,12 @@ else
 	}
 }
 
-
-void   FUNC cyb_won(ptr,usrn,wptr)
-WARSHP	*ptr;				/* ptr to Cyber who won */
-int		usrn;				/* usernum of cyber who won */
-WARSHP   *wptr;			/* ptr to ship cyber killed */
-
+/*
+ * WARSHP	*ptr;			ptr to Cyber who won
+ * int		usrn;			usernum of cyber who won
+ * WARSHP   *wptr;			ptr to ship cyber killed
+*/
+void   FUNC cyb_won(WARSHP *ptr, int usrn, WARSHP *wptr)
 {
 usrn = usrn;
 wptr = wptr;
@@ -819,20 +779,20 @@ ptr->speed2b = 2000.0;
 ptr->cybupdate = 0;
 }
 
-void   FUNC cyb_died(ptr,usrn,wptr)
-WARSHP	*ptr;				/* ptr to Cyber who died */
-int		usrn;				/* usernum of cyber who died */
-WARSHP   *wptr;			/* ptr to ship who killed cyber*/
-
-
+/*
+ * WARSHP	*ptr;		 ptr to Cyber who died
+ * int		usrn;			 usernum of cyber who died
+ * WARSHP   *wptr;			 ptr to ship who killed cyber
+ */
+void   FUNC cyb_died(WARSHP *ptr, int usrn, WARSHP *wptr)
 {
 usrn = usrn;
 wptr = wptr;
 ptr->status = GESTAT_AVAIL;
 }
 
-int	 FUNC isquad(ptr)
-WARSHP	*ptr;				/* ptr to Cyber */
+/* ptr to Cyber */
+int	 FUNC isquad(WARSHP *ptr)
 {
 return(shipclass[ptr->shpclass].tough_factor == CYB_TOUGH_1);
 }
