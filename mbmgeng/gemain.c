@@ -55,6 +55,7 @@
 #include "gcomm.h"
 #include "string.h"
 #else
+
 #include "stdio.h"
 #include "ctype.h"
 #include "mem.h"
@@ -64,6 +65,7 @@
 #include "stdlib.h"
 #include "portable.h"
 #include "dosface.h"
+
 #endif
 
 #include "math.h"
@@ -73,6 +75,7 @@
 #include "gemain.h"
 
 #define GEMAIN  1
+
 #include "geglobal.h"
 
 /* LOCAL GLOBAL DEFS *****************************************************/
@@ -88,10 +91,11 @@
 #define GEMSG                   "MBMGEMSG.MCV"
 #endif
 
-
 #ifdef PHARLAP
 #else
+
 int dfsthn();
+
 #endif
 
 /* I think this is the state indicator we get from the kernel */
@@ -99,32 +103,32 @@ int gestt;
 
 /* definition file for the kernel to know who we are */
 struct module mbmge = {        /* module interface block               */
-        "",                      /*    description for main menu         */
-        gelogon,                 /*    user logon supplemental routine   */
-        galemp,                  /*    input routine if selected         */
-        stshdlr,                 /*    status-input routine if selected  */
-        NULL,                    /*    "injoth" routine for this module  */
-        pwarlof,                 /*    user logoff supplemental routine  */
-        pwarhup,                  /*    hangup (lost carrier) routine     */
-        pgemidnight,              /*    midnight cleanup routine          */
-        pgedelete,                /*    delete-account routine            */
-        pclswar                   /*    finish-up (sys shutdown) routine  */
+    "",                      /*    description for main menu         */
+    gelogon,                 /*    user logon supplemental routine   */
+    galemp,                  /*    input routine if selected         */
+    stshdlr,                 /*    status-input routine if selected  */
+    NULL,                    /*    "injoth" routine for this module  */
+    pwarlof,                 /*    user logoff supplemental routine  */
+    pwarhup,                  /*    hangup (lost carrier) routine     */
+    pgemidnight,              /*    midnight cleanup routine          */
+    pgedelete,                /*    delete-account routine            */
+    pclswar                   /*    finish-up (sys shutdown) routine  */
 };
 
 /*
  * Database files
  */
 BTVFILE *gebb1,  /* GEship.dat   */
-        *gebb2,  /* GEplanet.dat */
-        *gebb4,  /* GEmail.dat   */
-        *gebb5;  /* GEuser.dat   */
+    *gebb2,  /* GEplanet.dat */
+    *gebb4,  /* GEmail.dat   */
+    *gebb5;  /* GEuser.dat   */
 FILE *gemb, *gehlpmb, *geshmb;
 
 static char *geuser,
-            *geship,
-            *geplnt,
-            *gemail,
-            *geshipcl;
+    *geship,
+    *geplnt,
+    *gemail,
+    *geshipcl;
 
 static char *endmark;
 
@@ -183,80 +187,80 @@ int su;
 int tmp_usrnum;
 
 long max_plrec,
-        teambonus,
-        pltvcash,
-        pltvdiv,
-        startcash;
+    teambonus,
+    pltvcash,
+    pltvdiv,
+    startcash;
 
 unsigned plantime = PLANTIME;
 
 int gemaxplrs,
-        gefreebies,
-        gemaxlist,
-        maxships,
-        se100dam,
-        profon,
-        showopt,
-        syscmds,
-        sysonly,
-        max_plnts,
-        trans_opt,
-        numships,
-        univmax,
-        plodds,
-        wormodds,
-        hpfirdst,
-        hpdammax,
-        pfirdist,
-        pdammax,
-        jamtime,
-        maildays,
-        torpsped,
-        mislsped,
-        decodds,
-        nummines,
-        usermines,
-        maxdroids,
-        cyb_class,
-        clenguse,
-        logflag,
-        optmenu,
-        cyb_gold,
-        tot_classes,
-        team_max,
-        usegemsg,
-        fse_state,
-        phatowrp,
-        misengfc,
-        score_bonus,
-        score_f1,
-        score_f2,
-        chgloser,
-        univwrap,
-        maxplanets;
+    gefreebies,
+    gemaxlist,
+    maxships,
+    se100dam,
+    profon,
+    showopt,
+    syscmds,
+    sysonly,
+    max_plnts,
+    trans_opt,
+    numships,
+    univmax,
+    plodds,
+    wormodds,
+    hpfirdst,
+    hpdammax,
+    pfirdist,
+    pdammax,
+    jamtime,
+    maildays,
+    torpsped,
+    mislsped,
+    decodds,
+    nummines,
+    usermines,
+    maxdroids,
+    cyb_class,
+    clenguse,
+    logflag,
+    optmenu,
+    cyb_gold,
+    tot_classes,
+    team_max,
+    usegemsg,
+    fse_state,
+    phatowrp,
+    misengfc,
+    score_bonus,
+    score_f1,
+    score_f2,
+    chgloser,
+    univwrap,
+    maxplanets;
 
 char *opttxt,
-        optchr;
+    optchr;
 
 long *opttbl;
 
 double tor_fact,
-        tdammax,
-        mdammax,
-        mis_fact,
-        idammax,
-        minedammax,
-        repairrate,
+    tdammax,
+    mdammax,
+    mis_fact,
+    idammax,
+    minedammax,
+    repairrate,
 /*                              tonfact,    omitted */
-        tooclose,
-        hyperdist1,
-        hyperdist2,
-        plattrf1,
-        plattrf2,
-        plattrf3,
-        plattrt1,
-        plattrt2,
-        plattrt3;
+    tooclose,
+    hyperdist1,
+    hyperdist2,
+    plattrf1,
+    plattrf2,
+    plattrf3,
+    plattrt1,
+    plattrt2,
+    plattrt3;
 
 long plantock;
 
@@ -324,7 +328,6 @@ double maxpl[NUMITEMS];
 
 long weight[NUMITEMS];
 
-
 /* the net score value of each item on the planet */
 
 long value[NUMITEMS];
@@ -351,28 +354,27 @@ MENU {
 #define MENUNUM (sizeof(menu)/sizeof(MENU))
 
 MENU menu[] = {
-        {0,        mnu_main,},
-        {1,        mnu_main_ans},
-        {FIGHTSUB, mnu_fightsub},
-        {ADMENU1,  mnu_admenu1},
-        {ADMENU1A, mnu_admenu1a},
-        {ADMENU2,  mnu_admenu2},
-        {ADMENU2B, mnu_admenu2b},
-        {ADMENU2E, mnu_admenu2e},
-        {ADMEN2F1, mnu_admenu2f1},
-        {ADMEN2F2, mnu_admenu2f2},
-        {ADMEN2F3, mnu_admenu2f3},
-        {ADMEN2F4, mnu_admenu2f4},
-        {ADMENU2H, mnu_admenu2h},
-        {ADMENU2I, mnu_admenu2i},
-        {ADMENU2J, mnu_admenu2j},
-        {CHOOSESH, mnu_choosesh},
-        {MENUG,    mnu_menug},
-        {MENUG1,   mnu_menug1},
-        {MENUG2,   mnu_menug2}
+    {0,        mnu_main,},
+    {1,        mnu_main_ans},
+    {FIGHTSUB, mnu_fightsub},
+    {ADMENU1,  mnu_admenu1},
+    {ADMENU1A, mnu_admenu1a},
+    {ADMENU2,  mnu_admenu2},
+    {ADMENU2B, mnu_admenu2b},
+    {ADMENU2E, mnu_admenu2e},
+    {ADMEN2F1, mnu_admenu2f1},
+    {ADMEN2F2, mnu_admenu2f2},
+    {ADMEN2F3, mnu_admenu2f3},
+    {ADMEN2F4, mnu_admenu2f4},
+    {ADMENU2H, mnu_admenu2h},
+    {ADMENU2I, mnu_admenu2i},
+    {ADMENU2J, mnu_admenu2j},
+    {CHOOSESH, mnu_choosesh},
+    {MENUG,    mnu_menug},
+    {MENUG1,   mnu_menug1},
+    {MENUG2,   mnu_menug2}
 
 };
-
 
 #ifdef FAKESECURE
 struct secure dummy_secure;
@@ -385,34 +387,35 @@ struct secure sv_secure;
 **************************************************************************/
 #ifdef PHARLAP
 void EXPORT init__galemp(void) {
-    #ifdef GETRAINER
+#ifdef GETRAINER
         stzcpy(mbmge.descrp,gmdnam("MBMG2.MDF"),MNMSIZ);
-    #else
+#else
         stzcpy(mbmge.descrp,gmdnam("MBMGEMP.MDF"),MNMSIZ);
-    #endif
+#endif
         iniwara();
         gestt=register_module(&mbmge);
         return;
 }
 #else
-    int FUNC iniwar(void) {
-        iniwara();
-        return (0);
-    }
+int FUNCFUNC iniwar(void) {
+    iniwara();
+    return (0);
+}
+
 #endif
 
 void FUNC dummy(void) {
 }
 
 void FUNC iniwara(void) {
-int i, n, type, classbase;
-int j;
-long numrecs;
-int class_tab[50];
+    int i, n, type, classbase;
+    int j;
+    long numrecs;
+    int class_tab[50];
 
     gemb = opnmsg(GEMSG);
     endmark = stgopt(ENDMARK);
-    if (!sameas(endmark, "ENDMARK")) {
+    if(!sameas(endmark, "ENDMARK")) {
         catastro("GE:ERR:MBMGEMSG.MCV Corrupted");
     }
 
@@ -448,7 +451,7 @@ int class_tab[50];
     profon = ynopt(PROFON);
     logflag = ynopt(LOGFLG);
 
-    if (logflag)
+    if(logflag)
         geshocst(0, "GE:Ext Trace Logging ON!");
 #ifdef FASTPLANET
     geshocst(0, "GE:FASTPLANET ON!");
@@ -502,20 +505,17 @@ int class_tab[50];
     plattrf2 = (double) (numopt(PLATTRF2, 5, 1000));
     plattrf2 = plattrf2 / 100.0;
 
-
     plattrf3 = (double) (numopt(PLATTRF3, 5, 1000));
     plattrf3 = plattrf3 / 100.0;
 
-
     plattrt1 = (double) (numopt(PLATTRT1, 5, 1000));
     plattrt1 = plattrt1 / 100.0;
-
 
     plattrt2 = (double) (numopt(PLATTRT2, 5, 1000));
     plattrt2 = plattrt2 / 100.0;
 
 /* load the planet maximum table */
-    for (i = 0; i < NUMITEMS; ++i) {
+    for(i = 0; i < NUMITEMS; ++i) {
         logthis(spr("Item %s", item_name[i]));
 
         maxpl[i] = (double) (lngopt(ITMPL01 + i, 0L, 201228378L));
@@ -536,7 +536,7 @@ int class_tab[50];
     }
 
     /* load the shield price table */
-    for (i = 0; i < TOPSHIELD; ++i) {
+    for(i = 0; i < TOPSHIELD; ++i) {
         logthis(spr("shieldtype %d", i));
 
         shieldprice[i] = lngopt(SHLDPR01 + i, 0L, 201228378L);
@@ -544,7 +544,7 @@ int class_tab[50];
     }
 
     /* load the phaser price table */
-    for (i = 0; i < TOPPHASOR; ++i) {
+    for(i = 0; i < TOPPHASOR; ++i) {
         logthis(spr("phasertype %d", i));
 
         phaserprice[i] = lngopt(PHSRPR01 + i, 0L, 201228378L);
@@ -597,7 +597,7 @@ int class_tab[50];
 #endif
 
     geshocst(2, spr("GE:Opn Pl St %d %d %d", secure->open_stat, secure->days_run, secure->days_tot));
-    if (secure->open_stat != 0)
+    if(secure->open_stat != 0)
         numrecs = cntrbtv();
     else
         numrecs = 100;
@@ -606,7 +606,7 @@ int class_tab[50];
     numrecs = (numrecs / (long) plodds) * 4L;
     plantime = (int) (plantock / numrecs);
 
-    if (plantime < 4)
+    if(plantime < 4)
         plantime = 4;
 
 #ifdef FASTPLANET
@@ -625,11 +625,11 @@ int class_tab[50];
     secure->days_tot = 5;
 #endif
 
-    if (sv_secure.open_stat != secure->open_stat) {
+    if(sv_secure.open_stat != secure->open_stat) {
         catastro("GE: Secure Stat Open failure!");
     }
 
-    if (sv_secure.days_tot != secure->days_tot) {
+    if(sv_secure.days_tot != secure->days_tot) {
         catastro("GE: Secure Days Open failure!");
     }
 
@@ -644,7 +644,7 @@ int class_tab[50];
     warusr_ecl = pltile(nships * (long) sizeof(WARUSR), 0, sizeof(WARUSR), sizeof(WARUSR));
     warusr = MK_FP(warusr_ecl, 0);
 
-    for (j = 0; j < nships; j++) {
+    for(j = 0; j < nships; j++) {
         setmem((void *) warusroff(j), sizeof(WARUSR), 0);
     }
     geshocst(1, spr("GE:INF:User Mem: %ld", nships * sizeof(WARUSR)));
@@ -653,7 +653,7 @@ int class_tab[50];
     warshp_ecl = pltile(nships * (long) sizeof(WARSHP), 0, sizeof(WARSHP), sizeof(WARSHP));
     warshp = MK_FP(warshp_ecl, 0);
 
-    for (j = 0; j < nships; j++) {
+    for(j = 0; j < nships; j++) {
         setmem(((void *) warshpoff(j)), sizeof(WARSHP), 0);
     }
     geshocst(1, spr("GE:INF:Ship Mem: %ld", nships * sizeof(WARSHP)));
@@ -702,9 +702,8 @@ int class_tab[50];
     gechrbuf3 = (char *) alcmem(20);
     warpbuf = (char *) alcmem(40);
 
-
 /* init empty mine field */
-    for (n = 0; n < nummines; ++n)
+    for(n = 0; n < nummines; ++n)
         mines[n].channel = 255;
 
 /* init sector, planet, and worm table to bad values */
@@ -720,7 +719,6 @@ int class_tab[50];
     worm.ysect = 32767;
     worm.plnum = 32767;
 
-
     setmbk(gemb);
 
     cyb_class = 0;
@@ -735,7 +733,7 @@ int class_tab[50];
 /* does the table have all the elements? */
     n = (SXXEND - S01TYPE);
     i = n / NCL;
-    if ((i * NCL) != n)
+    if((i * NCL) != n)
         catastro("GE:ERR:Ship Class Tbl Corrupted");
 
 /* this is how many inactive and active classes we have */
@@ -747,13 +745,13 @@ int class_tab[50];
 
     n = 0;
 
-    for (i = 0; i < tot_classes; ++i) {
+    for(i = 0; i < tot_classes; ++i) {
         classbase = S01TYPE + (i * NCL);
         type = tokopt(classbase, "USER", "CYBORG", "DROID", "<NONE>", NULL);
 
         class_tab[i] = classbase;
 
-        if (type != CLASSTYPE_NONE) {
+        if(type != CLASSTYPE_NONE) {
             ++n;
         }
     }
@@ -767,7 +765,7 @@ int class_tab[50];
 
 /* read in the ship classes */
     i = 0;
-    for (n = 0; n < tot_classes; ++n) {
+    for(n = 0; n < tot_classes; ++n) {
         classbase = class_tab[i];
         shipclass[i].max_type = tokopt(classbase, "USER", "CYBORG", "DROID", "<NONE>", NULL);
         shipclass[i].typename = stgopt(++classbase);
@@ -808,15 +806,15 @@ int class_tab[50];
         shipclass[i].kill_func = NULL;
         shipclass[i].won_func = NULL;
 
-        if (shipclass[i].max_type == CLASSTYPE_CYBORG) /* CYBORG */
+        if(shipclass[i].max_type == CLASSTYPE_CYBORG) /* CYBORG */
         {
-            if (cyb_class == 0)  /* set up base cybertron class */
+            if(cyb_class == 0)  /* set up base cybertron class */
                 cyb_class = i;
             shipclass[i].init_func = cyb_init;
             shipclass[i].tick_func = cyb_lives;
             shipclass[i].kill_func = cyb_died;
             shipclass[i].won_func = cyb_won;
-        } else if (shipclass[i].max_type == CLASSTYPE_DROID) /* DROID */
+        } else if(shipclass[i].max_type == CLASSTYPE_DROID) /* DROID */
         {
             shipclass[i].init_func = droid_init;
             shipclass[i].tick_func = droid_lives;
@@ -834,12 +832,12 @@ int class_tab[50];
 #define NPL 8
 
 /* read in the neutral planets */
-    for (i = 0; i < s00plnum; ++i) {
-        if ((S00P1RES + (i * NPL)) - (S00P1DEF + (i * NPL)) != (NPL - 1))
+    for(i = 0; i < s00plnum; ++i) {
+        if((S00P1RES + (i * NPL)) - (S00P1DEF + (i * NPL)) != (NPL - 1))
             catastro(spr("GE:ERR:Sect00 Table Error %d Msg # %d", i + 1, S00P1DEF + (i * NPL)));
         classbase = S00P1DEF + (i * NPL);
         n = ynopt(classbase);
-        if (!n)
+        if(!n)
             catastro(spr("GE:ERR:Sect00 Table Error %d Msg # %d", i + 1, S00P1DEF + (i * NPL)));
 
         s00[i].name = stgopt(++classbase);
@@ -865,13 +863,12 @@ int class_tab[50];
 
 /* tell everyone that we are up */
     geshocst(0, spr("Galactic Empire %s", VERSION));
-    if (secure->open_stat == -1)
+    if(secure->open_stat == -1)
         geshocst(0, spr("Unregistered - Day %d of %d", secure->days_run, secure->days_tot));
-    else if (secure->open_stat == 1)
+    else if(secure->open_stat == 1)
         geshocst(0, spr("Registration # %s", stgopt(REGNO)));
     else
         geshocst(0, "Unregistered - Disabled!");
-
 
 #ifdef PHARLAP
     if (secure->open_stat != 0) {
@@ -879,13 +876,13 @@ int class_tab[50];
         rtkick(TICKTIME2,pwarrti2);
         rtkick(60,pwarrti3);
         rtkick(plantime,pplarti);
-    #ifdef BLDPLNTS
+#ifdef BLDPLNTS
         rtkick(30,plabld);
-    #endif
+#endif
         rtkick(1,pautorti);
-	}
+    }
 #else
-    if (secure->open_stat != 0) {
+    if(secure->open_stat != 0) {
         rtkick(TICKTIME, warrti);
         rtkick(TICKTIME2, warrti2);
         rtkick(60, warrti3);
@@ -893,13 +890,13 @@ int class_tab[50];
         rtkick(1, autorti);
     }
 #endif
-    for (j = 0; j < nships; ++j)
+    for(j = 0; j < nships; ++j)
         warshpoff(j)->status = GESTAT_AVAIL;
 
 /* find the module number (state) of the FSE for later use */
     fse_state = -1;
-    for (i = 0; i < nmods; i++) {
-        if ((sameas((char *) (module[i]->descrp), "Editor")) == TRUE)
+    for(i = 0; i < nmods; i++) {
+        if((sameas((char *) (module[i]->descrp), "Editor")) == TRUE)
             fse_state = i;
     }
 }
@@ -911,17 +908,17 @@ int FUNC gelogon(void) {
 
     setmbk(gemb);
 
-    if (secure->open_stat == 0)
+    if(secure->open_stat == 0)
         return (0);
 
-    if (!hasmkey(PLAYKEY))
+    if(!hasmkey(PLAYKEY))
         return (0);
 
     /* BJ CHANGED FROM USRACC */
-    if (!geudb(GELOOKUP, usaptr->userid, warusroff(usrnum))) {
+    if(!geudb(GELOOKUP, usaptr->userid, warusroff(usrnum))) {
         prfmsg(GECALLS);
         outprf(usrnum);
-    } else if (gernd() % 10 == 1) {
+    } else if(gernd() % 10 == 1) {
         prfmsg(GECALLS2);
         outprf(usrnum);
     }
@@ -941,7 +938,7 @@ return;
 }
 #else
 int gedelete(uid)
-        char *uid;
+    char *uid;
 {
     gedeletea(uid);
     return (0);
@@ -1006,7 +1003,7 @@ void FUNC gemidnighta(void) {
 
     setmbk(gemb);
 
-    if (secure->open_stat == 0)
+    if(secure->open_stat == 0)
         return;
 
     geshocst(0, spr("GE:INF:Begin Cleanup"));
@@ -1014,10 +1011,10 @@ void FUNC gemidnighta(void) {
 /* clear out planet counter */
     geshocst(1, spr("GE:INF:Cleanup Phase-1"));
     setbtv(gebb5);
-    if (qlobtv(0)) {
+    if(qlobtv(0)) {
         do {
             gcrbtv(&tmpusr, 0);
-            if (!sameto(tmpusr.userid, KEY)) {
+            if(!sameto(tmpusr.userid, KEY)) {
                 tmpusr.planets = 0;
                 tmpusr.score = 0;
                 tmpusr.plscore = 0;
@@ -1025,21 +1022,20 @@ void FUNC gemidnighta(void) {
                 updbtv(&tmpusr);
                 gcrbtv(&tmpusr, 0);   /* thank you BTRIEVE 5.00b */
             }
-        } while (qnxbtv());
+        } while(qnxbtv());
     }
-
 
     geshocst(1, spr("GE:INF:Cleanup Phase-2"));
 
     setbtv(gebb2);
 
-    if (qlobtv(0)) {
+    if(qlobtv(0)) {
         do {
             gcrbtv(&planet, 0);
             setbtv(gebb5);
-            if (planet.type == PLTYPE_PLNT) {
-                if (planet.userid[0] != 0) {
-                    if (qeqbtv(planet.userid, 0)) {
+            if(planet.type == PLTYPE_PLNT) {
+                if(planet.userid[0] != 0) {
+                    if(qeqbtv(planet.userid, 0)) {
                         gcrbtv(&tmpusr, 0);
                         plptr = &planet;
                         calc_networth();
@@ -1061,7 +1057,7 @@ void FUNC gemidnighta(void) {
                         tmpstat.cash = planet.cash;
                         tmpstat.debt = planet.debt;
                         tmpstat.tax = planet.tax;
-                        for (i = 0; i < NUMITEMS; ++i)
+                        for(i = 0; i < NUMITEMS; ++i)
                             tmpstat.itemqty[i] = planet.items[i].qty;
 
 /*HERE*/
@@ -1072,14 +1068,14 @@ void FUNC gemidnighta(void) {
                 }
             }
             setbtv(gebb2);
-        } while (qnxbtv());
+        } while(qnxbtv());
     }
 
-    if (secure->open_stat != 0) {
+    if(secure->open_stat != 0) {
         sprintf(gechrbuf, "%ld", (cntrbtv() / 2L));
         geshocst(0, spr("GE:INF:Plnt DB Size %sk", gechrbuf));
 
-        if (cntrbtv() >= max_plrec)
+        if(cntrbtv() >= max_plrec)
             geshocst(0, "GE:INF:Max Sect Reached");
     }
 
@@ -1091,42 +1087,42 @@ void FUNC gemidnighta(void) {
 
     i = cofdat(today());
     i -= maildays; /* back up 1 week */
-    if (qlobtv(0)) {
+    if(qlobtv(0)) {
         do {
             gcrbtv(gemsg, 0);
-            if (gemsg->nreply < i) /* we robbed nreply for the stamp */
+            if(gemsg->nreply < i) /* we robbed nreply for the stamp */
                 delbtv();
-            if (gemsg->userto[0] == '*') /* non-live player */
+            if(gemsg->userto[0] == '*') /* non-live player */
                 delbtv();
 
-        } while (qnxbtv());
+        } while(qnxbtv());
     }
 
     geshocst(1, spr("GE:INF:Cleanup Phase-4"));
     setbtv(gebb5);
 
 /* zero out the team count and score */
-    for (i = 0; i < MAXTEAMS; ++i) {
+    for(i = 0; i < MAXTEAMS; ++i) {
         teamtab[i].teamcount = 0;
         teamtab[i].teamscore = 0;
     }
 
 /* first count up the members of a team */
 
-    if (qlobtv(0)) {
+    if(qlobtv(0)) {
         do {
             gcrbtv(&tmpusr, 0);
-            if (!sameto(tmpusr.userid, KEY)) /* ignore the secret key record */
+            if(!sameto(tmpusr.userid, KEY)) /* ignore the secret key record */
             {
                 foundit = FALSE;
-                if (tmpusr.teamcode > 0) {
-                    for (i = 0; i < MAXTEAMS; ++i) {
-                        if (teamtab[i].teamcode == tmpusr.teamcode) {
+                if(tmpusr.teamcode > 0) {
+                    for(i = 0; i < MAXTEAMS; ++i) {
+                        if(teamtab[i].teamcode == tmpusr.teamcode) {
                             foundit = TRUE;
                             break;
                         }
                     }
-                    if (foundit == FALSE) {
+                    if(foundit == FALSE) {
                         tmpusr.teamcode = 0;
                         logthis(spr("Reset Teamcode to 0 [%s]", tmpusr.userid));
                     } else {
@@ -1135,31 +1131,31 @@ void FUNC gemidnighta(void) {
                         logthis(gechrbuf);
                     }
                 }
-                if (foundit == FALSE)
+                if(foundit == FALSE)
                     updbtv(&tmpusr);
             }
             gcrbtv(&tmpusr, 0);
-        } while (qnxbtv());
+        } while(qnxbtv());
     }
 
 /* update player and team scores */
 
-    if (qlobtv(0)) {
+    if(qlobtv(0)) {
         do {
             gcrbtv(&tmpusr, 0);
-            if (!sameto(tmpusr.userid, KEY)) /* ignore the secret key record */
+            if(!sameto(tmpusr.userid, KEY)) /* ignore the secret key record */
             {
                 tmpusr.score = tmpusr.plscore + tmpusr.klscore;
 
-                if (tmpusr.teamcode > 0) {
-                    for (i = 0; i < MAXTEAMS; ++i) {
-                        if (teamtab[i].teamcode == tmpusr.teamcode) {
+                if(tmpusr.teamcode > 0) {
+                    for(i = 0; i < MAXTEAMS; ++i) {
+                        if(teamtab[i].teamcode == tmpusr.teamcode) {
                             break;
                         }
                     }
 
                     /* just incase things get messed up */
-                    if (teamtab[i].teamcount == 0)
+                    if(teamtab[i].teamcount == 0)
                         teamtab[i].teamcount = 1;
 
                     teamtab[i].teamscore += teambonus;
@@ -1177,13 +1173,13 @@ void FUNC gemidnighta(void) {
                 updbtv(&tmpusr);
             }
             gcrbtv(&tmpusr, 0);
-        } while (qnxbtv());
+        } while(qnxbtv());
     }
 
 /* remove any teams with no players */
 
-    for (i = 0; i < MAXTEAMS; ++i) {
-        if (teamtab[i].teamcode > 0 && teamtab[i].teamcount == 0) {
+    for(i = 0; i < MAXTEAMS; ++i) {
+        if(teamtab[i].teamcode > 0 && teamtab[i].teamcount == 0) {
             teamtab[i].teamcode = -1;
             geshocst(0, spr("GE:INF:Removed Team %s", teamtab[i].teamname));
         }
@@ -1201,24 +1197,23 @@ void FUNC gemidnighta(void) {
 
     strncpy(tmpbuf2, KEY, 1);
 
-    if (qhibtv(1)) {
+    if(qhibtv(1)) {
         do {
             gcrbtv(&tmpusr, 1);
-            if (tmpusr.score > 0
-                && tmpusr.userid[0] != tmpbuf2[0]
-                && tmpusr.userid[0] != '@') {
+            if(tmpusr.score > 0
+               && tmpusr.userid[0] != tmpbuf2[0]
+               && tmpusr.userid[0] != '@') {
                 ++i;
                 tmpusr.rospos = i;
                 updbtv(&tmpusr);
                 gcrbtv(&tmpusr, 1);
             }
-        } while (qprbtv());
+        } while(qprbtv());
     }
 
     geshocst(0, spr("GE:INF:End Cleanup"));
     return;
 }
-
 
 /* determine the net worth of a planet */
 
@@ -1228,14 +1223,13 @@ void FUNC calc_networth() {
     tmpusr.plscore += v;
 }
 
-
 unsigned FUNC long value_pl() {
     unsigned long v;
     int i;
 
     v = (plptr->cash + plptr->tax) / (1000000L / pltvcash);
 
-    for (i = 0; i < NUMITEMS; ++i) {
+    for(i = 0; i < NUMITEMS; ++i) {
         v += (value[i] * ((long) plptr->items[i].qty / pltvdiv));
     }
 
@@ -1277,7 +1271,7 @@ int FUNC warhup(void) {
 
 void FUNC warhupa(void) {
 
-    if (secure->open_stat == 0)
+    if(secure->open_stat == 0)
         return;
 
     setbtv(gebb1);
@@ -1288,12 +1282,12 @@ void FUNC warhupa(void) {
 
     logthis(spr("WARHUP called 4 %s", waruptr->userid));
 
-    if (warsptr->status == GESTAT_USER) {
-        if (ingegame(usrnum)) {
+    if(warsptr->status == GESTAT_USER) {
+        if(ingegame(usrnum)) {
             /* if modem hangup */
             logthis(spr("User Hungup Status = %d", status));
 /*              if (warsptr->cantexit > 0 && status == 11)*/
-            if (warsptr->cantexit > 0) {
+            if(warsptr->cantexit > 0) {
                 killem(warsptr, usrnum);
                 warsptr->where = -1;
             } else {
@@ -1331,7 +1325,7 @@ int FUNC clswar(void) {
 #endif
 
 void FUNC clswara(void) {
-    if (gemb != NULL) {
+    if(gemb != NULL) {
         clsmsg(gemb);
         gemb = NULL;
     }
@@ -1340,7 +1334,7 @@ void FUNC clswara(void) {
 
     clsbtv(gebb4);
 
-    if (secure->open_stat != 0) {
+    if(secure->open_stat != 0) {
         clsbtv(gebb2);
         clsbtv(gebb5);
     }
@@ -1354,7 +1348,7 @@ void FUNC clswara(void) {
 
 int FUNC galemp() {
     int i, rtn;
-    if (secure->open_stat == 0) {
+    if(secure->open_stat == 0) {
         prf("\r\n\r\n\r\n");
         prf("The Galactic Empire trial period is over. If you wish to ");
         prf("have this game permanently added to this system let your SYSOP ");
@@ -1368,8 +1362,8 @@ int FUNC galemp() {
     warsptr = warshpoff(usrnum);
     waruptr = warusroff(usrnum);
 
-    for (i = 0; i < MENUNUM; ++i) {
-        if (menu[i].substt == usrptr->substt) {
+    for(i = 0; i < MENUNUM; ++i) {
+        if(menu[i].substt == usrptr->substt) {
             rtn = (*(menu[i].func))();
             clrprf();
             return (rtn);
@@ -1386,13 +1380,13 @@ void FUNC outwar(int filter, unsigned exclude, unsigned freq) {
     int i;
 
     int zothusn;
-    for (zothusn = 0; zothusn < nships; zothusn++) {
-        if (zothusn != exclude && ingegame(zothusn)) {
-            if (freq == 0) {
+    for(zothusn = 0; zothusn < nships; zothusn++) {
+        if(zothusn != exclude && ingegame(zothusn)) {
+            if(freq == 0) {
                 outprfge(filter, zothusn);
             } else {
-                for (i = 0; i < 3; ++i) {
-                    if (freq == warshpoff(zothusn)->freq[i]) {
+                for(i = 0; i < 3; ++i) {
+                    if(freq == warshpoff(zothusn)->freq[i]) {
                         outprfge(filter, zothusn);
                     }
                 }
@@ -1517,10 +1511,10 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
     rtn = 0;
 
     logthis(spr("GEUDB called: F=%d,%s,%s", func, usrname, geptr->userid));
-    switch (func) {
+    switch(func) {
 
         case GELOOKUP        :
-            if (qeqbtv(usrname, 0))
+            if(qeqbtv(usrname, 0))
                 rtn = 1;
             logthis(spr("GE: lookup *%s* f:%d", usrname, rtn));
             break;
@@ -1530,14 +1524,14 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
 #ifdef PHARLAP
             if (!dinsbtv(geptr))
 #else
-            if (!insbtv(geptr))
+            if(!insbtv(geptr))
 #endif
                 geshocst(0, spr("GE:ERR:User ins Fail %s", usrname));
 
             break;
 
         case GEDELETE        :
-            if (acqbtv(NULL, usrname, 0)) {
+            if(acqbtv(NULL, usrname, 0)) {
                 delbtv();
                 rtn = 1;
             } else {
@@ -1547,7 +1541,7 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
 
         case GEUPDATE        :
             logthis(spr("DEBUG <%s> <%s> update", usrname, geptr->userid));
-            if (acqbtv(NULL, usrname, 0)) {
+            if(acqbtv(NULL, usrname, 0)) {
                 updbtv(geptr);
                 rtn = 1;
             } else {
@@ -1556,7 +1550,7 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
             break;
 
         case GEGET           :
-            if (acqbtv(geptr, usrname, 0)) {
+            if(acqbtv(geptr, usrname, 0)) {
                 rtn = 1;
             } else {
                 geshocst(0, spr("GE:ERR:User Get Fail %s", usrname));
@@ -1568,7 +1562,6 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
     }
     return (rtn);
 }
-
 
 /**************************************************************************
 ** sector Database functions                                             **
@@ -1741,7 +1734,6 @@ return(FALSE);
 return(TRUE);
 }
 
-
 /**************************************************************************
 ** Team Table Database functions                                         **
 **************************************************************************/
@@ -1754,7 +1746,7 @@ void FUNC load_team_tab() {
 
 /* clear out the memory team table */
 
-    for (i = 0; i < MAXTEAMS; ++i) {
+    for(i = 0; i < MAXTEAMS; ++i) {
         teamtab[i].teamcode = 0;
         teamtab[i].teamname[0] = 0;
         teamtab[i].teamcount = 0;
@@ -1765,10 +1757,10 @@ void FUNC load_team_tab() {
 
     logthis("Loading Team Table");
 
-    if ((mzfp = fopen("MBMGETEA.DAT", "r")) != NULL) {
+    if((mzfp = fopen("MBMGETEA.DAT", "r")) != NULL) {
         i = 0;
-        while (fgets(buffer, sizeof(buffer), mzfp) != NULL) {
-            if (sameto("TEAM|", buffer) && buffer[80] == '|') {
+        while(fgets(buffer, sizeof(buffer), mzfp) != NULL) {
+            if(sameto("TEAM|", buffer) && buffer[80] == '|') {
 /*                      logthis(spr("Loading TT Elmt # %d",i));*/
 /*                      logthis(spr("Buffer = [%s]",buffer));*/
                 strncpy(gechrbuf, &buffer[5], 5);
@@ -1796,7 +1788,7 @@ void FUNC load_team_tab() {
                 stripb(teamtab[i].secret);
 
                 i++;
-                if (i >= MAXTEAMS)
+                if(i >= MAXTEAMS)
                     break;
             } else {
                 geshocst(0, "GE:ERR Bad Team Rcd - Ignored");
@@ -1813,9 +1805,9 @@ void FUNC update_team_tab() {
 
     hdl = fopen("mbmgetea.dat", "wt");
 
-    if (hdl != (FILE *) 0) {
-        for (i = 0; i < MAXTEAMS; ++i) {
-            if (teamtab[i].teamcode != -1) {
+    if(hdl != (FILE *) 0) {
+        for(i = 0; i < MAXTEAMS; ++i) {
+            if(teamtab[i].teamcode != -1) {
                 fprintf(hdl, "TEAM|%5ld|%-30s|%5d|%10ld|%-10s|%-10s|\n",
                         teamtab[i].teamcode,
                         teamtab[i].teamname,
@@ -1843,6 +1835,7 @@ int FUNC plarti(void) {
     plartia();
     return (0);
 }
+
 #endif
 
 void FUNC plartia(void) {
@@ -1871,10 +1864,10 @@ void FUNC plartia(void) {
 
 /* if first time through get the first record in the file */
 
-    if (fpos == 0) {
+    if(fpos == 0) {
         logthis("plarti:fpos == 0 reset stuff");
         intkey = 1;
-        if (agtbtv(&planet, &intkey, 2)) {
+        if(agtbtv(&planet, &intkey, 2)) {
             logthis("plarti:querried first planet get fpos");
             fpos = absbtv();
         }
@@ -1887,7 +1880,7 @@ void FUNC plartia(void) {
     }
 
 /* if we still do not have any records go no further */
-    if (fpos == 0) {
+    if(fpos == 0) {
 #ifdef PHARLAP
         rtkick(plantime,pplarti);
 #else
@@ -1904,7 +1897,7 @@ void FUNC plartia(void) {
 
     do {
         tic++;
-        if (tic > MAXTIC) {
+        if(tic > MAXTIC) {
             /* must get the current record to mark the spot */
             gcrbtv(&planet, 2);
             fpos = absbtv();
@@ -1912,25 +1905,24 @@ void FUNC plartia(void) {
             break;
         }
 
-        if (firstime == TRUE || qnxbtv()) {
-            if (firstime == TRUE)
+        if(firstime == TRUE || qnxbtv()) {
+            if(firstime == TRUE)
                 logthis("First time through plarti do loop");
 
             firstime = FALSE;
             logthis("plarti: got next record");
 
-
             plnt_type = (int) (gebb2->key[0]);
-            if (plnt_type == SECTYPE_NORMAL) {
+            if(plnt_type == SECTYPE_NORMAL) {
                 logthis("plarti:found sector record");
                 ++sectcnt;
-            } else if (plnt_type == PLTYPE_PLNT) {
+            } else if(plnt_type == PLTYPE_PLNT) {
                 gcrbtv(&planet, 2);
                 fpos = absbtv();
                 not_done = FALSE;
                 logthis("plarti:found planet record");
                 ++plntcnt;
-            } else if (plnt_type == PLTYPE_WORM) {
+            } else if(plnt_type == PLTYPE_WORM) {
                 logthis("plarti:found wormhole record");
 
                 ++wormcnt;
@@ -1950,7 +1942,7 @@ void FUNC plartia(void) {
             ftocktime = ((double) plantime * ftockfact);
 
             /* no smaller than every 3 seconds */
-            if (ftocktime < 3.0) {
+            if(ftocktime < 3.0) {
                 geshocst(1, "GE:INF:plarti:recalb tic forced to 3");
                 plantime = 3;
             } else
@@ -1972,7 +1964,7 @@ void FUNC plartia(void) {
 #endif
             break;
         }
-    } while (not_done);
+    } while(not_done);
 
 /* skip past neutral zone */
 /* GE22e patch to fix dieing population on Zygor-3
@@ -1981,10 +1973,10 @@ if (planet.xsect == 0 && planet.ysect == 0)
 */
 
     flag = 0;
-    if (fpos != 0 && tic <= MAXTIC) {
+    if(fpos != 0 && tic <= MAXTIC) {
         logthis("got a planet record");
         plptr = &planet;
-        if (plptr->items[0].qty > 0 && plptr->userid[0] != 0)  /* any men on planet? */
+        if(plptr->items[0].qty > 0 && plptr->userid[0] != 0)  /* any men on planet? */
         {
             logthis("and it has a population");
             ++plntpop;
@@ -2001,10 +1993,10 @@ if (planet.xsect == 0 && planet.ysect == 0)
 
 /* GE22e patch to fix dieing population on Zygor-3 */
 
-    if (planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 1) {
+    if(planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 1) {
         logthis("Updating Zygor");
 
-        for (i = 0; i < NUMITEMS; ++i) {
+        for(i = 0; i < NUMITEMS; ++i) {
             planet.items[i].qty = 1032000L;
             planet.items[i].sell = 'Y';
             planet.items[i].markup2a = (baseprice[i] * 2) + (gernd() % baseprice[i]);
@@ -2012,7 +2004,7 @@ if (planet.xsect == 0 && planet.ysect == 0)
         flag = 1;
     }
 
-    if (planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 2) {
+    if(planet.xsect == 0 && planet.ysect == 0 && planet.plnum == 2) {
         logthis("Updating T-station");
         planet.items[I_TROOPS].qty = 1032000L; /* BJ ADDED L */
         planet.items[I_TROOPS].sell = 'Y';
@@ -2028,7 +2020,7 @@ if (planet.xsect == 0 && planet.ysect == 0)
         flag = 1;
     }
 
-    if (flag == 1) {
+    if(flag == 1) {
         logthis("plarti:changes made to planet - update it");
         gesdb(GEUPDATE, (PKEY *) &planet, (GALSECT *) &planet);
     }
@@ -2066,12 +2058,13 @@ int FUNC warrti(void) {
     warrtia();
     return (0);
 }
+
 #endif
 
 void FUNC warrtia(void) {
-int zothusn;            /* general purpose other-user channel number */
-WARSHP *wptr;
-int cntr;
+    int zothusn;            /* general purpose other-user channel number */
+    WARSHP *wptr;
+    int cntr;
 
     logthis("TICK:Warrtia entered");
     cntr = 0;
@@ -2080,13 +2073,13 @@ int cntr;
 #endif
     checkmines();  /* check for mines */
 
-    for (zothusn = 0; zothusn < nships; zothusn++) {
+    for(zothusn = 0; zothusn < nships; zothusn++) {
         wptr = warshpoff(zothusn);
-        if (ingegame(zothusn)) {
+        if(ingegame(zothusn)) {
             logthis(spr("Chk Shp Stat %s", wptr->userid));
             setbtv(gebb1);
             setmbk(gemb);
-            if (wptr->status == GESTAT_USER)
+            if(wptr->status == GESTAT_USER)
                 ++cntr;
             fluxstat(wptr, zothusn);
             repairship(wptr, zothusn);
@@ -2128,30 +2121,28 @@ int FUNC autorti(void) {
 #endif
 
 void FUNC autortia(void) {
-    int zothusn;            /* general purpose other-user channel number */
-    WARSHP *wptr;
+int zothusn;            /* general purpose other-user channel number */
+WARSHP *wptr;
 
-    static int ticktock1 = 0;
-    static int ticktock2 = 0;
-    int count, class;
-    int i, j, clscnt;
-
+static int ticktock1 = 0;
+static int ticktock2 = 0;
+int count, class;
+int i, j, clscnt;
 
     logthis("TICK:autorti entered");
 
     setmbk(gemb);
     setbtv(gebb1);
 
-/* 12/19/91 spread out disk I/O over more time */
-
-    if (ticktock1 == 0)
+    /* 12/19/91 spread out disk I/O over more time */
+    if(ticktock1 == 0)
         ticktock1 = nterms;
 
     ++ticktock2;
 
     logthis(spr("ticktock1 = %d -- ticktock2 = %d", ticktock1, ticktock2));
 
-    if (ticktock2 >= 30 && ticktock1 < nships) {
+    if(ticktock2 >= 30 && ticktock1 < nships) {
         logthis("ticktock2 >=30 and ticktock1 < nships");
         logthis("ticktock2 >=30 and ticktock1 < nships");
         logthis("ticktock2 >=30 and ticktock1 < nships");
@@ -2160,25 +2151,25 @@ void FUNC autortia(void) {
         wptr = warshpoff(ticktock1);
         zothusn = ticktock1;
 
-        if (wptr->status == GESTAT_AVAIL) {
+        if(wptr->status == GESTAT_AVAIL) {
             class = -1;
             logthis("Chan Stat = GESTAT_AVAIL");
             /* look through the classes for artificial classes */
-            for (i = 0; i < tot_classes; ++i) {
-                if (shipclass[i].max_type == CLASSTYPE_CYBORG ||
-                    shipclass[i].max_type == CLASSTYPE_DROID) {
+            for(i = 0; i < tot_classes; ++i) {
+                if(shipclass[i].max_type == CLASSTYPE_CYBORG ||
+                   shipclass[i].max_type == CLASSTYPE_DROID) {
                     /* is this class filled */
                     clscnt = 0;
-                    for (j = 0; j < nships; ++j) {
+                    for(j = 0; j < nships; ++j) {
                         /* is this a automatron and of this class */
-                        if ((warshpoff(j))->status == GESTAT_AUTO
-                            && (warshpoff(j))->shpclass == i) {
+                        if((warshpoff(j))->status == GESTAT_AUTO
+                           && (warshpoff(j))->shpclass == i) {
                             clscnt++;
                         }
                     }
                     logthis(spr("Class %d -- Count %d", i, clscnt));
                     /* is this class full? */
-                    if (clscnt < shipclass[i].tot_to_create) {
+                    if(clscnt < shipclass[i].tot_to_create) {
                         /* NO - (i) is now set to the class to create */
                         class = i;
                         break;
@@ -2189,14 +2180,14 @@ void FUNC autortia(void) {
             /* should also add a random factor to choose a auto class even if the
 		class is full */
 
-            if (gernd() % 100 == 0 || class == -1) {
+            if(gernd() % 100 == 0 || class == -1) {
                 logthis("pick random class");
                 /* look through the classes for artificial classes */
                 class = -1;
-                for (j = 0; j < 200; ++j) {
+                for(j = 0; j < 200; ++j) {
                     i = gernd() % tot_classes;
-                    if (shipclass[i].max_type == CLASSTYPE_CYBORG ||
-                        shipclass[i].max_type == CLASSTYPE_DROID) {
+                    if(shipclass[i].max_type == CLASSTYPE_CYBORG ||
+                       shipclass[i].max_type == CLASSTYPE_DROID) {
                         class = i;
                         break;
                     }
@@ -2206,34 +2197,34 @@ void FUNC autortia(void) {
             logthis(spr("picked class - %d", class));
 
             /* initialize the non-user ship areas */
-            if (class > -1) {
+            if(class > -1) {
                 logthis(spr("Calling init_func 4 cls %d", class));
                 logthis(spr("   Name: %s", shipclass[i].typename));
 
-                if (shipclass[class].init_func != NULL)
+                if(shipclass[class].init_func != NULL)
                     (*(shipclass[class].init_func))(wptr, zothusn, class);
             }
         }
 
-        if (++ticktock1 >= nships)
+        if(++ticktock1 >= nships)
             ticktock1 = nterms;
         ticktock2 = 0;
     }
 
-    if (cybhaltflg <= 0) {
+    if(cybhaltflg <= 0) {
         cybhaltflg = 0;
 
         /* cybertron loop */
-        for (count = nterms; count < nships; count++) {
+        for(count = nterms; count < nships; count++) {
             wptr = warshpoff(count);
             zothusn = count;
 
-            if (wptr->status == GESTAT_AUTO) {
-                if (wptr->tick == 0) {
+            if(wptr->status == GESTAT_AUTO) {
+                if(wptr->tick == 0) {
                     logthis(spr("Calling tick_func 4 usn %d", zothusn));
                     logthis(spr("  Class %d", wptr->shpclass));
 
-                    if (shipclass[wptr->shpclass].tick_func != NULL)
+                    if(shipclass[wptr->shpclass].tick_func != NULL)
                         (*(shipclass[wptr->shpclass].tick_func))(wptr, zothusn);
                 } else {
                     --wptr->tick;
@@ -2257,34 +2248,28 @@ void FUNC autortia(void) {
 /**************************************************************************
 ** Real time kick routine #2                                             **
 **************************************************************************/
-
 #ifdef PHARLAP
-void  FUNC pwarrti2(void)
-{
-warrti2a();
-return;
+void  FUNC pwarrti2(void) {
+    warrti2a();
+    return;
 }
-
 #else
 int FUNC warrti2(void) {
     warrti2a();
     return (0);
 }
-
 #endif
 
 void FUNC warrti2a(void) {
-    int zothusn;            /* general purpose other-user channel number */
-    WARSHP *wptr;
-
-    static int clicker = 0;
+int zothusn;            /* general purpose other-user channel number */
+WARSHP *wptr;
+static int clicker = 0;
 
     logthis("TICK:PWarrti2 entered");
-
     zothusn = clicker;
 
-    while (zothusn < nships) {
-        if (ingegame(zothusn)) {
+    while(zothusn < nships) {
+        if(ingegame(zothusn)) {
             wptr = warshpoff(zothusn);
             setbtv(gebb1);
             setmbk(gemb);
@@ -2295,9 +2280,7 @@ void FUNC warrti2a(void) {
         }
         zothusn += 3;
     }
-
     clicker = (clicker + 1) % 3;
-
 #ifdef PHARLAP
     rtkick(TICKTIME2,pwarrti2);
 #else
@@ -2311,28 +2294,23 @@ void FUNC warrti2a(void) {
 **************************************************************************/
 
 #ifdef PHARLAP
-void  FUNC pwarrti3(void)
-{
-warrti3a();
-return;
+void  FUNC pwarrti3(void) {
+    warrti3a();
+    return;
 }
-
 #else
 int FUNC warrti3(void) {
     warrti3a();
     return (0);
 }
-
 #endif
 
 void FUNC warrti3a(void) {
-    COORD tmpcoord;
+COORD tmpcoord;
 
     logthis("TICK:Warrti3a entered");
-
     setmbk(gemb);
     prfmsg(ZAPHIM2);
-
     tmpcoord.xcoord = 0.0;
     tmpcoord.ycoord = 0.0;
     outsect(FILTER, &tmpcoord, 99, 0);
@@ -2349,223 +2327,138 @@ void FUNC warrti3a(void) {
 /* U T I L I T I E S */
 /*********************/
 
-
 /**************************************************************************
 ** OUTPRF special doesn't output if Automaton                            **
 **************************************************************************/
-
-void FUNC
-outprfge(class, shpno
-)
-int class;
-int shpno;
-
-{
-/* added 12/17/91 as a safty check */
-if (shpno >= 0 && shpno < nterms)
-{
-if (user[shpno].state == gestt)
-{
-if (class == ALWAYS)
-{
-outprf(shpno);
-return;
+void FUNC outprfge(int class, int shpno) {
+    /* added 12/17/91 as a safty check */
+    if(shpno >= 0 && shpno < nterms) {
+        /*
+         * This has to do with the kernel's state machine but don't remember
+         * exactly how.  I'll have to look it up.
+         */
+        if(user[shpno].state == gestt) {
+            if(class == ALWAYS) {
+                outprf(shpno);
+                return;
+            } else if(
+                        class == FILTER &&
+                        (warusroff(shpno)->options[MSG_FILTER] == TRUE)
+                    ) {
+                            clrprf();
+                            return;
+                      } else {
+                            outprf(shpno);
+                            return;
+                      }
+        }
+    }
+    clrprf();
 }
-else
-if (class == FILTER && (
-warusroff(shpno)
-->options[MSG_FILTER] == TRUE))
-{
-clrprf();
-
-return;
-}
-else
-{
-outprf(shpno);
-return;
-}
-}
-}
-
-clrprf();
-
-}
-
 
 /**************************************************************************
 ** Send message to all ships in this sector                             **
 **************************************************************************/
-
-void FUNC
-outsect(filter, coordptr, exclude, freq
-)
-int filter;
-COORD *coordptr;
-unsigned exclude, freq;
-{
+void FUNC outsect(int filter, COORD *coordptr, unsigned exclude, unsigned freq) {
 int i;
 int zothusn;
 
-for (
-zothusn = 0;
-zothusn<nterms;
-zothusn++)
-{
-if (
-ingegame(zothusn)
-&& zothusn != exclude)
-{
-if (samesect(&(
-warshpoff(zothusn)
-->coord),coordptr))
-{
-if (freq == 0)
-{
-outprfge(filter, zothusn
-);
-}
-else
-{
-for (
-i = 0;
-i<3; ++i)
-{
-if (freq ==
-warshpoff(zothusn)
-->freq[i])
-{
-outprfge(filter, zothusn
-);
-}
-}
-}
-}
-}
-}
-
-clrprf();
-
+    for(zothusn = 0; zothusn < nterms; zothusn++) {
+        if(ingegame(zothusn) && zothusn != exclude) {
+            if(samesect(&(warshpoff(zothusn)->coord), coordptr)) {
+                if(freq == 0) {
+                    outprfge(filter, zothusn);
+                } else {
+                    for(i = 0; i < 3; ++i) {
+                        if(freq == warshpoff(zothusn)->freq[i]) {
+                            outprfge(filter, zothusn);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    clrprf();
 }
 
 /**************************************************************************
 ** Send message to all ships in scanning range of this ship
 **************************************************************************/
-
-void FUNC
-outrange(filter, coordptr
-)
-int filter;
-COORD *coordptr;
-{
+void FUNC outrange(int filter, COORD *coordptr) {
 double ddist;
 int zothusn;
 WARSHP *wptr;
 
-
-for (
-zothusn = 0;
-zothusn<nships;
-zothusn++)
-{
-wptr = warshpoff(zothusn);
-if (
-ingegame(zothusn)
-&& shipclass[wptr->shpclass].max_type == CLASSTYPE_USER)
-{
-ddist = cdistance(coordptr, &wptr->coord);
-ddist *= 10000;
-if (ddist > 1 &&
-
-ddist<(double)
-
-shipclass[wptr->shpclass].scanrange)
-outprfge(filter, zothusn
-);
+    for(zothusn = 0; zothusn < nships; zothusn++) {
+        wptr = warshpoff(zothusn);
+        if(
+            ingegame(zothusn) &&
+            shipclass[wptr->shpclass].max_type == CLASSTYPE_USER
+        ) {
+            ddist = cdistance(coordptr, &wptr->coord);
+            ddist *= 10000;
+            if(ddist > 1 && ddist < (double) shipclass[wptr->shpclass].scanrange)
+                outprfge(filter, zothusn);
+        }
+    }
+    clrprf();
 }
-}
-
-clrprf();
-
-}
-
 
 /**************************************************************************
 ** Check is user is in the game                                          **
 **   Automatons are always in the game
 **************************************************************************/
+int FUNC ingegame(int shpno) {
 
+    if(shpno >= nships || shpno < 0)
+        return (FALSE);
 
-int FUNC ingegame(shpno)
-int shpno;
-{
+    if(shpno < nterms)
+        if(user[shpno].state == gestt && user[shpno].substt >= FIGHTSUB)
+            return (TRUE);
+    /* Ah, looks like automatons have shipno's greater than nterms */
+    if(shpno >= nterms && warshpoff(shpno)->status == GESTAT_AUTO)
+        return (TRUE);
 
-
-if (shpno >= nships || shpno < 0)
-return(FALSE);
-
-if (shpno < nterms)
-if (user[shpno].state == gestt && user[shpno].substt >= FIGHTSUB)
-return(TRUE);
-
-if (shpno >= nterms &&
-warshpoff(shpno)
-->status == GESTAT_AUTO)
-return(TRUE);
-
-return(FALSE);
+    return (FALSE);
 }
-
 
 /**************************************************************************
 ** SHOCST Replacement                                                    **
 **
 **************************************************************************/
+void FUNC geshocst(int opt, char *str) {
+    char tmpbuf[40];
 
-
-void FUNC
-geshocst(opt, str
-)
-int opt;
-char *str;
-{
-char tmpbuf[40];
 /* kill warning */
-str = str;
+    str = str;
 
 /* Always display */
-if (opt == 0)
-{
-tmp_usrnum = usrnum;
-usrnum = -1;
+    if(opt == 0) {
+        tmp_usrnum = usrnum;
+        usrnum = -1;
 #ifdef PHARLAP
-strncpy(tmpbuf,str,32);
-	tmpbuf[31] = NULL;
-	shocst(tmpbuf,str);
+        strncpy(tmpbuf,str,32);
+        tmpbuf[31] = NULL;
+        shocst(tmpbuf,str);
 #else
-shocst(0,str);
+        shocst(0, str);
 #endif
-usrnum = tmp_usrnum;
-}
-else
-if (opt <= showopt)
-{
-tmp_usrnum = usrnum;
-usrnum = -1;
+        usrnum = tmp_usrnum;
+    } else if(opt <= showopt) {
+        tmp_usrnum = usrnum;
+        usrnum = -1;
 #ifdef PHARLAP
-strncpy(tmpbuf,str,32);
-	tmpbuf[31] = NULL;
-	shocst(tmpbuf,str);
+        strncpy(tmpbuf,str,32);
+        tmpbuf[31] = NULL;
+        shocst(tmpbuf,str);
 #else
-shocst(0,str);
+        shocst(0, str);
 #endif
-usrnum = tmp_usrnum;
-}
-if (logflag)
-
-logthis (spr(
-
-"CON: %s",str));
+        usrnum = tmp_usrnum;
+    }
+    if(logflag)
+        logthis(spr("CON: %s", str));
 }
 
 /****************************************************************************
@@ -2588,22 +2481,22 @@ int FUNC mnu_main() {
 /* player selected somthing from the main menu */
 
 int FUNC mnu_main_ans() {
-    if (margc == 0) {
+    if(margc == 0) {
         prfmsg(REPRMT);
         outprfge(ALWAYS, usrnum);
         return (1);
-    } else if (margc == 1) {
-        if (sameas(input, "P")) {
+    } else if(margc == 1) {
+        if(sameas(input, "P")) {
 #ifdef PHARLAP
             if (!hasmkey(PLAYKEY))
-			{
-			prfmsg(FORPLAY);
-			outprfge(ALWAYS,usrnum);
-			prfmsg(REPRMT);
-			outprfge(ALWAYS,usrnum);
-			}
+            {
+            prfmsg(FORPLAY);
+            outprfge(ALWAYS,usrnum);
+            prfmsg(REPRMT);
+            outprfge(ALWAYS,usrnum);
+            }
 #else
-            if (usrptr->class < PAYING && gefreebies == 0) {
+            if(usrptr->class < PAYING && gefreebies == 0) {
                 prfmsg(FORLIVE);
                 outprfge(ALWAYS, usrnum);
                 prfmsg(REPRMT);
@@ -2611,7 +2504,7 @@ int FUNC mnu_main_ans() {
             }
 #endif
             else {
-                if (numwar < gemaxplrs) {
+                if(numwar < gemaxplrs) {
                     lookupshp();
                     clrprf();
                     return (1);
@@ -2623,42 +2516,42 @@ int FUNC mnu_main_ans() {
                     return (1);
                 }
             }
-        } else if (sameas(input, "G")) {
+        } else if(sameas(input, "G")) {
             prfmsg(EXPLAIN);
             outprfge(ALWAYS, usrnum);
             prfmsg(REPRMT);
             outprfge(ALWAYS, usrnum);
             return (1);
-        } else if (sameas(input, "R")) {
+        } else if(sameas(input, "R")) {
             cmd_geroster();
             prfmsg(REPRMT);
             outprfge(ALWAYS, usrnum);
             return (1);
-        } else if (sameas(input, "M")) {
+        } else if(sameas(input, "M")) {
             disp_menu_d();
             outprfge(ALWAYS, usrnum);
             return (1);
-        } else if (sameas(input, "5")) {
+        } else if(sameas(input, "5")) {
             mailread("@@sysstat1", MAIL_CLASS_GAMESTATS);
             prfmsg(REPRMT);
             outprfge(ALWAYS, usrnum);
             return (1);
-        } else if (sameas(input, "I")) {
+        } else if(sameas(input, "I")) {
             prfmsg(COINFO);
             outprfge(ALWAYS, usrnum);
             return (1);
-        } else if (sameas(input, "?")) {
+        } else if(sameas(input, "?")) {
             disp_main_menu();
             outprfge(ALWAYS, usrnum);
             return (1);
-        } else if (sameas(input, "x")) {
+        } else if(sameas(input, "x")) {
             prfmsg(EXIWAR);
             outprfge(ALWAYS, usrnum);
             btupmt(usrnum, 0);
             return (0);
-        } else if (optmenu) {
+        } else if(optmenu) {
             input[0] = toupper(input[0]);
-            if (input[0] == optchr) {
+            if(input[0] == optchr) {
                 optdisp();
                 return (1);
             }
@@ -2673,8 +2566,8 @@ int FUNC mnu_main_ans() {
 /* player is playing the game and entered a command */
 
 int FUNC mnu_fightsub() {
-    if (sameas(input, "x")) {
-        if (warsptr->cantexit == 0) {
+    if(sameas(input, "x")) {
+        if(warsptr->cantexit == 0) {
             cleartm(usrnum);
             gepdb(GEUPDATE, warsptr->userid, warsptr->shipno, warsptr);
             geudb(GEUPDATE, waruptr->userid, waruptr);
@@ -2691,7 +2584,7 @@ int FUNC mnu_fightsub() {
             outprfge(ALWAYS, usrnum);
         }
     } else {
-        if (margc > 0)
+        if(margc > 0)
             gwar();
         else {
             prfmsg(HUH);
@@ -2707,8 +2600,8 @@ int FUNC mnu_fightsub() {
 
 int FUNC mnu_admenu1() {
     int i;
-    if (margc > 0) {
-        if (genearas("y", margv[0])) {
+    if(margc > 0) {
+        if(genearas("y", margv[0])) {
             plnum = warsptr->where - 10;
 
             getplanetdat(usrnum);
@@ -2716,7 +2609,7 @@ int FUNC mnu_admenu1() {
             strncpy(plptr->userid, warsptr->userid, UIDSIZ);
             ++waruptr->planets;
 
-            for (i = 0; i < NUMITEMS; ++i)
+            for(i = 0; i < NUMITEMS; ++i)
                 plptr->items[i].rate = 0;
 
             plptr->items[I_MEN].rate = 50;
@@ -2731,7 +2624,7 @@ int FUNC mnu_admenu1() {
             prfmsg(ADMENU1A);
             outprfge(ALWAYS, usrnum);
             usrptr->substt = ADMENU1A;
-        } else if (genearas("n", margv[0])) {
+        } else if(genearas("n", margv[0])) {
             prfmsg(ADMIN3);
             outprfge(ALWAYS, usrnum);
             usrptr->substt = FIGHTSUB;
@@ -2748,7 +2641,7 @@ int FUNC mnu_admenu1() {
 */
 
 int mnu_admenu1a() {
-    if (margc > 0) {
+    if(margc > 0) {
         plnum = warsptr->where - 10;
 
         getplanetdat(usrnum);
@@ -2784,18 +2677,18 @@ int mnu_admenu1a() {
 
 int FUNC mnu_admenu2() {
     int i;
-    if (margc > 0) {
-        if (*margv[0] >= '1' && *margv[0] <= '7') {
+    if(margc > 0) {
+        if(*margv[0] >= '1' && *margv[0] <= '7') {
             plnum = warsptr->where - 10;
 
             getplanetdat(usrnum);
 
-            switch (*margv[0]) {
+            switch(*margv[0]) {
                 case '1':
                     prfmsg(ADMIN01, plptr->name);
                     prfmsg(DASHES);
                     prfmsg(ADMIN02);
-                    for (i = 0; i < NUMITEMS; ++i) {
+                    for(i = 0; i < NUMITEMS; ++i) {
                         sprintf(gechrbuf, "%-11s %5u %5ld %5u %5u %1c %5ld",
                                 item_name[i],
                                 plptr->items[i].rate,
@@ -2852,7 +2745,7 @@ int FUNC mnu_admenu2() {
             }
 
             outprfge(ALWAYS, usrnum);
-        } else if (sameas(input, "x")) {
+        } else if(sameas(input, "x")) {
             prfmsg(ADMIN3);
             outprfge(ALWAYS, usrnum);
             usrptr->substt = FIGHTSUB;
@@ -2877,7 +2770,7 @@ int FUNC mnu_admenu2b() {
     getplanetdat(usrnum);
     amt = atol(margv[0]);
 
-    if (amt <= plptr->tax) {
+    if(amt <= plptr->tax) {
         sprintf(gechrbuf, "%ld", amt);
         prfmsg(ADMENU2C, gechrbuf);
         outprfge(ALWAYS, usrnum);
@@ -2900,9 +2793,9 @@ int FUNC mnu_admenu2b() {
 
 int FUNC mnu_admenu2e() {
     int i;
-    for (i = 0; i < NUMITEMS; ++i) /* skip notused */
+    for(i = 0; i < NUMITEMS; ++i) /* skip notused */
     {
-        if (genearas(kwrd[i], margv[0])) {
+        if(genearas(kwrd[i], margv[0])) {
             warsptr->titem = i;
             prfmsg(ADMEN2F1, item_name[warsptr->titem]);
             outprfge(ALWAYS, usrnum);
@@ -2924,7 +2817,7 @@ int FUNC mnu_admenu2f1() {
     unsigned amt;
     amt = atoi(margv[0]);
 
-    if (margc == 1 && amt <= 100) {
+    if(margc == 1 && amt <= 100) {
         titems[usrnum].rate = amt;
         prfmsg(ADMEN2F2, item_name[warsptr->titem]);
         outprfge(ALWAYS, usrnum);
@@ -2942,7 +2835,7 @@ int FUNC mnu_admenu2f2() {
     unsigned amt;
     amt = atoi(margv[0]);
 
-    if (margc == 1 && amt <= 32000) {
+    if(margc == 1 && amt <= 32000) {
         titems[usrnum].markup2a = amt;
         prfmsg(ADMEN2F3, item_name[warsptr->titem]);
         outprfge(ALWAYS, usrnum);
@@ -2959,7 +2852,7 @@ int FUNC mnu_admenu2f2() {
 
 int FUNC mnu_admenu2f3() {
 
-    if (margc == 1 && (genearas("y", margv[0]) || genearas("n", margv[0]))) {
+    if(margc == 1 && (genearas("y", margv[0]) || genearas("n", margv[0]))) {
         titems[usrnum].sell = toupper(*margv[0]);
         prfmsg(ADMEN2F4, item_name[warsptr->titem]);
         outprfge(ALWAYS, usrnum);
@@ -2977,7 +2870,7 @@ int FUNC mnu_admenu2f4() {
     unsigned amt;
     amt = atoi(margv[0]);
 
-    if (margc == 1 && amt <= 32000) {
+    if(margc == 1 && amt <= 32000) {
         titems[usrnum].reserve = amt;
         update_items();
         prfmsg(ADMENU2);
@@ -2991,12 +2884,11 @@ int FUNC mnu_admenu2f4() {
 }
 
 /* player was asked how much to set taxes at */
-
 int FUNC mnu_admenu2h() {
     unsigned amt;
     amt = atoi(margv[0]);
 
-    if (margc == 1 && amt <= 100) {
+    if(margc == 1 && amt <= 100) {
         plnum = warsptr->where - 10;
         getplanetdat(usrnum);
 
@@ -3020,7 +2912,7 @@ int FUNC mnu_admenu2h() {
 
 int FUNC mnu_admenu2i() {
 
-    if (margc == 1) {
+    if(margc == 1) {
         plnum = warsptr->where - 10;
         getplanetdat(usrnum);
 
@@ -3031,11 +2923,11 @@ int FUNC mnu_admenu2i() {
         pkey.plnum = plnum;
         gesdb(GEUPDATE, (PKEY *) &pkey, (GALSECT *) &planet);
 
-        if (sameas(plptr->password, "none")) {
+        if(sameas(plptr->password, "none")) {
             prfmsg(ADMEN2I2);
             plptr->teamcode = 0;
-        } else if (sameas(plptr->password, "team")) {
-            if (waruptr->teamcode > 0) {
+        } else if(sameas(plptr->password, "team")) {
+            if(waruptr->teamcode > 0) {
                 plptr->teamcode = waruptr->teamcode;
                 prfmsg(ADMEN2I3);
             } else {
@@ -3067,7 +2959,7 @@ int FUNC mnu_admenu2j() {
 
     getplanetdat(usrnum);
 
-    if (margc == 0) {
+    if(margc == 0) {
         plptr->beacon[0] = 0;
         prfmsg(ADMEN2J1);
     } else {
@@ -3087,7 +2979,6 @@ int FUNC mnu_admenu2j() {
     return (1);
 }
 
-
 /* player selected item 1 from the main menu */
 
 int FUNC mnu_choosesh() {
@@ -3099,12 +2990,12 @@ int FUNC mnu_choosesh() {
    sub-menu, and was asked to select an option */
 
 int mnu_menug() {
-    if (margc > 0) {
-        switch (tolower(*margv[0])) {
+    if(margc > 0) {
+        switch(tolower(*margv[0])) {
 
             case '1':
 
-                if (mailread(usaptr->userid, MAIL_CLASS_DISTRESS)) {
+                if(mailread(usaptr->userid, MAIL_CLASS_DISTRESS)) {
                     prfmsg(usrptr->substt = MENUG1);
                     outprfge(ALWAYS, usrnum);
                 } else {
@@ -3115,7 +3006,7 @@ int mnu_menug() {
 
             case '2':
 
-                if (mailread(usaptr->userid, MAIL_CLASS_PRODRPT)) {
+                if(mailread(usaptr->userid, MAIL_CLASS_PRODRPT)) {
                     prfmsg(usrptr->substt = MENUG2);
                     outprfge(ALWAYS, usrnum);
                 } else {
@@ -3151,12 +3042,12 @@ int mnu_menug() {
 
 
 int FUNC mnu_menug1() {
-    if (margc > 0) {
-        switch (tolower(*margv[0])) {
+    if(margc > 0) {
+        switch(tolower(*margv[0])) {
 
             case 'n':
 
-                if (mailread(usaptr->userid, MAIL_CLASS_DISTRESS)) {
+                if(mailread(usaptr->userid, MAIL_CLASS_DISTRESS)) {
                     prfmsg(usrptr->substt = MENUG1);
                     outprfge(ALWAYS, usrnum);
                 } else {
@@ -3190,12 +3081,12 @@ int FUNC mnu_menug1() {
 */
 
 int FUNC mnu_menug2() {
-    if (margc > 0) {
-        switch (tolower(*margv[0])) {
+    if(margc > 0) {
+        switch(tolower(*margv[0])) {
 
             case 'n':
 
-                if (mailread(usaptr->userid, MAIL_CLASS_PRODRPT)) {
+                if(mailread(usaptr->userid, MAIL_CLASS_PRODRPT)) {
                     prfmsg(usrptr->substt = MENUG2);
                     outprfge(ALWAYS, usrnum);
                 } else {
@@ -3223,20 +3114,19 @@ int FUNC mnu_menug2() {
     return (1);
 }
 
-
 /* re-displays the main menu */
 
 void FUNC disp_main_menu() {
     prfmsg(MENUA);
 
-    if (usegemsg) {
-        if (mailscan(usaptr->userid, 0))
+    if(usegemsg) {
+        if(mailscan(usaptr->userid, 0))
             prfmsg(MENUB2);
         else
             prfmsg(MENUB1);
     }
 
-    if (optmenu)
+    if(optmenu)
         prf("\r   %c ... %s", optchr, opttxt);
 
     prfmsg(MENUC);
@@ -3244,15 +3134,14 @@ void FUNC disp_main_menu() {
 }
 
 /* re-displays the mail sub-menu */
-
 void FUNC disp_menu_d() {
     prfmsg(MENUD);
-    if (mailscan(usaptr->userid, MAIL_CLASS_DISTRESS))
+    if(mailscan(usaptr->userid, MAIL_CLASS_DISTRESS))
         prfmsg(MENUE2);
     else
         prfmsg(MENUE1);
 
-    if (mailscan(usaptr->userid, MAIL_CLASS_PRODRPT))
+    if(mailscan(usaptr->userid, MAIL_CLASS_PRODRPT))
         prfmsg(MENUF2);
     else
         prfmsg(MENUF1);
@@ -3260,25 +3149,25 @@ void FUNC disp_menu_d() {
 }
 
 void FUNC update_items() {
-    int i, pcnt = 0;
-    plnum = warsptr->where - 10;
+int i, pcnt = 0;
 
+    plnum = warsptr->where - 10;
     getplanetdat(usrnum);
 
-    for (i = 0; i < NUMITEMS; ++i)
-        if (i != warsptr->titem)
+    for(i = 0; i < NUMITEMS; ++i)
+        if(i != warsptr->titem)
             pcnt += plptr->items[i].rate;
 
-    if ((titems[usrnum].rate + pcnt) > 100) {
+    if((titems[usrnum].rate + pcnt) > 100) {
         titems[usrnum].rate = 100 - pcnt;
-        if (titems[usrnum].rate > 100)
+        if(titems[usrnum].rate > 100)
             titems[usrnum].rate = 0;
 
         prfmsg(ADMEN2FA, item_name[warsptr->titem], titems[usrnum].rate);
         outprfge(ALWAYS, usrnum);
     }
     i = (titems[usrnum].rate + pcnt);
-    if (i < 100) {
+    if(i < 100) {
         i = 100 - i;
         prfmsg(ADMEN2FB, i);
         outprfge(ALWAYS, usrnum);
@@ -3290,24 +3179,22 @@ void FUNC update_items() {
     setsect(warsptr); /* build PKEY */
     pkey.plnum = plnum;
     gesdb(GEUPDATE, (PKEY *) &pkey, (GALSECT *) &planet);
-
 }
 
-
 void FUNC optdisp() {
-    static FILE *hdl = (FILE *) 0;
+static FILE *hdl = (FILE *) 0;
 
-    if (hdl == (FILE *) 0) {
+    if(hdl == (FILE *) 0) {
         hdl = fopen("mbmgemnu.txt", "rt");
-        if (hdl == (FILE *) 0)
+        if(hdl == (FILE *) 0)
             geshocst(0, "GE:ERR MBMGEMNU.TXT Open Failed");
         else
             logthis("optdisp: mbmgemnu.txt opened");
     }
 
-    if (hdl != (FILE *) 0) {
-        if (fseek(hdl, opttbl[usrnum], 0) == 0) {
-            if (fgets(gechrbuf, 85, hdl) != NULL) {
+    if(hdl != (FILE *) 0) {
+        if(fseek(hdl, opttbl[usrnum], 0) == 0) {
+            if(fgets(gechrbuf, 85, hdl) != NULL) {
                 logthis(gechrbuf);
                 prf(gechrbuf);
                 outprfge(ALWAYS, usrnum);
@@ -3333,34 +3220,34 @@ void FUNC optdisp() {
     return;
 }
 
+/*
+ * This is one of the entry points from the kernel I think
+ */
 void FUNC stshdlr() {
-    if (status == CYCLE) {
-        switch (usrptr->substt) {
+    if(status == CYCLE) {
+        switch(usrptr->substt) {
             case OPTDISP:
                 setmbk(gemb);
-                if (btuoba(usrnum) > (OUTSIZ / 2)) {
+                if(btuoba(usrnum) > (OUTSIZ / 2)) {
                     optdisp();
                 } else {
                     btuinj(usrnum, CYCLE);
                 }
-
                 break;
-
             case OPTDISP2:
-
                 setmbk(gemb);
                 usrptr->substt = 1;
                 prf(".");
                 disp_main_menu();
                 outprfge(ALWAYS, usrnum);
                 return;
-
             default:
+                /* return control to kernel */
                 dfsthn();
                 return;
-
         }
     } else {
+        /* return control to kernel */
         dfsthn();
     }
 }

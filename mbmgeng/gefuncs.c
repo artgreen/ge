@@ -2135,11 +2135,9 @@ char *FUNC username(WARSHP *ptr) {
 /* data logger */
 
 void FUNC logthis(char *str) {
-
-    FILE *hdl;
-    int idate, itime;
-    char *c_date, *c_time;
-
+FILE *hdl;
+int idate, itime;
+char *c_date, *c_time;
 
     if (!logflag)
         return;
@@ -2155,7 +2153,6 @@ void FUNC logthis(char *str) {
         fprintf(hdl, "[%s %s] %s\r", c_date, c_time, str);
         fclose(hdl);
     }
-
     return;
 }
 
