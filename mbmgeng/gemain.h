@@ -176,8 +176,6 @@
                                         /* only attack their attacker */
 #define CYBMAXPERTICK   2               /* the number of cybs processed each tick */
 #define QUADMAXPERTICK  5               /* the number of quads processed each tick */
-
-
 #define TELEDAM                 17      /* amount of damage done when edge reached */
 
 /* the following define if included will cause the captured planet map
@@ -212,7 +210,6 @@
 #define CLASSTYPE_DROID         3
 #define CLASSTYPE_NONE          4
 
-
 #define MAIL_CLASS_DISTRESS     1
 #define MAIL_CLASS_MAXOUT               2
 #define MAIL_CLASS_PRODRPT              3
@@ -239,9 +236,7 @@
 
 #define GEMSGSIZ                784
 #define FIXEDMSGSIZ   sizeof(struct message)+GEMSGSIZ
-
-
-#define         ALWAYS          1
+#define ALWAYS          1
 #define FILTER          2
 #define BLOCK                   3
 
@@ -280,12 +275,11 @@ TORPEDO {
     unsigned distance;
 };
 
-
+/*
+ * struct defining a user/player
+ */
 #define WARUSR struct warusr
-extern
-
-
-WARUSR {                           /* user data blocks                       */
+extern WARUSR {                           /* user data blocks                       */
     char userid[UIDSIZ];     /* userid of player                       */
     unsigned long score;              /*   Your score               31     */
     char waste[40];
@@ -304,12 +298,11 @@ WARUSR {                           /* user data blocks                       */
     char filler[256 - 109 - UIDSIZ];
 };
 
-
+/*
+ * Struct for a ship
+ */
 #define WARSHP struct warshp
-extern
-
-
-WARSHP {                        /* user data blocks         */
+extern WARSHP {                        /* user data blocks         */
     char userid[UIDSIZ];     /* userid of player                          */
     int shipno;             /*   Ship id number                          */
     char shipname[35];       /*   Ship name                               */
@@ -387,9 +380,11 @@ WARSHP {                        /* user data blocks         */
 #define Y2 ptr2->ycoord
 */
 
+/*
+ * Inventory items
+ */
 #define ITEM    struct item
-extern
-ITEM {
+extern ITEM {
     unsigned long qty;                            /* quantity on hand                                                     */
     unsigned rate;                                           /* rate of manufacture                                          */
     char sell;                                           /* sell to allies?                                                      */
@@ -399,25 +394,25 @@ ITEM {
 };
 
 #define PLNTCOORD struct _plntcoord
-extern
-PLNTCOORD {
+extern PLNTCOORD {
     int type;                  /* planet type */
     COORD coord;                 /* location */
 };
 
-
+/*
+ * Table for planets
+ */
 #define PLANETAB struct planetab
-
 extern
 PLANETAB {
     PLNTCOORD planets[MAXPLANETS];
 };
 
-
+/*
+ * Struct for a sector
+ */
 #define GALSECT struct galsect
-
-extern
-GALSECT {                /* star system data record               */
+extern GALSECT {                /* star system data record               */
     int xsect;                                  /* sector x coord                       */
     int ysect;                                  /* sector y coord                       */
     int plnum;                                  /* always 0 */
@@ -428,10 +423,11 @@ GALSECT {                /* star system data record               */
     char filler[512 - 10 - (sizeof(PLNTCOORD) * MAXPLANETS)];          /* fill to 250*/
 };
 
+/*
+ * Planet structure
+ */
 #define GALPLNT struct _galplnt
-
-extern
-GALPLNT {                /* star system data record               */
+extern GALPLNT {                /* star system data record               */
     int xsect;                                  /* sector x coord                       */
     int ysect;                                  /* sector y coord                       */
     int plnum;               /* planet number */
@@ -454,13 +450,10 @@ GALPLNT {                /* star system data record               */
     int technology;
     unsigned long teamcode;
     char filler[512 - 182 - (UIDSIZ * 2) - (sizeof(ITEM) * NUMITEMS)];
-
 };
 
 #define GALWORM struct galworm
-
-extern
-GALWORM {                /* star system data record               */
+extern GALWORM {                /* star system data record               */
     int xsect;                                  /* sector x coord                       */
     int ysect;                                  /* sector y coord                       */
     int plnum;               /* planet number */
@@ -474,36 +467,27 @@ GALWORM {                /* star system data record               */
 
 
 #define PKEY struct _pkey
-
-extern
-PKEY {                /* star system data record key   */
+extern PKEY {                /* star system data record key   */
     int xsect;                                  /* sector x coord                       */
     int ysect;                                  /* sector y coord                       */
     int plnum;                                  /* always 0 */
 };
 
 #define WORMTAB struct _wormtab
-
-extern
-WORMTAB {
+extern WORMTAB {
     COORD coord;
     COORD dest;
 };
 
-
 #define MAILKEY struct _mailkey
-
-extern
-MAILKEY {
+extern MAILKEY {
     char userid[UIDSIZ];
     int class;
     long msgno;
 };
 
 #define MAIL struct _mail
-
-extern
-MAIL {
+extern MAIL {
     char userid[UIDSIZ];
     int class;
     int type;
@@ -523,8 +507,7 @@ MAIL {
 };
 
 #define MAILSTAT struct _mailstat
-extern
-MAILSTAT {
+extern MAILSTAT {
     char userid[UIDSIZ];
     int class;
     int type;
@@ -541,20 +524,21 @@ MAILSTAT {
     char filler[253 - 97 - (UIDSIZ) - (sizeof(long) * NUMITEMS)];         /* fill to 250 BJ changed size for name*/
 };
 
-
+/*
+ * Database index for ships
+ */
 #define SHPKEY struct _shpkey
-
-extern
-SHPKEY {
+extern SHPKEY {
     char userid[UIDSIZ];
     int shipno;
 };
 
+/*
+ * A ship
+ */
 #define SHIP    struct _ship
-
 extern
-SHIP {
-    char *typename;
+SHIP { char *typename;
     char *shipname;
     unsigned char max_shlds;
     unsigned char max_phasr;
@@ -650,8 +634,7 @@ extern TEAM {
 
 
 #define BEACONTAB struct _beacontab
-extern
-BEACONTAB {
+extern BEACONTAB {
     COORD coord;
     int plnum;
     char beacon[BEACONMSGSZ];
