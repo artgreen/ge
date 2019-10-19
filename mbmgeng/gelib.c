@@ -46,12 +46,9 @@
 /*       your tabs to 3....    MBM                                         */
 
 #ifdef PHARLAP
-
 #include "gcomm.h"
 #include "string.h"
-
 #else
-
 #include "stdio.h"
 #include "ctype.h"
 #include "dos.h"
@@ -59,8 +56,6 @@
 #include "btvstf.h"
 #include "stdlib.h"
 #include "portable.h"
-
-
 #endif
 
 #include "math.h"
@@ -73,7 +68,6 @@
 /**************************************************************************
 ** Verify system
 **************************************************************************/
-
 void c4angle()
 
 {
@@ -82,6 +76,7 @@ extern BTVFILE *accbb;
 char  nm1[7] = {"XGrlep"};
 char  nm2[UIDSIZ];      /*BJ CHANGED TO REFLECT UIDSIZ */
 static int hap;
+
 if (hap != 1)
 	{
 	setbtv(accbb);
@@ -100,9 +95,7 @@ if (hap != 1)
 ** Determine the smallest of two complementary angles                    **
 **************************************************************************/
 
-unsigned  smallest(a1,a2)
-unsigned  a1,a2;
-
+unsigned smallest(unsigned a1, unsigned a2)
 {
 int a;
 
@@ -118,9 +111,7 @@ else
 /**************************************************************************
 ** Generate a random number                                              **
 **************************************************************************/
-
-double rndm(mod)
-double  mod;
+double rndm(double mod)
 {
 
 static randmax = (double)RAND_MAX;
@@ -139,9 +130,7 @@ return(rand());
 ** Calculate ship bearing between two objects                            **
 **************************************************************************/
 
-double  cbearing(ptr1, ptr2, heading)
-COORD *ptr1,*ptr2;
-double heading;
+double  cbearing(COORD *ptr1, COORD *ptr2, double heading)
 {
 double   vector(), absol(), normal();
 double   b;
@@ -168,36 +157,21 @@ return (b);
 /**************************************************************************
 ** Calculate the distance between two ships                              **
 **************************************************************************/
-
-double cdistance(ptr1,ptr2)
-COORD *ptr1,*ptr2;
+double cdistance(COORD *ptr1, COORD *ptr2)
 {
 double a, b, c;
-
-
-
-
-b = (ptr1->xcoord - ptr2->xcoord);
-
+    b = (ptr1->xcoord - ptr2->xcoord);
 c = (ptr1->ycoord - ptr2->ycoord);
-
 b = absol(b);
-
 c = absol(c);
-
-
 a = sqrt((b*b) + (c*c));
-
 return (a);
 }
 
 /**************************************************************************
 ** Calculate the angle from one ship to another                          **
 **************************************************************************/
-
-double vector(ptr1,ptr2)
-COORD *ptr1, *ptr2;
-
+double vector(COORD *ptr1, COORD *ptr2)
 {
 double   a;
 double   angleb(),anglec(),normal();
@@ -229,23 +203,15 @@ if (ptr1->xcoord <= ptr2->xcoord && ptr1->ycoord >= ptr2->ycoord)
 	a = 0.0 + a;
 	return(a);
 	}
-
-
 return(99999L);
 }
 
 /**************************************************************************
 ** Calculate the angle from the center to the other ship                 **
 **************************************************************************/
-
-double angleb (ptr1, ptr2)
-COORD *ptr1, *ptr2;
-
+double angleb (COORD *ptr1, COORD *ptr2)
 {
-
 double   da,db,dc, angle;
-
-
 
 da = cdistance(ptr1, ptr2);
 dc = absol(ptr1->xcoord - ptr2->xcoord);
@@ -265,15 +231,9 @@ return (angle);
 /**************************************************************************
 ** Calculate the angle from the center to the other ship                 **
 **************************************************************************/
-
-double anglec (ptr1, ptr2)
-COORD *ptr1, *ptr2;
-
+double anglec (COORD *ptr1, COORD *ptr2)
 {
-
 double   da,db,dc, angle;
-
-
 
 da = cdistance(ptr1, ptr2);
 dc = absol(ptr1->xcoord - ptr2->xcoord);
@@ -294,12 +254,8 @@ return (angle);
 /**************************************************************************
 ** Bring an angle back into the range 0 - 360                            **
 **************************************************************************/
-
-double normal (angle)
-double   angle;
+double normal(double angle)
 {
-
-
 if (angle < 0)
 	{
 	angle = normal(angle+360);
@@ -316,8 +272,7 @@ return (angle);
 ** convert degrees to radiuns                                            **
 **************************************************************************/
 
-double degtorad(value)
-double value;
+double degtorad(double value)
 {
 return (value*(PI/180));
 }
@@ -326,8 +281,7 @@ return (value*(PI/180));
 ** convert radiuns to degrees                                            **
 **************************************************************************/
 
-double radtodeg(value)
-double value;
+double radtodeg(double value)
 {
 return (value*(180/PI));
 }
@@ -336,8 +290,7 @@ return (value*(180/PI));
 ** double absolute function                                              **
 **************************************************************************/
 
-double absol(value)
-double value;
+double absol(double value)
 {
 c4angle();
 if (value < 0)
