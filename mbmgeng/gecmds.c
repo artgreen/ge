@@ -4483,11 +4483,13 @@ void FUNC cmd_clear() {
 void FUNC ansifunc(int func) {
     switch (func) {
         case HOMEY:
-            prf(".[0;0H");
+            /*prf(".[0;0H");*/
+            prf("");
             break;
 
         case CLEAR:
-            prf(".[2J");
+            /*prf(".[2J");*/
+            prt("");
             break;
     }
 }
@@ -4695,9 +4697,6 @@ SCANTAB *sptr;
 WARSHP *wptr;
 int i, j;
 int zothusn;
-/* UID  ship    ship    ship
- *      no      name    class
- */
 char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
 
     prf("start ship list\r");
