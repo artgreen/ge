@@ -4731,9 +4731,7 @@ SCANTAB *sptr;
 WARSHP *wptr;
 int i, j;
 int zothusn;
-/* UID  ship    ship    ship
- *      no      name    class
- */
+
 char mask[] = {"SD1:%s,%d,'%s',%d\r"};
 
     prf(
