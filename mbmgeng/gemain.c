@@ -928,51 +928,35 @@ int FUNC gelogon(void) {
 /**************************************************************************
 ** User deleted  routine                                                 **
 **************************************************************************/
-
 #ifdef PHARLAP
-void  FUNC pgedelete(uid)
-char *uid;
-{
-gedeletea(uid);
-return;
-}
+    void  FUNC pgedelete(char *uid) {
+        gedeletea(uid);
+        return;
+    }
 #else
-int gedelete(uid)
-    char *uid;
-{
-    gedeletea(uid);
-    return (0);
-}
+    int gedelete(char *uid) {
+        gedeletea(uid);
+        return (0);
+    }
 #endif
 
-void FUNC
-gedeletea(uid)
-char *uid;
-{
-if (secure->open_stat == 0)
-return;
+void FUNC gedeletea(char *uid) {
+    if(secure->open_stat == 0)
+        return;
 
-if (geudb(GELOOKUP,uid, &tmpusr))
-{
-geudb(GEGET,uid, &tmpusr);
-while (gepdb(GELOOKUPNAME,uid,0,&tmpshp))
-{
-gcrbtv(&tmpshp,0);
-gepdb(GEDELETE,tmpshp.userid,tmpshp.shipno,&tmpshp);
-
-logthis (spr(
-
-"GE:Deleted %s ship %d",tmpshp.userid,tmpshp.shipno));
-}
-geudb(GEDELETE,tmpusr.userid,&tmpusr);
-
-logthis (spr(
-
-"GE:Deleted %s user",tmpusr.userid));
-return;
-}
-geshocst(1,spr("GE:User %s not in DB",uid));
-return;
+    if(geudb(GELOOKUP, uid, &tmpusr)) {
+        geudb(GEGET, uid, &tmpusr);
+        while(gepdb(GELOOKUPNAME, uid, 0, &tmpshp)) {
+            gcrbtv(&tmpshp, 0);
+            gepdb(GEDELETE, tmpshp.userid, tmpshp.shipno, &tmpshp);
+            logthis(spr("GE:Deleted %s ship %d", tmpshp.userid, tmpshp.shipno));
+        }
+        geudb(GEDELETE, tmpusr.userid, &tmpusr);
+        logthis(spr("GE:Deleted %s user", tmpusr.userid));
+        return;
+    }
+    geshocst(1, spr("GE:User %s not in DB", uid));
+    return;
 }
 
 
@@ -981,23 +965,21 @@ return;
 **************************************************************************/
 
 #ifdef PHARLAP
-void  FUNC pgemidnight(void)
-{
-gemidnighta();
-return;
-}
+    void  FUNC pgemidnight(void) {
+        gemidnighta();
+        return;
+    }
 #else
-int FUNC gemidnight(void) {
-    gemidnighta();
-    return (0);
-}
-
+    int FUNC gemidnight(void) {
+        gemidnighta();
+        return (0);
+    }
 #endif
 
 void FUNC gemidnighta(void) {
-    int i;
-    int foundit;
-    long scr;
+int i;
+int foundit;
+long scr;
 
     char tmpbuf2[2];
 
@@ -1311,17 +1293,15 @@ void FUNC warhupa(void) {
 **************************************************************************/
 
 #ifdef PHARLAP
-void  FUNC pclswar(void)
-{
-clswara();
-return;
-}
+    void  FUNC pclswar(void) {
+        clswara();
+        return;
+    }
 #else
-int FUNC clswar(void) {
-    clswara();
-    return (0);
-}
-
+    int FUNC clswar(void) {
+        clswara();
+        return (0);
+    }
 #endif
 
 void FUNC clswara(void) {
@@ -1331,7 +1311,6 @@ void FUNC clswara(void) {
     }
 
     clsbtv(gebb1);
-
     clsbtv(gebb4);
 
     if(secure->open_stat != 0) {
@@ -1345,7 +1324,6 @@ void FUNC clswara(void) {
 /**************************************************************************
 ** Main input loop                                                       **
 **************************************************************************/
-
 int FUNC galemp() {
     int i, rtn;
     if(secure->open_stat == 0) {
@@ -1375,7 +1353,6 @@ int FUNC galemp() {
 /**************************************************************************
 ** Send message to all ships                                             **
 **************************************************************************/
-
 void FUNC outwar(int filter, unsigned exclude, unsigned freq) {
     int i;
 
@@ -1399,113 +1376,68 @@ void FUNC outwar(int filter, unsigned exclude, unsigned freq) {
 /**************************************************************************
 ** Player/ship Database functions                                        **
 **************************************************************************/
-
-int FUNC
-gepdb(func, usrname, shipnum, geptr
-)
-int func;
-char *usrname;
-int shipnum;
-WARSHP *geptr;
-{
+int FUNC gepdb(int func, char *usrname, int shipnum, WARSHP *geptr) {
 int rtn;
 
-setbtv(gebb1);
-rtn = 0;
+    setbtv(gebb1);
+    rtn = 0;
 
-strncpy(shpkey
-.userid,usrname,UIDSIZ);
-shpkey.
-shipno = shipnum;
+    strncpy(shpkey.userid, usrname, UIDSIZ);
+    shpkey.shipno = shipnum;
 
-logthis (spr(
-
-"GEPDB called: F=%d,%s,%d,%s",func,usrname,shipnum,geptr->userid));
-switch  (func)
-{
-
-case    GELOOKUP        :
-if (qeqbtv(&shpkey,1))
-rtn = 1;
-break;
-
-case    GEADD           :
+    logthis(spr("GEPDB called: F=%d,%s,%d,%s", func, usrname, shipnum, geptr->userid));
+    switch(func) {
+        case GELOOKUP        :
+            if(qeqbtv(&shpkey, 1))
+                rtn = 1;
+            break;
+        case GEADD           :
 #ifdef PHARLAP
-if (!dinsbtv(geptr))
+            if (!dinsbtv(geptr))
 #else
-if (!
-insbtv(geptr)
-)
+            if(!insbtv(geptr))
 #endif
-geshocst(0,spr("GE:ERR:Ship ins Fail %s",usrname));
-
-break;
-
-case    GEDELETE        :
-if (
-acqbtv(NULL,
-&shpkey,1))
-{
-delbtv();
-
-rtn = 1;
-}
-else
-{
-geshocst(0,spr("GE:ERR:Ship Del Fail %s",usrname));
-}
-break;
-
-case    GEUPDATE        :
-
-if (
-acqbtv(NULL,
-&shpkey,1))
-{
-updbtv(geptr);
-rtn = 1;
-}
-else
-{
-geshocst(0,spr("GE:ERR:Ship Upd Fail %s",usrname));
-}
-break;
-
-case    GEGET           :
-if (
-acqbtv(geptr,
-&shpkey,1))
-rtn = 1;
-break;
-
-case    GENEXT  :
-if (
-
-qnxbtv()
-
-)
-rtn = 1;
-break;
-
-case    GELOOKUPNAME    :
-if (
-qeqbtv(usrname,
-0))
-rtn = 1;
-break;
-
-default:
-rtn = 0;
-}
-return(rtn);
+                geshocst(0, spr("GE:ERR:Ship ins Fail %s", usrname));
+            break;
+        case GEDELETE        :
+            if(acqbtv(NULL, &shpkey, 1)) {
+                delbtv();
+                rtn = 1;
+            } else {
+                geshocst(0, spr("GE:ERR:Ship Del Fail %s", usrname));
+            }
+            break;
+        case GEUPDATE        :
+            if(acqbtv(NULL, &shpkey, 1)) {
+                updbtv(geptr);
+                rtn = 1;
+            } else {
+                geshocst(0, spr("GE:ERR:Ship Upd Fail %s", usrname));
+            }
+            break;
+        case GEGET           :
+            if(acqbtv(geptr, &shpkey, 1))
+                rtn = 1;
+            break;
+        case GENEXT  :
+            if(qnxbtv())
+                rtn = 1;
+            break;
+        case GELOOKUPNAME    :
+            if(qeqbtv(usrname, 0))
+                rtn = 1;
+            break;
+        default:
+            rtn = 0;
+    }
+    return (rtn);
 }
 
 /**************************************************************************
 ** User Database functions                                               **
 **************************************************************************/
-
 int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
-    int rtn;
+int rtn;
 
     setbtv(gebb5);
     rtn = 0;
@@ -1518,18 +1450,14 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
                 rtn = 1;
             logthis(spr("GE: lookup *%s* f:%d", usrname, rtn));
             break;
-
         case GEADD           :
-
 #ifdef PHARLAP
             if (!dinsbtv(geptr))
 #else
             if(!insbtv(geptr))
 #endif
                 geshocst(0, spr("GE:ERR:User ins Fail %s", usrname));
-
             break;
-
         case GEDELETE        :
             if(acqbtv(NULL, usrname, 0)) {
                 delbtv();
@@ -1538,7 +1466,6 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
                 geshocst(0, spr("GE:ERR:User Del Fail %s", usrname));
             }
             break;
-
         case GEUPDATE        :
             logthis(spr("DEBUG <%s> <%s> update", usrname, geptr->userid));
             if(acqbtv(NULL, usrname, 0)) {
@@ -1548,7 +1475,6 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
                 geshocst(0, spr("GE:ERR:User Upd Fail %s", usrname));
             }
             break;
-
         case GEGET           :
             if(acqbtv(geptr, usrname, 0)) {
                 rtn = 1;
@@ -1556,7 +1482,6 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
                 geshocst(0, spr("GE:ERR:User Get Fail %s", usrname));
             }
             break;
-
         default:
             rtn = 0;
     }
@@ -1567,171 +1492,108 @@ int FUNC geudb(int func, char *usrname, WARUSR *geptr) {
 ** sector Database functions                                             **
 **************************************************************************/
 
-int FUNC
-gesdb(func, sect, geptr
-)
-int func;
-PKEY *sect;
-GALSECT *geptr;
-{
+int FUNC gesdb(int func, PKEY *sect, GALSECT *geptr) {
 int rtn;
 long numrecs = 0;
 
-logthis (spr(
+    logthis(spr("Func GESDB, func = %d, sect*= %ld,geptr*=%ld", func, (long) sect, (long) geptr));
+    logthis(spr("            xsect %d, ysect %d, plnum %d", sect->xsect, sect->ysect, sect->plnum));
 
-"Func GESDB, func = %d, sect*= %ld,geptr*=%ld",func,(long)sect,(long)geptr));
+    setbtv(gebb2);
+    rtn = 0;
 
-logthis (spr(
-
-"            xsect %d, ysect %d, plnum %d",sect->xsect,sect->ysect,sect->plnum));
-
-setbtv(gebb2);
-rtn = 0;
-
-switch  (func)
-{
-
-case    GELOOKUP        :
-if (!
-qeqbtv(sect,
-0))
-rtn = 1;
-break;
-
-case    GEUPDATE        :
-if (
-acqbtv(NULL, sect,
-0))
-{
-updbtv(geptr);
-rtn = 1;
-}
-else
-{
-geshocst(0,spr("GE:ERR:Plt Upd Fail x%d,y%d,p%d",sect->xsect,
-sect->ysect,sect->plnum));
-}
-break;
-
-case    GEADD           :
-numrecs = cntrbtv();
-if (numrecs < max_plrec)
-{
-logthis (spr(
-
-"GE:DBG:Ins Sect %d %d %d",geptr->xsect,geptr->ysect,geptr->plnum));
-
+    switch(func) {
+        case GELOOKUP        :
+            if(!qeqbtv(sect, 0))
+                rtn = 1;
+            break;
+        case GEUPDATE        :
+            if(acqbtv(NULL, sect, 0)) {
+                updbtv(geptr);
+                rtn = 1;
+            } else {
+                geshocst(0, spr("GE:ERR:Plt Upd Fail x%d,y%d,p%d", sect->xsect,
+                                sect->ysect, sect->plnum));
+            }
+            break;
+        case GEADD           :
+            numrecs = cntrbtv();
+            if(numrecs < max_plrec) {
+                logthis(spr("GE:DBG:Ins Sect %d %d %d", geptr->xsect, geptr->ysect, geptr->plnum));
 #ifdef PHARLAP
-if (!dinsbtv(geptr))
+                if (!dinsbtv(geptr))
 #else
-if (!
-insbtv(geptr)
-)
+                if(!insbtv(geptr))
 #endif
-geshocst(0,"GE:ERR:Sect/plt ins Fail");
+                    geshocst(0, "GE:ERR:Sect/plt ins Fail");
 
-logthis("GE:DBG:Ins Sect suceeded");
-}
-else
-{
-geshocst(1,"GE:INF:Max Sect Reached");
-}
-break;
+                logthis("GE:DBG:Ins Sect suceeded");
+            } else {
+                geshocst(1, "GE:INF:Max Sect Reached");
+            }
+            break;
 
-case    GEGET           :
-if  ((geptr->xsect != sect->xsect)
-||(geptr->ysect != sect->ysect)
-||(geptr->plnum != sect->plnum))
-{
-if (
-acqbtv(geptr, sect,
-0))
-{
-logthis("gesdb GEGET acqbtv found record");
-rtn = 1;
-}
-}
-else
-{
-logthis("gesdb GEGET record already in memory");
-rtn = 1;
-}
-break;
-
-case    GEGETNOW        :
-if (
-acqbtv(geptr, sect,
-0))
-rtn = 1;
-break;
-
-default:
-rtn = 0;
-}
-return(rtn);
+        case GEGET           :
+            if((geptr->xsect != sect->xsect)
+               || (geptr->ysect != sect->ysect)
+               || (geptr->plnum != sect->plnum)) {
+                if(acqbtv(geptr, sect, 0)) {
+                    logthis("gesdb GEGET acqbtv found record");
+                    rtn = 1;
+                }
+            } else {
+                logthis("gesdb GEGET record already in memory");
+                rtn = 1;
+            }
+            break;
+        case GEGETNOW        :
+            if(acqbtv(geptr, sect, 0))
+                rtn = 1;
+            break;
+        default:
+            rtn = 0;
+    }
+    return (rtn);
 }
 
-int FUNC
-getplanetdat(usrn)          /* plnum MUST be set before this is called */
-int usrn;
-{
+/* plnum MUST be set before this is called */
+int FUNC getplanetdat(int usrn) {
 int i, bbad;
 
-if (plnum > 0 && plnum <= MAXPLANETS)
-{
-getsector(&(
-warshpoff(usrn)
-->coord));
+    if(plnum > 0 && plnum <= MAXPLANETS) {
+        getsector(&(warshpoff(usrn)->coord));
 
-/* DEBUG Is numplan  set right or is it 9*/
-if (plnum <= sector.numplan)
-{
-logthis (spr(
+        /* DEBUG Is numplan  set right or is it 9*/
+        if(plnum <= sector.numplan) {
+            logthis(spr("Getsectdat:plnum = %d, numplan = %d", plnum, sector.numplan));
+            getplanet(&(warshpoff(usrn)->coord), plnum);
 
-"Getsectdat:plnum = %d, numplan = %d",plnum,sector.numplan));
-getplanet(&(
-warshpoff(usrn)
-->coord),plnum);
-/* If this fails what happens */
-plptr = &planet;
-if (plptr->type == PLTYPE_WORM)
-{
-memcpy(&worm,&planet,sizeof(GALWORM));  /* make it the current user */
-}
-else
-{
-if (plptr->beacon[0] != 0)
-{
-bbad = FALSE;
-
-for (
-i = 0;
-i<BEACONMSGSZ;++i)
-{
-if (plptr->beacon[i] < ' ' || plptr->beacon[i] > '~')
-{
-plptr->beacon[0] = 0;
-bbad = TRUE;
-break;
-}
-}
-if (!bbad)
-{
-movecoord(&beacon[usrn].coord,&plptr->coord);
-beacon[usrn].
-plnum = plnum;
-strncpy(beacon[usrn]
-.beacon,plptr->beacon,BEACONMSGSZ);
-}
-}
-}
-}
-else
-{
-return(FALSE);
-}
-}
-return(TRUE);
+            /* If this fails what happens */
+            plptr = &planet;
+            if(plptr->type == PLTYPE_WORM) {
+                memcpy(&worm, &planet, sizeof(GALWORM));  /* make it the current user */
+            } else {
+                if(plptr->beacon[0] != 0) {
+                    bbad = FALSE;
+                    for(i = 0; i < BEACONMSGSZ; ++i) {
+                        if(plptr->beacon[i] < ' ' || plptr->beacon[i] > '~') {
+                            plptr->beacon[0] = 0;
+                            bbad = TRUE;
+                            break;
+                        }
+                    }
+                    if(!bbad) {
+                        movecoord(&beacon[usrn].coord, &plptr->coord);
+                        beacon[usrn].plnum = plnum;
+                        strncpy(beacon[usrn].beacon, plptr->beacon, BEACONMSGSZ);
+                    }
+                }
+            }
+        } else {
+            return (FALSE);
+        }
+    }
+    return (TRUE);
 }
 
 /**************************************************************************
@@ -1739,12 +1601,11 @@ return(TRUE);
 **************************************************************************/
 
 void FUNC load_team_tab() {
+char buffer[256];
+FILE *mzfp;
+int i;
 
-    char buffer[256];
-    FILE *mzfp;
-    int i;
-
-/* clear out the memory team table */
+    /* clear out the memory team table */
 
     for(i = 0; i < MAXTEAMS; ++i) {
         teamtab[i].teamcode = 0;
@@ -1826,44 +1687,40 @@ void FUNC update_team_tab() {
 ** Planet economic processing                                            **
 **************************************************************************/
 #ifdef PHARLAP
-void FUNC pplarti(void) {
-    plartia();
-    return;
-}
+    void FUNC pplarti(void) {
+        plartia();
+        return;
+    }
 #else
-int FUNC plarti(void) {
-    plartia();
-    return (0);
-}
-
+    int FUNC plarti(void) {
+        plartia();
+        return (0);
+    }
 #endif
 
 void FUNC plartia(void) {
-    static long fpos = 0;
-    static unsigned int plntcnt = 0;
-    static unsigned int plntpop = 0;
-    static unsigned int sectcnt = 0;
-    static unsigned int wormcnt = 0;
+static long fpos = 0;
+static unsigned int plntcnt = 0;
+static unsigned int plntpop = 0;
+static unsigned int sectcnt = 0;
+static unsigned int wormcnt = 0;
 
-    int flag, tic, plnt_type, not_done;
-    int firstime = FALSE;
-    int i;
+int flag, tic, plnt_type, not_done;
+int firstime = FALSE;
+int i;
 
 #define MAXTIC  20
 
-    static long tocks = 0;
-    double ftocktime, ftockfact;
-    unsigned int minutes;
-
-    int intkey;
+static long tocks = 0;
+double ftocktime, ftockfact;
+unsigned int minutes;
+int intkey;
 
     logthis("TICK:plarti entered");
     setbtv(gebb2);
-
     ++tocks;
 
-/* if first time through get the first record in the file */
-
+    /* if first time through get the first record in the file */
     if(fpos == 0) {
         logthis("plarti:fpos == 0 reset stuff");
         intkey = 1;
