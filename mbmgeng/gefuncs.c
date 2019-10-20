@@ -2165,6 +2165,9 @@ WARUSR *FUNC warusroff(int usrn) {
     }
 }
 
+/*
+ * Return a pointer to the ship owned by usrn
+ */
 WARSHP *FUNC warshpoff(int usrn) {
     if (usrn >= 0 && usrn < nships)
         return ((WARSHP *) ((long) (warshp_ecl + (usrn << 3)) << 16));
@@ -2176,11 +2179,9 @@ WARSHP *FUNC warshpoff(int usrn) {
 }
 
 double FUNC ton_fact(WARSHP *ptr, double damfact) {
-
-    double temp;
+double temp;
 
     temp = damfact / ((double) (shipclass[ptr->shpclass].damfact) / 100.0);
-
     return (temp);
 }
 
