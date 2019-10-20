@@ -637,10 +637,10 @@ void FUNC iniwara(void) {
 
     gehlpmb = opnmsg(GEHELP);
 
-/* ships in game is at least number of terminal channels */
+    /* ships in game is at least number of terminal channels */
     nships = nterms + numships;
 
-/* allocate memory for user data table */
+    /* allocate memory for user data table */
     warusr_ecl = pltile(nships * (long) sizeof(WARUSR), 0, sizeof(WARUSR), sizeof(WARUSR));
     warusr = MK_FP(warusr_ecl, 0);
 
@@ -2416,6 +2416,7 @@ int FUNC ingegame(int shpno) {
     if(shpno < nterms)
         if(user[shpno].state == gestt && user[shpno].substt >= FIGHTSUB)
             return (TRUE);
+
     /* Ah, looks like automatons have shipno's greater than nterms */
     if(shpno >= nterms && warshpoff(shpno)->status == GESTAT_AUTO)
         return (TRUE);
