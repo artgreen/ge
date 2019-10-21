@@ -1964,23 +1964,21 @@ void FUNC warrtia(void) {
 ** Real time kick routine for all automatons                             **
 **************************************************************************/
 #ifdef PHARLAP
-void  FUNC pautorti(void)
-{
-autortia();
-return;
-}
-#else
-int FUNC autorti(void) {
+    void  FUNC pautorti(void)
+    {
     autortia();
-    return (0);
-}
-
+    return;
+    }
+#else
+    int FUNC autorti(void) {
+        autortia();
+        return (0);
+    }
 #endif
 
 void FUNC autortia(void) {
 int zothusn;            /* general purpose other-user channel number */
 WARSHP *wptr;
-
 static int ticktock1 = 0;
 static int ticktock2 = 0;
 int count, class;
@@ -2266,7 +2264,6 @@ WARSHP *wptr;
 **   Automatons are always in the game
 **************************************************************************/
 int FUNC ingegame(int shpno) {
-
     if(shpno >= nships || shpno < 0)
         return (FALSE);
 

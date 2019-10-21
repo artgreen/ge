@@ -2087,56 +2087,47 @@ prf("Xfactor=%s,Yfactor=%s\r",spr("%ld",(long)xfactor),spr("%ld",(long)yfactor))
 }
 
 #ifdef NOTHING
-                                                                                                                        void scan_hy()
+void scan_hy() {
+unsigned x, y;
+WARSHP *wptr;
+double xfactor, yfactor, xf, yf;
 
-{
-unsigned x,y;
-WARSHP  *wptr;
-
-double xfactor,yfactor,xf,yf;
-
-
-if(warsptr->where != 1)
-	{
-	prfmsg(NOSCANL);
-	}
-else
-	{
-	setsect(warsptr);
-	prfmsg(SCAN26,xsect,ysect);
-	clearmap();
-	xfactor = ((double)univmax*2.0)/((double)MAXX-1.0);
-	yfactor = ((double)univmax*2.0)/((double)MAXY-1.0);
-	for (othusn=0 ; othusn < nships ; othusn++)
-		{
-		wptr=warshpoff(othusn);
-		if (ingegame(othusn))
+    if(warsptr->where != 1) {
+        prfmsg(NOSCANL);
+    } else {
+        setsect(warsptr);
+        prfmsg(SCAN26, xsect, ysect);
+        clearmap();
+        xfactor = ((double) univmax * 2.0) / ((double) MAXX - 1.0);
+        yfactor = ((double) univmax * 2.0) / ((double) MAXY - 1.0);
+        for(othusn = 0; othusn < nships; othusn++) {
+            wptr = warshpoff(othusn);
+            if(ingegame(othusn))
 /*              if (ingegame(othusn) && wptr->where == 1)*/
-			{
-			xf = ((wptr->coord.xcoord)+(double)univmax);
-			yf = ((wptr->coord.ycoord)+(double)univmax);
-			x = (unsigned)(xf/xfactor);
-			y = (unsigned)(yf/yfactor);
+            {
+                xf = ((wptr->coord.xcoord) + (double) univmax);
+                yf = ((wptr->coord.ycoord) + (double) univmax);
+                x = (unsigned) (xf / xfactor);
+                y = (unsigned) (yf / yfactor);
 
-			map[y][x] = '+';
-			if (wptr->status == GESTAT_AUTO)
-				mapc[y][x] = '1';
-			else
-				mapc[y][x] = '2';
+                map[y][x] = '+';
+                if(wptr->status == GESTAT_AUTO)
+                    mapc[y][x] = '1';
+                else
+                    mapc[y][x] = '2';
+            }
+        }
+        xf = ((warsptr->coord.xcoord) + (double) univmax);
+        yf = ((warsptr->coord.ycoord) + (double) univmax);
+        xfactor = ((double) univmax * 2.0) / ((double) MAXX - 1.0);
+        yfactor = ((double) univmax * 2.0) / ((double) MAXY - 1.0);
+        x = (unsigned) (xf / xfactor);
+        y = (unsigned) (yf / yfactor);
 
-			}
-		}
-	xf = ((warsptr->coord.xcoord)+(double)univmax);
-	yf = ((warsptr->coord.ycoord)+(double)univmax);
-	xfactor = ((double)univmax*2.0)/((double)MAXX-1.0);
-	yfactor = ((double)univmax*2.0)/((double)MAXY-1.0);
-	x = (unsigned)(xf/xfactor);
-	y = (unsigned)(yf/yfactor);
-
-	map[y][x] = '*';
-	printmap();
-	}
-outprfge(ALWAYS,usrnum);
+        map[y][x] = '*';
+        printmap();
+    }
+    outprfge(ALWAYS, usrnum);
 }
 #endif
 
@@ -3756,7 +3747,7 @@ void FUNC cmd_sysop() {
         }
     }
 #ifdef NOTHING
-                                                                                                                                else
+else
 if (sameas("cyborg",margv[1]))
 	{
 	warsptr->status = GESTAT_AUTO;
@@ -4580,20 +4571,20 @@ int zothusn;
 	}
 	//prf("In list_ship() and margv[3] is: %s\r", margv[3]);
 	//outprfge(ALWAYS, usrnum);
-	
+
     /* loop through all ships */
     for(zothusn = 0; zothusn < nships; zothusn++) {
     	// prf("zothusn = %d\r", zothusn); outprfge(ALWAYS, usrnum);
-    	
+
         /* get a pointer to the ship */
         wptr = warshpoff(zothusn);
     	//prf("wptr->userid = %s\r", wptr->userid); outprfge(ALWAYS, usrnum);
-        
+
         /* is this user still in the game? */
         if(ingegame(zothusn)) {
         	/* check and see if the names match */
         	//prf("'%s' vs. '%s'\r", margv[3], wptr->userid);
-        	
+
         	if( sameas(margv[3], wptr->userid) ) {
 				/* yep let's load the sector this ship is in */
 				setsect(wptr);
@@ -4601,7 +4592,7 @@ int zothusn;
 				return;
 			}
         }
-    }	
+    }
 }
 
 void data_cmd_a(void) {
@@ -4611,7 +4602,7 @@ void (*cmd_index[])(void) = {
 	data_cmd_list_ship
 };
 	//prf("In data_cmd_a() and margv[2] is: %s\r", margv[2]);
-	
+
 	// calculate offset into the command index
 	i = *margv[2] - 'a';
 	//prf("i = %d\r", i);
@@ -4633,7 +4624,7 @@ void data_cmd_b(void) {
 }
 
 /*
- * 
+ *
 */
 void FUNC cmd_data() {
 int i, j;
@@ -4651,16 +4642,16 @@ void (*cmd_index[])(void) = {
 	// we still support old school data call...
     if (!sameas(margv[1], "qazwsx")) {
     	// new commands start here
-    	
+
 		// calculate offset into the command index
 		i = *margv[1] - 'a';
-		
+
 		// TODO: replace lousy safety check
 		if( i >= 0 && i <= 10 ) {
 			(*cmd_index[i])();
 			return;
 		}
-    } else 
+    } else
     {
 	    if (
 			sameas(margv[2], "r") ||
@@ -4675,9 +4666,9 @@ void (*cmd_index[])(void) = {
 			sprintf(gechrbuf, "%ld", waruptr->score);
 			sprintf(gechrbuf2, "%ld", waruptr->cash);
 			sprintf(gechrbuf3, "%ld", waruptr->population);
-			prf("UD2:%s,%s,%s*\r", gechrbuf, gechrbuf2, gechrbuf3); 
+			prf("UD2:%s,%s,%s*\r", gechrbuf, gechrbuf2, gechrbuf3);
 			outprfge(ALWAYS, usrnum);
-			
+
 			setsect(warsptr);
 			prn_ship(warsptr);
 			return;
