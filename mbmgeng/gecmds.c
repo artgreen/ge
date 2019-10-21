@@ -103,7 +103,7 @@ void cmd_gehelp(), cmd_cloak(), cmd_gehelp(), cmd_impulse(), cmd_phas(),
         cmd_new(), cmd_sell(), cmd_sysop(), cmd_rename(), cmd_destruct(), cmd_abort(),
         cmd_jammer(), cmd_mine(), cmd_abandon(), cmd_zipper(), cmd_lock(),
         cmd_navigate(), cmd_who(), cmd_displ(), cmd_freq(), cmd_cls(), cmd_data(),
-        cmd_team(), cmd_spy(), cmd_jettison(), api_ships(), list_ships();
+        cmd_team(), cmd_spy(), cmd_jettison(), list_ships();
 
 #define GECMDSIZ (sizeof(gecmds)/sizeof(struct cmd))
 
@@ -4570,26 +4570,19 @@ char mask[] = {"SD1:%s,%d,'%s',%d\r"};
     prf("end ship detail\r"); outprfge(ALWAYS, usrnum);
 }
 
-void data_cmd_list_ships(void) {
-	list_ships();
-}
-
 void data_cmd_list_ship(void) {
-SCANTAB *sptr;
 WARSHP *wptr;
-int i, j;
 int zothusn;
-char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
 
 	if( margc != 4 ) {
 		prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
 		return;
 	}
-	prf("In list_ship() and margv[3] is: %s\r", margv[3]);
-	outprfge(ALWAYS, usrnum);
+	//prf("In list_ship() and margv[3] is: %s\r", margv[3]);
+	//outprfge(ALWAYS, usrnum);
 	
     /* loop through all ships */
-    for(zothusn = 0; zothusn <= nships; zothusn++) {
+    for(zothusn = 0; zothusn < nships; zothusn++) {
     	// prf("zothusn = %d\r", zothusn); outprfge(ALWAYS, usrnum);
     	
         /* get a pointer to the ship */
@@ -4614,15 +4607,15 @@ char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
 void data_cmd_a(void) {
 int i = 0;
 void (*cmd_index[])(void) = {
-	data_cmd_list_ships,
+	list_ships,
 	data_cmd_list_ship
 };
-	prf("In data_cmd_a() and margv[2] is: %s\r", margv[2]);
+	//prf("In data_cmd_a() and margv[2] is: %s\r", margv[2]);
 	
 	// calculate offset into the command index
 	i = *margv[2] - 'a';
-	prf("i = %d\r", i);
-	outprfge(ALWAYS, usrnum);
+	//prf("i = %d\r", i);
+	//outprfge(ALWAYS, usrnum);
 
 	// TODO: replace lousy safety check
 	if( i >= 0 && i <= 1 ) {
@@ -4631,9 +4624,12 @@ void (*cmd_index[])(void) = {
 	}
 }
 
+/*
+  * Command group A
+*/
 void data_cmd_b(void) {
-	prf("In data_cmd_b() and margv[2] is: %s\r", margv[2]);
-	outprfge(ALWAYS, usrnum);
+	//prf("In data_cmd_b() and margv[2] is: %s\r", margv[2]);
+	//outprfge(ALWAYS, usrnum);
 }
 
 /*
@@ -4643,7 +4639,8 @@ void FUNC cmd_data() {
 int i, j;
 void (*cmd_index[])(void) = {
 	data_cmd_a,
-	data_cmd_b
+	data_cmd_b,
+	dummy
 };
 
     if (margc < 3) {
@@ -4678,69 +4675,11 @@ void (*cmd_index[])(void) = {
 			sprintf(gechrbuf, "%ld", waruptr->score);
 			sprintf(gechrbuf2, "%ld", waruptr->cash);
 			sprintf(gechrbuf3, "%ld", waruptr->population);
-			prf("UD2:%s,%s,%s*\r", gechrbuf, gechrbuf2, gechrbuf3); outprfge(ALWAYS, usrnum);
-
+			prf("UD2:%s,%s,%s*\r", gechrbuf, gechrbuf2, gechrbuf3); 
+			outprfge(ALWAYS, usrnum);
+			
 			setsect(warsptr);
-
-			prf("SD1:%s,%d*\r",
-				warsptr->shipname,
-				warsptr->shpclass);
-
-			prf("SD2:%s,%s,%d,%d,%d,%d,%s,%s*\r",
-				spr("%ld", (long) warsptr->heading),
-				spr("%ld", (long) warsptr->speed),
-				xsect, ysect, xcord, ycord,
-				spr("%ld", (long) warsptr->damage),
-				spr("%ld", (long) warsptr->energy));
-
-			prf("SD3:%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
-				spr("%ld", (long) warsptr->phasr),
-				warsptr->phasrtype,
-				warsptr->kills,
-				warsptr->lastfired,
-				warsptr->shieldtype,
-				warsptr->shieldstat,
-				warsptr->shield,
-				warsptr->cloak,
-				warsptr->tactical,
-				warsptr->helm,
-				warsptr->train,
-				warsptr->where);
-
-			prf("SD4:");
-			for (i = 0; i < MAXTORPS; ++i)
-				prf("T%d:%u-%u,", i, warsptr->ltorps[i].channel, warsptr->ltorps[i].distance);
-			prf("*\r");
-
-			prf("SD5:");
-			for (i = 0; i < MAXMISSL; ++i)
-				prf("M%d:%u-%u,", i, warsptr->lmissl[i].channel, warsptr->lmissl[i].distance);
-			prf("*\r");
-
-			prf("SD6:");
-			for (i = 0; i < NUMITEMS; ++i)
-				prf("I%d:%s,", i, spr("%ld", warsptr->items[i]));
-			prf("*\r");
-
-			j = 0;
-			for (i = 0; i < MAXDECOY; ++i)
-				if (warsptr->decout[i] > 0)
-					++j;
-
-			prf("SD7:%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
-				j,
-				warsptr->jammer,
-				warsptr->kills,
-				warsptr->freq[0],
-				warsptr->freq[1],
-				warsptr->freq[2],
-				warsptr->hostile,
-				warsptr->cantexit,
-				warsptr->repair,
-				warsptr->hypha,
-				warsptr->firecntl,
-				warsptr->destruct,
-				warsptr->status); outprfge(ALWAYS, usrnum);
+			prn_ship(warsptr);
 			return;
 		}
 		if (
@@ -4757,12 +4696,6 @@ void (*cmd_index[])(void) = {
 			scan_data2();
 			return;
 		}
-		if (sameas(margv[2], "a")) {
-			api_ships();
-			return;
-		}
-        prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
-        return;
     };
 	prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
 }
@@ -4842,6 +4775,7 @@ int zothusn;
 char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
 
     prf("start ship list\r");
+	prf("Shp ShpNo ShpNm Xsect Ysect Xcoord Ycoord Heading Speed\r");
 
     /* loop through all ships */
     for(zothusn = 0; zothusn < nships; zothusn++) {
@@ -4851,7 +4785,6 @@ char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
         if(ingegame(zothusn)) {
             /* yep let's load the sector this ship is in */
             setsect(wptr);
-
             /* let's queue a record for xmit */
             prf(
                 mask,
@@ -4867,99 +4800,6 @@ char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
     prf("end ship list\r"); outprfge(ALWAYS, usrnum);
 }
 
-void FUNC api_ships() {
-SCANTAB *sptr;
-WARSHP *wptr;
-int i, j;
-int zothusn;
-
-char mask[] = {"SD1:%s,%d,'%s',%d\r"};
-
-    prf(
-        "start ship detail: %s\r",
-        spr("%6ld", shipclass[warsptr->shpclass].scanrange)
-    );
-
-    /* loop through all ships */
-    for(zothusn = 0; zothusn < nships; zothusn++) {
-        /* get a pointer to the ship */
-        wptr = warshpoff(zothusn);
-        /* is this user still in the game? */
-        if(ingegame(zothusn)) {
-            /* yep let's load the sector this ship is in */
-            setsect(wptr);
-
-            /* let's queue a record for xmit */
-            prf(
-                mask,
-                wptr->userid,
-                wptr->shipno,
-                wptr->shipname,
-                wptr->shpclass
-            );
-            prf("SD2:%s,%s,%d,%d,%d,%d,%s,%s*\r",
-                spr("%ld", (long) wptr->heading),
-                spr("%ld", (long) wptr->speed),
-                xsect, ysect, xcord, ycord,
-                spr("%ld", (long) wptr->damage),
-                spr("%ld", (long) wptr->energy)
-            );
-
-            prf("SD3:%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
-                spr("%ld", (long) wptr->phasr),
-                wptr->phasrtype,
-                wptr->kills,
-                wptr->lastfired,
-                wptr->shieldtype,
-                wptr->shieldstat,
-                wptr->shield,
-                wptr->cloak,
-                wptr->tactical,
-                wptr->helm,
-                wptr->train,
-                wptr->where);
-
-            prf("SD4:");
-            for (i = 0; i < MAXTORPS; ++i)
-                prf("T%d:%u-%u,", i, wptr->ltorps[i].channel, wptr->ltorps[i].distance);
-            prf("*\r");
-
-            prf("SD5:");
-            for (i = 0; i < MAXMISSL; ++i)
-                prf("M%d:%u-%u,", i, wptr->lmissl[i].channel, wptr->lmissl[i].distance);
-            prf("*\r");
-
-            prf("SD6:");
-            for (i = 0; i < NUMITEMS; ++i)
-                prf("I%d:%s,", i, spr("%ld", wptr->items[i]));
-            prf("*\r");
-
-            j = 0;
-            for (i = 0; i < MAXDECOY; ++i)
-                if (wptr->decout[i] > 0)
-                    ++j;
-
-            prf("SD7:%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
-                j,
-                wptr->jammer,
-                wptr->kills,
-                wptr->freq[0],
-                wptr->freq[1],
-                wptr->freq[2],
-                wptr->hostile,
-                wptr->cantexit,
-                wptr->repair,
-                wptr->hypha,
-                wptr->firecntl,
-                wptr->destruct,
-                wptr->status);
-                outprfge(ALWAYS, usrnum);
-        }
-    }
-
-    prf("end ship detail\r"); outprfge(ALWAYS, usrnum);
-}
-
 char *FUNC gedots(int numdots) {
 int i;
 static char dotbuf[41];
@@ -4972,7 +4812,6 @@ static char dotbuf[41];
     dotbuf[numdots] = 0;
     return (dotbuf);
 }
-
 
 /**************************************************************************
 ** Spy Command                                                        **
