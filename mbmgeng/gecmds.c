@@ -4017,7 +4017,6 @@ int i;
             "filter",
     };
 
-
     if (margc < 2 || margc > 3) {
         prfmsg(SETFMT); outprfge(ALWAYS, usrnum);
         return;
@@ -4477,7 +4476,7 @@ char *FUNC teamname(WARUSR *ptr) {
 }
 
 void FUNC cmd_clear() {
-    ansifunc(CLEAR); outprfge(ALWAYS, usrnum);
+    /* ansifunc(CLEAR); outprfge(ALWAYS, usrnum); */
 }
 
 void FUNC ansifunc(int func) {
@@ -4489,140 +4488,283 @@ void FUNC ansifunc(int func) {
 
         case CLEAR:
             /*prf(".[2J");*/
-            prt("");
+            prf("");
             break;
     }
 }
 
+/*
+  * Command group A
+*/
+void prn_ship(WARSHP *wptr) {
+int i, j;
+char mask[] = {"SD1:%s,%d,'%s',%d\r"};
+
+    prf("start ship detail\r");
+
+	/* let's queue a record for xmit */
+	prf(
+		mask,
+		wptr->userid,
+		wptr->shipno,
+		wptr->shipname,
+		wptr->shpclass
+	);
+	prf("SD2:%s,%s,%d,%d,%d,%d,%s,%s*\r",
+		spr("%ld", (long) wptr->heading),
+		spr("%ld", (long) wptr->speed),
+		xsect, ysect, xcord, ycord,
+		spr("%ld", (long) wptr->damage),
+		spr("%ld", (long) wptr->energy)
+	);
+
+	prf("SD3:%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
+		spr("%ld", (long) wptr->phasr),
+		wptr->phasrtype,
+		wptr->kills,
+		wptr->lastfired,
+		wptr->shieldtype,
+		wptr->shieldstat,
+		wptr->shield,
+		wptr->cloak,
+		wptr->tactical,
+		wptr->helm,
+		wptr->train,
+		wptr->where);
+
+	prf("SD4:");
+	for (i = 0; i < MAXTORPS; ++i)
+		prf("T%d:%u-%u,", i, wptr->ltorps[i].channel, wptr->ltorps[i].distance);
+	prf("*\r");
+
+	prf("SD5:");
+	for (i = 0; i < MAXMISSL; ++i)
+		prf("M%d:%u-%u,", i, wptr->lmissl[i].channel, wptr->lmissl[i].distance);
+	prf("*\r");
+
+	prf("SD6:");
+	for (i = 0; i < NUMITEMS; ++i)
+		prf("I%d:%s,", i, spr("%ld", wptr->items[i]));
+	prf("*\r");
+
+	j = 0;
+	for (i = 0; i < MAXDECOY; ++i)
+		if (wptr->decout[i] > 0)
+			++j;
+
+	prf("SD7:%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
+		j,
+		wptr->jammer,
+		wptr->kills,
+		wptr->freq[0],
+		wptr->freq[1],
+		wptr->freq[2],
+		wptr->hostile,
+		wptr->cantexit,
+		wptr->repair,
+		wptr->hypha,
+		wptr->firecntl,
+		wptr->destruct,
+		wptr->status);
+
+    prf("end ship detail\r"); outprfge(ALWAYS, usrnum);
+}
+
+void data_cmd_list_ships(void) {
+	list_ships();
+}
+
+void data_cmd_list_ship(void) {
+SCANTAB *sptr;
+WARSHP *wptr;
+int i, j;
+int zothusn;
+char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
+
+	if( margc != 4 ) {
+		prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
+		return;
+	}
+	prf("In list_ship() and margv[3] is: %s\r", margv[3]);
+	outprfge(ALWAYS, usrnum);
+	
+    /* loop through all ships */
+    for(zothusn = 0; zothusn <= nships; zothusn++) {
+    	// prf("zothusn = %d\r", zothusn); outprfge(ALWAYS, usrnum);
+    	
+        /* get a pointer to the ship */
+        wptr = warshpoff(zothusn);
+    	//prf("wptr->userid = %s\r", wptr->userid); outprfge(ALWAYS, usrnum);
+        
+        /* is this user still in the game? */
+        if(ingegame(zothusn)) {
+        	/* check and see if the names match */
+        	//prf("'%s' vs. '%s'\r", margv[3], wptr->userid);
+        	
+        	if( sameas(margv[3], wptr->userid) ) {
+				/* yep let's load the sector this ship is in */
+				setsect(wptr);
+				prn_ship(wptr);
+				return;
+			}
+        }
+    }	
+}
+
+void data_cmd_a(void) {
+int i = 0;
+void (*cmd_index[])(void) = {
+	data_cmd_list_ships,
+	data_cmd_list_ship
+};
+	prf("In data_cmd_a() and margv[2] is: %s\r", margv[2]);
+	
+	// calculate offset into the command index
+	i = *margv[2] - 'a';
+	prf("i = %d\r", i);
+	outprfge(ALWAYS, usrnum);
+
+	// TODO: replace lousy safety check
+	if( i >= 0 && i <= 1 ) {
+		(*cmd_index[i])();
+		return;
+	}
+}
+
+void data_cmd_b(void) {
+	prf("In data_cmd_b() and margv[2] is: %s\r", margv[2]);
+	outprfge(ALWAYS, usrnum);
+}
+
+/*
+ * 
+*/
 void FUNC cmd_data() {
 int i, j;
+void (*cmd_index[])(void) = {
+	data_cmd_a,
+	data_cmd_b
+};
 
-    if (margc != 3) {
+    if (margc < 3) {
         prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
         return;
     };
 
-    if (!sameas(margv[1], "a")) {
-        if (!sameas(margv[1], "d")) {
-            if (!sameas(margv[1], "qazwsx")) {
-                prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
-                return;
-            };
-        };
+	// we still support old school data call...
+    if (!sameas(margv[1], "qazwsx")) {
+    	// new commands start here
+    	
+		// calculate offset into the command index
+		i = *margv[1] - 'a';
+		
+		// TODO: replace lousy safety check
+		if( i >= 0 && i <= 10 ) {
+			(*cmd_index[i])();
+			return;
+		}
+    } else 
+    {
+	    if (
+			sameas(margv[2], "r") ||
+			sameas(margv[2], "report")
+		) {
+			prf("UD1:%s,%d,%d,%d,%d*\r",
+				waruptr->userid,
+				waruptr->noships,
+				waruptr->kills,
+				waruptr->rospos,
+				waruptr->planets);
+			sprintf(gechrbuf, "%ld", waruptr->score);
+			sprintf(gechrbuf2, "%ld", waruptr->cash);
+			sprintf(gechrbuf3, "%ld", waruptr->population);
+			prf("UD2:%s,%s,%s*\r", gechrbuf, gechrbuf2, gechrbuf3); outprfge(ALWAYS, usrnum);
+
+			setsect(warsptr);
+
+			prf("SD1:%s,%d*\r",
+				warsptr->shipname,
+				warsptr->shpclass);
+
+			prf("SD2:%s,%s,%d,%d,%d,%d,%s,%s*\r",
+				spr("%ld", (long) warsptr->heading),
+				spr("%ld", (long) warsptr->speed),
+				xsect, ysect, xcord, ycord,
+				spr("%ld", (long) warsptr->damage),
+				spr("%ld", (long) warsptr->energy));
+
+			prf("SD3:%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
+				spr("%ld", (long) warsptr->phasr),
+				warsptr->phasrtype,
+				warsptr->kills,
+				warsptr->lastfired,
+				warsptr->shieldtype,
+				warsptr->shieldstat,
+				warsptr->shield,
+				warsptr->cloak,
+				warsptr->tactical,
+				warsptr->helm,
+				warsptr->train,
+				warsptr->where);
+
+			prf("SD4:");
+			for (i = 0; i < MAXTORPS; ++i)
+				prf("T%d:%u-%u,", i, warsptr->ltorps[i].channel, warsptr->ltorps[i].distance);
+			prf("*\r");
+
+			prf("SD5:");
+			for (i = 0; i < MAXMISSL; ++i)
+				prf("M%d:%u-%u,", i, warsptr->lmissl[i].channel, warsptr->lmissl[i].distance);
+			prf("*\r");
+
+			prf("SD6:");
+			for (i = 0; i < NUMITEMS; ++i)
+				prf("I%d:%s,", i, spr("%ld", warsptr->items[i]));
+			prf("*\r");
+
+			j = 0;
+			for (i = 0; i < MAXDECOY; ++i)
+				if (warsptr->decout[i] > 0)
+					++j;
+
+			prf("SD7:%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
+				j,
+				warsptr->jammer,
+				warsptr->kills,
+				warsptr->freq[0],
+				warsptr->freq[1],
+				warsptr->freq[2],
+				warsptr->hostile,
+				warsptr->cantexit,
+				warsptr->repair,
+				warsptr->hypha,
+				warsptr->firecntl,
+				warsptr->destruct,
+				warsptr->status); outprfge(ALWAYS, usrnum);
+			return;
+		}
+		if (
+			sameas(margv[2], "s") ||
+			sameas(margv[2], "scan")
+		) {
+			scan_data1();
+			return;
+		}
+		if (
+			sameas(margv[2], "p") ||
+			sameas(margv[2], "sector")
+		) {
+			scan_data2();
+			return;
+		}
+		if (sameas(margv[2], "a")) {
+			api_ships();
+			return;
+		}
+        prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
+        return;
     };
-
-    if (
-        sameas(margv[2], "d")
-        ) {
-        api_ships();
-        return;
-    }
-
-    if (
-        sameas(margv[2], "l")
-        ) {
-        list_ships();
-        return;
-    }
-
-    if (
-        sameas(margv[2], "r") ||
-        sameas(margv[2], "report")
-    ) {
-        prf("UD1:%s,%d,%d,%d,%d*\r",
-            waruptr->userid,
-            waruptr->noships,
-            waruptr->kills,
-            waruptr->rospos,
-            waruptr->planets);
-        sprintf(gechrbuf, "%ld", waruptr->score);
-        sprintf(gechrbuf2, "%ld", waruptr->cash);
-        sprintf(gechrbuf3, "%ld", waruptr->population);
-        prf("UD2:%s,%s,%s*\r", gechrbuf, gechrbuf2, gechrbuf3); outprfge(ALWAYS, usrnum);
-
-        setsect(warsptr);
-
-        prf("SD1:%s,%d*\r",
-            warsptr->shipname,
-            warsptr->shpclass);
-
-        prf("SD2:%s,%s,%d,%d,%d,%d,%s,%s*\r",
-            spr("%ld", (long) warsptr->heading),
-            spr("%ld", (long) warsptr->speed),
-            xsect, ysect, xcord, ycord,
-            spr("%ld", (long) warsptr->damage),
-            spr("%ld", (long) warsptr->energy));
-
-        prf("SD3:%s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
-            spr("%ld", (long) warsptr->phasr),
-            warsptr->phasrtype,
-            warsptr->kills,
-            warsptr->lastfired,
-            warsptr->shieldtype,
-            warsptr->shieldstat,
-            warsptr->shield,
-            warsptr->cloak,
-            warsptr->tactical,
-            warsptr->helm,
-            warsptr->train,
-            warsptr->where);
-
-        prf("SD4:");
-        for (i = 0; i < MAXTORPS; ++i)
-            prf("T%d:%u-%u,", i, warsptr->ltorps[i].channel, warsptr->ltorps[i].distance);
-        prf("*\r");
-
-        prf("SD5:");
-        for (i = 0; i < MAXMISSL; ++i)
-            prf("M%d:%u-%u,", i, warsptr->lmissl[i].channel, warsptr->lmissl[i].distance);
-        prf("*\r");
-
-        prf("SD6:");
-        for (i = 0; i < NUMITEMS; ++i)
-            prf("I%d:%s,", i, spr("%ld", warsptr->items[i]));
-        prf("*\r");
-
-        j = 0;
-        for (i = 0; i < MAXDECOY; ++i)
-            if (warsptr->decout[i] > 0)
-                ++j;
-
-        prf("SD7:%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d*\r",
-            j,
-            warsptr->jammer,
-            warsptr->kills,
-            warsptr->freq[0],
-            warsptr->freq[1],
-            warsptr->freq[2],
-            warsptr->hostile,
-            warsptr->cantexit,
-            warsptr->repair,
-            warsptr->hypha,
-            warsptr->firecntl,
-            warsptr->destruct,
-            warsptr->status); outprfge(ALWAYS, usrnum);
-        return;
-    }
-    if (
-        sameas(margv[2], "s") ||
-        sameas(margv[2], "scan")
-    ) {
-        scan_data1();
-        return;
-    }
-    if (
-        sameas(margv[2], "p") ||
-        sameas(margv[2], "sector")
-    ) {
-        scan_data2();
-        return;
-    }
-    if (sameas(margv[2], "a")) {
-        api_ships();
-        return;
-    }
-
-    prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
+	prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
 }
 
 void FUNC scan_data1() {
@@ -4819,8 +4961,8 @@ char mask[] = {"SD1:%s,%d,'%s',%d\r"};
 }
 
 char *FUNC gedots(int numdots) {
-    int i;
-    static char dotbuf[41];
+int i;
+static char dotbuf[41];
 
     if (numdots > 40)
         numdots = 40;
