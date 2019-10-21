@@ -103,7 +103,7 @@ void cmd_gehelp(), cmd_cloak(), cmd_gehelp(), cmd_impulse(), cmd_phas(),
         cmd_new(), cmd_sell(), cmd_sysop(), cmd_rename(), cmd_destruct(), cmd_abort(),
         cmd_jammer(), cmd_mine(), cmd_abandon(), cmd_zipper(), cmd_lock(),
         cmd_navigate(), cmd_who(), cmd_displ(), cmd_freq(), cmd_cls(), cmd_data(),
-        cmd_team(), cmd_spy(), cmd_jettison(), list_ships();
+        cmd_team(), cmd_spy(), cmd_jettison();
 
 #define GECMDSIZ (sizeof(gecmds)/sizeof(struct cmd))
 
@@ -4561,6 +4561,72 @@ char mask[] = {"SD1:%s,%d,'%s',%d\r"};
     prf("end ship detail\r"); outprfge(ALWAYS, usrnum);
 }
 
+void data_cmd_scan_table(void) {
+SCANTAB *sptr;
+WARSHP *wptr;
+int i;
+
+    prf("start scan table\r");
+    prf("Range: %s\r", spr("%6ld", shipclass[warsptr->shpclass].scanrange));
+    update_scantab(warsptr, usrnum);
+    sptr = &scantab[usrnum];
+
+    prf("ShpNo Let Flag Xsect Ysect Xcoord Ycoord Distance Bearing Heading Speed Class\r");
+    for (i = 0; i < NOSCANTAB; ++i) {
+        if (sptr->ship[i].flag == 1) {
+            wptr = warshpoff(sptr->ship[i].shipno);
+            setsect(wptr);
+            prf(
+                "%d %c %d %d %d %d %d %s %d %d %s %d\r",
+                sptr->ship[i].shipno,
+                sptr->ship[i].letter,
+                sptr->ship[i].flag,
+                xsect, ysect, xcord, ycord,
+                spr("%ld", (long) (sptr->ship[i].dist)),
+                sptr->ship[i].bearing,
+                sptr->ship[i].heading,
+                showarp(sptr->ship[i].speed),
+                wptr->shpclass
+            );
+        }
+    }
+    prf("end scan table\r");
+    outprfge(ALWAYS, usrnum);
+}
+
+void FUNC list_ships() {
+SCANTAB *sptr;
+WARSHP *wptr;
+int i, j;
+int zothusn;
+char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
+
+    prf("start ship list\r");
+    prf("Shp ShpNo ShpNm Xsect Ysect Xcoord Ycoord Heading Speed\r");
+
+    /* loop through all ships */
+    for(zothusn = 0; zothusn < nships; zothusn++) {
+        /* get a pointer to the ship */
+        wptr = warshpoff(zothusn);
+        /* is this user still in the game? */
+        if(ingegame(zothusn)) {
+            /* yep let's load the sector this ship is in */
+            setsect(wptr);
+            /* let's queue a record for xmit */
+            prf(
+                mask,
+                wptr->userid,
+                wptr->shipno,
+                wptr->shipname,
+                xsect, ysect, xcord, ycord,
+                spr("%ld", (long) wptr->heading),
+                spr("%ld", (long) wptr->speed)
+            );
+        }
+    }
+    prf("end ship list\r"); outprfge(ALWAYS, usrnum);
+}
+
 void data_cmd_list_ship(void) {
 WARSHP *wptr;
 int zothusn;
@@ -4599,7 +4665,8 @@ void data_cmd_a(void) {
 int i = 0;
 void (*cmd_index[])(void) = {
 	list_ships,
-	data_cmd_list_ship
+	data_cmd_list_ship,
+    data_cmd_scan_table
 };
 	//prf("In data_cmd_a() and margv[2] is: %s\r", margv[2]);
 
@@ -4609,7 +4676,7 @@ void (*cmd_index[])(void) = {
 	//outprfge(ALWAYS, usrnum);
 
 	// TODO: replace lousy safety check
-	if( i >= 0 && i <= 1 ) {
+	if( i >= 0 && i <= 2 ) {
 		(*cmd_index[i])();
 		return;
 	}
@@ -4698,19 +4765,13 @@ int i, j;
 unsigned spd;
 char mask[] = {" %c %d %d %d %d %s %d %d %s %d/%s\r"};
 
-
     prf("DataScan: Range: %s\r", spr("%6ld", shipclass[warsptr->shpclass].scanrange));
-
     update_scantab(warsptr, usrnum);
-
     sptr = &scantab[usrnum];
-
     spd = (unsigned) warsptr->speed;
 
     prf("Shp Xsect Ysect Xcoord Ycoord Distance Bearing Heading Speed Class\r");
-
     setsect(warsptr);
-
     prf(mask, '*', xsect, ysect, xcord, ycord, "0", 0,
         (int) warsptr->heading, showarp(warsptr->speed),
         warsptr->shpclass, shipclass[warsptr->shpclass].typename);
@@ -4732,7 +4793,6 @@ char mask[] = {" %c %d %d %d %d %s %d %d %s %d/%s\r"};
                 j, shipclass[j].typename);
         }
     }
-
     outprfge(ALWAYS, usrnum);
 }
 
@@ -4756,39 +4816,6 @@ unsigned i, x, y;
 
     outprfge(ALWAYS, usrnum);
 
-}
-
-void FUNC list_ships() {
-SCANTAB *sptr;
-WARSHP *wptr;
-int i, j;
-int zothusn;
-char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
-
-    prf("start ship list\r");
-	prf("Shp ShpNo ShpNm Xsect Ysect Xcoord Ycoord Heading Speed\r");
-
-    /* loop through all ships */
-    for(zothusn = 0; zothusn < nships; zothusn++) {
-        /* get a pointer to the ship */
-        wptr = warshpoff(zothusn);
-        /* is this user still in the game? */
-        if(ingegame(zothusn)) {
-            /* yep let's load the sector this ship is in */
-            setsect(wptr);
-            /* let's queue a record for xmit */
-            prf(
-                mask,
-                wptr->userid,
-                wptr->shipno,
-                wptr->shipname,
-                xsect, ysect, xcord, ycord,
-                spr("%ld", (long) wptr->heading),
-                spr("%ld", (long) wptr->speed)
-            );
-        }
-    }
-    prf("end ship list\r"); outprfge(ALWAYS, usrnum);
 }
 
 char *FUNC gedots(int numdots) {
