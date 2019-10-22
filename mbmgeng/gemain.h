@@ -41,6 +41,8 @@
 *                                                                         *
 *               I may be contacted via email at mmurdock@starphire.com    *
 ***************************************************************************/
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wmissing-declarations"
 #define TRUE            1
 #define FALSE           0
 
@@ -383,7 +385,7 @@ extern WARSHP {                        /* user data blocks */
 /*
  * Inventory items
  */
-#define ITEM    struct item
+#define ITEM struct item
 extern ITEM {
     unsigned long qty;                            /* quantity on hand */
     unsigned rate;                                           /* rate of manufacture */
@@ -680,3 +682,5 @@ struct secure *secure;
 
 #define FUNC _export
 
+
+#pragma clang diagnostic pop
