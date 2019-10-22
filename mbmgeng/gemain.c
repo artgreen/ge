@@ -51,11 +51,12 @@
 /* Not sure what the below does yet */
 /* #define BLDPLNTS 1 */
 
+//#define PHARLAP
+
 #ifdef PHARLAP
 #include "gcomm.h"
 #include "string.h"
 #else
-
 #include "stdio.h"
 #include "ctype.h"
 #include "mem.h"
@@ -65,7 +66,6 @@
 #include "stdlib.h"
 #include "portable.h"
 #include "dosface.h"
-
 #endif
 
 #include "math.h"
@@ -93,12 +93,10 @@
 
 #ifdef PHARLAP
 #else
-
 int dfsthn();
-
 #endif
 
-/* I think this is the state indicator we get from the kernel */
+/* This is the state indicator we get from the executive */
 int gestt;
 
 /* definition file for the kernel to know who we are */
@@ -118,27 +116,26 @@ struct module mbmge = {        /* module interface block               */
 /*
  * Database files
  */
-BTVFILE *gebb1,  /* GEship.dat   */
-    *gebb2,  /* GEplanet.dat */
-    *gebb4,  /* GEmail.dat   */
-    *gebb5;  /* GEuser.dat   */
+BTVFILE *gebb1,             /* GEship.dat   */
+        *gebb2,             /* GEplanet.dat */
+        *gebb4,             /* GEmail.dat   */
+        *gebb5;             /* GEuser.dat   */
 FILE *gemb, *gehlpmb, *geshmb;
 
 static char *geuser,
-    *geship,
-    *geplnt,
-    *gemail,
-    *geshipcl;
-
+            *geship,
+            *geplnt,
+            *gemail,
+            *geshipcl;
 static char *endmark;
 
 int numwar = 0;                 /* number of users in game  */
-WARSHP tmpshp;  /* used to temporarly set up a new ship */
+WARSHP tmpshp;                  /* used to temporarily set up a new ship */
 WARSHP *warshp, *warsptr;
 WARUSR *warusr, *waruptr;
 int warusr_ecl, warshp_ecl;
 WARUSR tmpusr;
-GALSECT sector, *sptr1;
+GALSECT sector, *sptr1;         // TODO: unused
 GALPLNT planet;
 GALWORM worm;
 PLANETAB *ptab;
@@ -146,22 +143,19 @@ PLANETAB *ptab;
 /*
  * The map
  */
-char map[MAXY][MAXX + 1];          /* global scan map array */
+char map[MAXY][MAXX + 1];           /* global scan map array */
 char mapc[MAXY][MAXX + 1];          /* global scan map array color map */
 
-MINE *mines;       /* place to stuff mines */
-
+MINE *mines;                        /* place to stuff mines */
 MAIL mail;
 MAILSTAT tmpstat;
-
-BEACONTAB *beacon;
-
+BEACONTAB *beacon;                  // place to stuff beacons
 struct message *gemsg;
 
 /***********************************************************************/
 /* Global variables                                                    */
 /***********************************************************************/
-int nships;
+int nships;                         // number of ships in game
 int heading;
 unsigned speed;
 int lockwarn;
@@ -182,15 +176,15 @@ int plnum;
 GALPLNT *plptr;
 ITEM *titems;
 TEAM *teamtab;
-
-int su;
 int tmp_usrnum;
 
-long max_plrec,
-    teambonus,
-    pltvcash,
-    pltvdiv,
-    startcash;
+int su;                              // TODO: unused
+
+long    max_plrec,
+        teambonus,
+        pltvcash,
+        pltvdiv,
+        startcash;
 
 unsigned plantime = PLANTIME;
 
@@ -240,7 +234,7 @@ int gemaxplrs,
     maxplanets;
 
 char *opttxt,
-    optchr;
+     optchr;
 
 long *opttbl;
 
@@ -264,83 +258,34 @@ double tor_fact,
 
 long plantock;
 
-SHPKEY shpkey;
+SHPKEY shpkey;                      // DB key
 MAILKEY mailkey;
-
 SHIP *shipclass;
-
-S00 *s00;
+S00 *s00;                           // Sector 0,0
 int s00plnum;
 
-SCANTAB *scantab;
+SCANTAB *scantab;                   // Table holding ships' scanner results
 
+/* Price tables */
 long shieldprice[TOPSHIELD];
 long phaserprice[TOPPHASOR];
 unsigned baseprice[NUMITEMS];
 
-/* OMITTED 3.2c.7
-long shieldprice[TOPSHIELD] = {5000,
-										10000,
-										40000L,
-										100000L,
-										250000L,
-										500000L,
-										750000L,
-										1100000L,
-										1500000L,
-										2500000L,
-										4000000L,
-										6000000L,
-										8000000L,
-										10000000L,
-										30000000L,
-										50000000L,
-										80000000L,
-										120000000L,
-										250000000L};
-
-long phaserprice[TOPPHASOR] = {5000,
-										10000,
-										40000L,
-										100000L,
-										220000L,
-										400000L,
-										650000L,
-										900000L,
-										1200000L,
-										2000000L,
-										3800000L,
-										5000000L,
-										7000000L,
-										9000000L,
-										15000000L,
-										30000000L,
-										60000000L,
-										100000000L,
-										200000000L};
-
-*/
 /* Maximum items a planet can hold (adjusted later)*/
-
 double maxpl[NUMITEMS];
 
 /* the net weight of each item */
-
 long weight[NUMITEMS];
 
 /* the net score value of each item on the planet */
-
 long value[NUMITEMS];
 
 /* the number of items produced by 1000 men a day */
-
 long manhours[NUMITEMS];
 
 #define MENU struct _menu
-
 MENU {
     int substt;
-
     int (*func)();
 };
 
@@ -352,7 +297,6 @@ MENU {
 */
 
 #define MENUNUM (sizeof(menu)/sizeof(MENU))
-
 MENU menu[] = {
     {0,        mnu_main,},
     {1,        mnu_main_ans},
@@ -379,7 +323,6 @@ MENU menu[] = {
 #ifdef FAKESECURE
 struct secure dummy_secure;
 #endif
-
 struct secure sv_secure;
 
 /**************************************************************************
@@ -397,15 +340,13 @@ void EXPORT init__galemp(void) {
         return;
 }
 #else
-int FUNCFUNC iniwar(void) {
+int FUNC iniwar(void) {
     iniwara();
     return (0);
 }
-
 #endif
 
-void FUNC dummy(void) {
-}
+void FUNC dummy(void) {}
 
 void FUNC iniwara(void) {
     int i, n, type, classbase;
@@ -514,7 +455,7 @@ void FUNC iniwara(void) {
     plattrt2 = (double) (numopt(PLATTRT2, 5, 1000));
     plattrt2 = plattrt2 / 100.0;
 
-/* load the planet maximum table */
+    /* load the planet maximum items table */
     for(i = 0; i < NUMITEMS; ++i) {
         logthis(spr("Item %s", item_name[i]));
 
@@ -555,9 +496,7 @@ void FUNC iniwara(void) {
     logthis(spr("pltvcash=%ld", pltvcash));
 
     pltvdiv = lngopt(PLTVDIV, 0L, 201228378L);
-
     phatowrp = numopt(PHATOWRP, 0, 100);
-
     misengfc = numopt(MISENGFC, 1, 2000);
 
     score_bonus = numopt(SCRBONUS, 0, 32700);
@@ -574,7 +513,6 @@ void FUNC iniwara(void) {
     setmem(opttbl, n, 0);
 
     gebb1 = opnbtv(geship, sizeof(WARSHP));
-
     gebb4 = opnbtv(gemail, sizeof(struct message) + GEMSGSIZ);
 
 #ifndef FAKESECURE
@@ -634,7 +572,6 @@ void FUNC iniwara(void) {
     }
 
     geshocst(2, spr("GE:Opn Us St %d %d %d", secure->open_stat, secure->days_run, secure->days_tot));
-
     gehlpmb = opnmsg(GEHELP);
 
     /* ships in game is at least number of terminal channels */
@@ -649,7 +586,7 @@ void FUNC iniwara(void) {
     }
     geshocst(1, spr("GE:INF:User Mem: %ld", nships * sizeof(WARUSR)));
 
-/* allocate memory for ship data table */
+    /* allocate memory for ship data table */
     warshp_ecl = pltile(nships * (long) sizeof(WARSHP), 0, sizeof(WARSHP), sizeof(WARSHP));
     warshp = MK_FP(warshp_ecl, 0);
 
@@ -658,55 +595,55 @@ void FUNC iniwara(void) {
     }
     geshocst(1, spr("GE:INF:Ship Mem: %ld", nships * sizeof(WARSHP)));
 
-/* allocate memory for planet table */
+    /* allocate memory for planet table */
     ptab = (PLANETAB *) alcmem(n = (nships * sizeof(PLANETAB)) + 1);
     setmem(ptab, n, 0);
     geshocst(1, spr("GE:INF:Planet Table Mem: %d", n));
 
-/* allocate memory for a temporary item table */
+    /* allocate memory for a temporary item table */
     titems = (ITEM *) alcmem(n = nships * sizeof(ITEM));
     setmem(titems, n, 0);
     geshocst(1, spr("GE:INF:Temp Items Mem: %d", n));
 
-/* allocate memory for a team table */
+    /* allocate memory for a team table */
     teamtab = (TEAM *) alcmem(n = MAXTEAMS * sizeof(TEAM));
     setmem(teamtab, n, 0);
     geshocst(1, spr("GE:INF:Team Tab Mem: %d", n));
 
-/* allocate memory for scan table */
+    /* allocate memory for scan table */
     scantab = (SCANTAB *) alcmem(n = nships * sizeof(SCANTAB));
     setmem(scantab, n, 0);
     geshocst(1, spr("GE:INF:Scantab Mem: %d", n));
 
-/* allocate memory for S00 table */
+    /* allocate memory for S00 table */
     s00 = (S00 *) alcmem(n = s00plnum * sizeof(S00));
     setmem(s00, n, 0);
     geshocst(1, spr("GE:INF:S00 Mem: %d", n));
 
-/* allocate memory for beacon table */
+    /* allocate memory for beacon table */
     beacon = (BEACONTAB *) alcmem(n = nships * sizeof(BEACONTAB));
     setmem(beacon, n, 0);
     geshocst(1, spr("GE:INF:Beacontab Mem: %d", n));
 
-/* allocate memory for the mail message table*/
+    /* allocate memory for the mail message table*/
     gemsg = (struct message *) alcmem(sizeof(struct message) + GEMSGSIZ);
 
-/* allocate memory for mine table */
+    /* allocate memory for mine table */
     mines = (MINE *) alcmem(n = nummines * sizeof(MINE));
     setmem(mines, n, 0);
     geshocst(1, spr("GE:INF:Mines Mem: %d", n));
 
-/* allocate memory for garbage bucket */
+    /* allocate memory for garbage bucket */
     gechrbuf = (char *) alcmem(255);
     gechrbuf2 = (char *) alcmem(20);
     gechrbuf3 = (char *) alcmem(20);
     warpbuf = (char *) alcmem(40);
 
-/* init empty mine field */
+    /* init empty mine field */
     for(n = 0; n < nummines; ++n)
         mines[n].channel = 255;
 
-/* init sector, planet, and worm table to bad values */
+    /* init sector, planet, and worm table to bad values */
     sector.xsect = 32767;
     sector.ysect = 32767;
     sector.plnum = 32767;
@@ -723,7 +660,7 @@ void FUNC iniwara(void) {
 
     cyb_class = 0;
 
-/* load the ship class table */
+    /* load the ship class table */
     geshmb = opnmsg(geshipcl);
     setmbk(geshmb);
 
@@ -758,12 +695,12 @@ void FUNC iniwara(void) {
 
     geshocst(1, spr("GE:INF:Fnd %d defined classes", n));
 
-/* allocate memory for ship class table*/
+    /* allocate memory for ship class table*/
     shipclass = (SHIP *) alcmem(n = tot_classes * sizeof(SHIP));
     setmem(shipclass, n, 0);
     geshocst(1, spr("GE:INF:Ship Class Mem: %d", n));
 
-/* read in the ship classes */
+    /* read in the ship classes */
     i = 0;
     for(n = 0; n < tot_classes; ++n) {
         classbase = class_tab[i];
@@ -800,7 +737,6 @@ void FUNC iniwara(void) {
         shipclass[i].res_flag_3 = numopt(++classbase, 0, 32767);
 
         shipclass[i].hlpmsg = ++classbase;
-
         shipclass[i].init_func = NULL;
         shipclass[i].tick_func = NULL;
         shipclass[i].kill_func = NULL;
@@ -814,18 +750,18 @@ void FUNC iniwara(void) {
             shipclass[i].tick_func = cyb_lives;
             shipclass[i].kill_func = cyb_died;
             shipclass[i].won_func = cyb_won;
-        } else if(shipclass[i].max_type == CLASSTYPE_DROID) /* DROID */
-        {
-            shipclass[i].init_func = droid_init;
-            shipclass[i].tick_func = droid_lives;
-            shipclass[i].kill_func = droid_died;
-            shipclass[i].won_func = droid_won;
+        } else {
+            if(shipclass[i].max_type == CLASSTYPE_DROID) /* DROID */
+            {
+                shipclass[i].init_func = droid_init;
+                shipclass[i].tick_func = droid_lives;
+                shipclass[i].kill_func = droid_died;
+                shipclass[i].won_func = droid_won;
+            }
         }
         geshocst(1, spr("GE:INF:Init Class %s", shipclass[i].typename));
-
         ++i; /* index the next table entry */
     }
-
     setmbk(gemb);
 
 /* number of parameters per planet entry */
@@ -855,21 +791,22 @@ void FUNC iniwara(void) {
         geshocst(1, spr("GE:INF:I/S00 %d %s", s00[i].type, s00[i].name));
     }
 
-/* Load the team table from disk */
+    /* Load the team table from disk */
     load_team_tab();
 
-/* turn on lockon warning global flag */
+    /* turn on lockon warning global flag */
     lockwarn = TRUE;
 
-/* tell everyone that we are up */
+    /* tell everyone that we are up */
     geshocst(0, spr("Galactic Empire %s", VERSION));
     if(secure->open_stat == -1)
         geshocst(0, spr("Unregistered - Day %d of %d", secure->days_run, secure->days_tot));
-    else if(secure->open_stat == 1)
-        geshocst(0, spr("Registration # %s", stgopt(REGNO)));
-    else
-        geshocst(0, "Unregistered - Disabled!");
-
+    else {
+        if(secure->open_stat == 1)
+            geshocst(0, spr("Registration # %s", stgopt(REGNO)));
+        else
+            geshocst(0, "Unregistered - Disabled!");
+    }
 #ifdef PHARLAP
     if (secure->open_stat != 0) {
         rtkick(TICKTIME,pwarrti);
@@ -893,7 +830,8 @@ void FUNC iniwara(void) {
     for(j = 0; j < nships; ++j)
         warshpoff(j)->status = GESTAT_AVAIL;
 
-/* find the module number (state) of the FSE for later use */
+    /* find the module number (state) of the FSE for later use */
+    // AG FSE = full screen editor.  Not sure i've ever seen it used
     fse_state = -1;
     for(i = 0; i < nmods; i++) {
         if((sameas((char *) (module[i]->descrp), "Editor")) == TRUE)
@@ -905,12 +843,9 @@ void FUNC iniwara(void) {
 ** User loged in routine                                                 **
 **************************************************************************/
 int FUNC gelogon(void) {
-
     setmbk(gemb);
-
     if(secure->open_stat == 0)
         return (0);
-
     if(!hasmkey(PLAYKEY))
         return (0);
 
@@ -963,7 +898,6 @@ void FUNC gedeletea(char *uid) {
 /**************************************************************************
 ** Midnight cleanup routine                                              **
 **************************************************************************/
-
 #ifdef PHARLAP
     void  FUNC pgemidnight(void) {
         gemidnighta();

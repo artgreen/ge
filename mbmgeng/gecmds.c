@@ -1597,13 +1597,10 @@ void FUNC damstr(int damage) {
 
 }
 
-
 /**************************************************************************
 ** Scan Command                                                          **
 **************************************************************************/
-
 void FUNC cmd_scan() {
-
     if (warsptr->tactical != 0) {
         prfmsg(TABROKE); outprfge(ALWAYS, usrnum);
         return;
@@ -1636,9 +1633,7 @@ void FUNC cmd_scan() {
     }
 }
 
-
 /* SCAN SHIP FUNCTION */
-
 void FUNC scan_sh() {
     int shpnum, gheading;
     WARSHP *wptr;
@@ -1722,16 +1717,13 @@ void FUNC scan_sh() {
 }
 
 void FUNC scan_pl() {
-    unsigned i;
+unsigned i;
 
-
-/* SCAN PLANET FUNCTION */
-
+    /* SCAN PLANET FUNCTION */
     if (margc != 3) {
         prfmsg(SCANFMT); outprfge(ALWAYS, usrnum);
         return;
     }
-
     plnum = atoi(margv[2]);
 
     if (plnum <= MAXPLANETS && plnum > 0) {
@@ -1866,15 +1858,11 @@ void FUNC scan_pl() {
 }
 
 void FUNC scan_ra() {
-    int x, y;
-
-    double xf, yf, x1, y1, range, xfactor, yfactor;
-
-
-    int i;
-
-    WARSHP *wptr;
-    MINE *mptr;
+int x, y;
+double xf, yf, x1, y1, range, xfactor, yfactor;
+int i;
+WARSHP *wptr;
+MINE *mptr;
 
     if (margc != 3) {
         prfmsg(SCANFMT); outprfge(ALWAYS, usrnum);
@@ -1884,20 +1872,14 @@ void FUNC scan_ra() {
     x = atoi(margv[2]);
     if (x < 1 || x > 9)
         x = 1;
-
     setsect(warsptr);
-
     range = (double) ((shipclass[warsptr->shpclass].scanrange) / ((10 - x) * (10 - x)));
 
     if (waruptr->options[SCANHOME])
         ansifunc(HOMEY);
-
     prfmsg(SCAN24, spr("%ld", (long) range), xsect, ysect);
-
     range = range / 10000;
-
     clearmap();
-
     update_scantab(warsptr, usrnum);
 
     x1 = (warsptr->coord.xcoord);
@@ -2004,11 +1986,9 @@ void FUNC scan_se() {
 
 
 void FUNC scan_lo() {
-    int x, y;
-
-    double xf, yf, x1, y1, range, xfactor, yfactor;
-
-    WARSHP *wptr;
+int x, y;
+double xf, yf, x1, y1, range, xfactor, yfactor;
+WARSHP *wptr;
 
     if (margc != 2) {
         prfmsg(SCANFMT); outprfge(ALWAYS, usrnum);
@@ -4517,6 +4497,39 @@ int i;
     }
     prf("end scan table\r");
     outprfge(ALWAYS, usrnum);
+}
+
+void FUNC list_planets() {
+SCANTAB *sptr;
+WARSHP *wptr;
+int i, j;
+int zothusn;
+char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
+
+    prf("start ship list\r");
+    prf("Shp ShpNo ShpNm Xsect Ysect Xcoord Ycoord Heading Speed\r");
+
+    /* loop through all ships */
+    for(zothusn = 0; zothusn < nships; zothusn++) {
+        /* get a pointer to the ship */
+        wptr = warshpoff(zothusn);
+        /* is this user still in the game? */
+        if(ingegame(zothusn)) {
+            /* yep let's load the sector this ship is in */
+            setsect(wptr);
+            /* let's queue a record for xmit */
+            prf(
+                mask,
+                wptr->userid,
+                wptr->shipno,
+                wptr->shipname,
+                xsect, ysect, xcord, ycord,
+                spr("%ld", (long) wptr->heading),
+                spr("%ld", (long) wptr->speed)
+            );
+        }
+    }
+    prf("end ship list\r"); outprfge(ALWAYS, usrnum);
 }
 
 void FUNC list_ships() {
