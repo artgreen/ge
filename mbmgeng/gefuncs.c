@@ -1586,7 +1586,6 @@ int FUNC valdegree(char *ptr) {
 /**************************************************************************
 ** Assess any random damage                                              **
 **************************************************************************/
-
 void FUNC randamage(WARSHP *ptr, int usrn) {
     int a;
 
@@ -1667,11 +1666,9 @@ void FUNC randamage(WARSHP *ptr, int usrn) {
     }
 }
 
-
 /**************************************************************************
 ** Determine the damage amount                                           **
 **************************************************************************/
-
 unsigned FUNC pdamage(WARSHP *wptr, double dist, int foc) {
     double dd, fd, dp, factor, disfact;
     unsigned dam;
@@ -1696,14 +1693,11 @@ unsigned FUNC pdamage(WARSHP *wptr, double dist, int foc) {
 
     logthis(spr("Pdamage %s %ld %d", wptr->userid, (long) dist, dam));
     return (dam);
-
 }
-
 
 /**************************************************************************
 ** set the xsect and ysect coordinates given a ship pntr                 **
 **************************************************************************/
-
 void FUNC setsect(WARSHP *ptr) {
     xsect = coord1(ptr->coord.xcoord);
     ysect = coord1(ptr->coord.ycoord);
@@ -1717,12 +1711,9 @@ void FUNC setsect(WARSHP *ptr) {
 /**************************************************************************
 ** move one coord to another (direction is <-- )                **
 **************************************************************************/
-
 void FUNC movecoord(COORD *pointb, COORD *pointa) {
-
     pointb->xcoord = pointa->xcoord;
     pointb->ycoord = pointa->ycoord;
-
 }
 
 /**************************************************************************
@@ -1749,11 +1740,9 @@ return(!strnicmp(str1,str2,strlen(str1)));
  BJ CHANGED */
 }
 
-
 /**************************************************************************
 ** MAIL functions                                                        **
 **************************************************************************/
-
 int FUNC mailscan(char *userid, int class) {
 
     strncpy(mailkey.userid, userid, UIDSIZ);
@@ -1776,10 +1765,8 @@ int FUNC mailscan(char *userid, int class) {
     return (FALSE);
 }
 
-int mailread(userid, class)
-        char *userid;
+int mailread(char *userid, int class)
 {
-
     strncpy(mailkey.userid, userid, UIDSIZ);
     mailkey.class = class;
     mailkey.msgno = 0;
