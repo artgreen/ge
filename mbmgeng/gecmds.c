@@ -1727,6 +1727,10 @@ unsigned i;
     plnum = atoi(margv[2]);
 
     if (plnum <= MAXPLANETS && plnum > 0) {
+        /*
+         * AG WARNING: plnum must be set before calling
+         * getplanetdat.  Yuk.
+         */
         getplanetdat(usrnum);
         refresh(warsptr, usrnum);
         if (plnum > sector.numplan) {
@@ -1834,11 +1838,11 @@ unsigned i;
                         prfmsg(SCAN31);
                     else
                         prfmsg(SCAN32);
-
                 }
             }
             prfmsg(DASHES); outprfge(ALWAYS, usrnum);
         } else if (plptr->type == PLTYPE_WORM) {
+            // AG can below be removed?  I think this is alread done in getplanet()
             memcpy(&worm, plptr, sizeof(GALWORM));
             bearing = (int) (cbearing(&warsptr->coord, &worm.coord, warsptr->heading) + .5);
             ddistance = cdistance(&warsptr->coord, &worm.coord) * 10000;
@@ -2105,11 +2109,11 @@ double xfactor, yfactor, xf, yf;
    then zero out ship no as before */
 
 void FUNC update_scantab(WARSHP *ptr, int usrn) {
-    int i, j;
-    WARSHP *wptr;
-    SCANTAB tmp;
+int i, j;
+WARSHP *wptr;
+SCANTAB tmp;
 
-    char lettab[300];
+    char lettab[300];                   // TODO: magic number
 
 /* clear the letter table
 for (i=0;i<300;++i)
@@ -2126,7 +2130,7 @@ for (i=0;i<300;++i)
         }
     }
 
-/* clear the table */
+    /* clear the table */
     for (i = 0; i < NOSCANTAB; ++i)
         tmp.ship[i].flag = 0;
 
@@ -2247,8 +2251,9 @@ for (i=0;i<NOSCANTAB;++i)
 }
 
 void FUNC map_planets() {
-    int i;
-    unsigned x, y;
+int i;
+unsigned x, y;
+
     getsector(&warsptr->coord);
     for (i = 0; i < sector.numplan; ++i) {
         if (sector.ptab[i].coord.xcoord != 0) {
@@ -2260,7 +2265,7 @@ void FUNC map_planets() {
 }
 
 void FUNC clearmap() {
-    int i, j;
+int i, j;
 
     for (i = 0; i < MAXY; ++i) {
         for (j = 0; j < MAXX; ++j) {
@@ -2272,7 +2277,6 @@ void FUNC clearmap() {
     }
 }
 
-
 void FUNC printmap() {
     int i, j;
     prfmsg(PLUSDASH);
@@ -2280,43 +2284,39 @@ void FUNC printmap() {
         prf("   |");
         for (j = 0; j < MAXX; ++j) {
             if (mapc[i][j] == '1') {
-                prf(".[31m%c.[37m", map[i][j]);
+// AG               prf(".[31m%c.[37m", map[i][j]);
+                prf("%c", map[i][j]);
             } else if (mapc[i][j] == '2') {
-                prf(".[33m%c.[37m", map[i][j]);
+//                prf(".[33m%c.[37m", map[i][j]);
+                prf("%c", map[i][j]);
             } else {
                 prf("%c", map[i][j]);
             }
         }
         prf("|\r");
     }
-
     prfmsg(PLUSDASH);
-
 }
 
-
 void FUNC printmapfull() {
-    SCANTAB *sptr;
+SCANTAB *sptr;
+int othusn;
+int i, j;
+int shp;
+int ff;
 
-    int othusn;
-
-    int i, j;
-    int shp;
-    int ff;
-
-    ff = 0;
-    shp = 0;
-
-    sptr = &scantab[usrnum];
+    ff = 0; shp = 0; sptr = &scantab[usrnum];
 
     prfmsg(PLUSFULL);
     for (i = 0; i < MAXY; ++i) {
         prf("   |");
         for (j = 0; j < MAXX; ++j) {
             if (mapc[i][j] == '1') {
-                prf(".[31m%c.[37m", map[i][j]);
+//                prf(".[31m%c.[37m", map[i][j]);
+                prf("%c", map[i][j]);
             } else if (mapc[i][j] == '2') {
-                prf(".[33m%c.[37m", map[i][j]);
+//                prf(".[33m%c.[37m", map[i][j]);
+                prf("%c", map[i][j]);
             } else {
                 prf("%c", map[i][j]);
             }
@@ -2344,9 +2344,7 @@ void FUNC printmapfull() {
     }
 
     prfmsg(PLUSDASH);
-
 }
-
 
 unsigned FUNC coord2(double dcoord) {
     double d1, d2;
@@ -2367,7 +2365,6 @@ int FUNC coord1(double dcoord) {
 ** Take the shields up or down                                           **
 **************************************************************************/
 void FUNC cmd_shields() {
-
     if (shipclass[warsptr->shpclass].max_shlds == 0) {
         prfmsg(SHIELD0); outprfge(ALWAYS, usrnum);
         return;
@@ -2410,12 +2407,10 @@ void FUNC cmd_shields() {
     }
 }
 
-
 /**************************************************************************
 ** Turn cloaking on and off                                              **
 **************************************************************************/
 void FUNC cmd_cloak() {
-
     if (shipclass[warsptr->shpclass].max_cloak == 0) {
         prfmsg(CLOK01); outprfge(ALWAYS, usrnum);
         return;
@@ -2464,8 +2459,7 @@ void FUNC cmd_cloak() {
 ** Transfer goods down                                                   **
 **************************************************************************/
 void FUNC cmd_transfer() {
-
-    int i;
+int i;
 
     if (warsptr->where < 10) {
         prfmsg(TRANSFR3); outprfge(ALWAYS, usrnum);
@@ -2485,7 +2479,6 @@ void FUNC cmd_transfer() {
             }
         }
     }
-
     prfmsg(TRANSFMT); outprfge(ALWAYS, usrnum);
 }
 
@@ -2630,9 +2623,8 @@ void FUNC cmd_admin() {
 ** Attack Command                                                        **
 **************************************************************************/
 void FUNC cmd_attack() {
-
-    int won;
-    unsigned long num;
+int won;
+unsigned long num;
 
     if (shipclass[warsptr->shpclass].max_attk == 0) {
         prfmsg(ATTACK0A); outprfge(ALWAYS, usrnum);
@@ -2645,14 +2637,12 @@ void FUNC cmd_attack() {
     }
 
     plnum = warsptr->where - 10;
-
     getplanetdat(usrnum);
 
     if (plptr->type == PLTYPE_WORM) {
         prfmsg(ATTACK0B); outprfge(ALWAYS, usrnum);
         return;
     }
-
 
     if (sameas(plptr->userid, warsptr->userid)) {
         prfmsg(ATTACK0); outprfge(ALWAYS, usrnum);
@@ -2704,23 +2694,22 @@ void FUNC cmd_attack() {
 }
 
 int FUNC attack_men(unsigned long num) {
+double r;
+int won = 0;
+int ii;
+unsigned long i,
+        j,
+        left1,
+        left2,
+        kill1,
+        kill2,
+        ratio;
 
-    double r;
-    int won = 0;
-    int ii;
-    unsigned long i,
-            j,
-            left1,
-            left2,
-            kill1,
-            kill2,
-            ratio;
-
-/* take troops off ship */
+    /* take troops off ship */
     warsptr->items[I_TROOPS] -= num;
     sprintf(gechrbuf, "%ld", num);
 
-/* tell him there gone*/
+    /* tell him there gone*/
     prfmsg(ATTACKM1, gechrbuf); outprfge(ALWAYS, usrnum);
 
     left1 = num;
@@ -2729,8 +2718,7 @@ int FUNC attack_men(unsigned long num) {
     kill1 = 0;
     kill2 = 0;
 
-/* figure out the proportion of this attack*/
-
+    /* figure out the proportion of this attack*/
     if (left2 > 0)
         ratio = (left1 * 100UL) / left2;
     else
@@ -2746,7 +2734,7 @@ int FUNC attack_men(unsigned long num) {
         prfmsg(ATTACKM8, gechrbuf);
     }
 
-/* this specifies the number of troops killed by ground troops */
+    /* this specifies the number of troops killed by ground troops */
     r = rndm(plattrt1) + .25;  /*.766*/
     kill1 += (unsigned long) ((double) left2 * r);
 
@@ -2765,11 +2753,9 @@ int FUNC attack_men(unsigned long num) {
 
     sprintf(gechrbuf, "%ld", kill1);
     sprintf(gechrbuf2, "%ld", kill2);
-
     prfmsg(ATTACKM2, gechrbuf2, gechrbuf);
 
-    left1 -= kill1;
-    left2 -= kill2;
+    left1 -= kill1; left2 -= kill2;
 
     if (left2 > 0 && left2 < (left1 / 4)) {
         sprintf(gechrbuf, "%ld", left2);
@@ -2784,8 +2770,7 @@ int FUNC attack_men(unsigned long num) {
         left1 = 0;
     }
 
-/* randomly trash a few of the planets items */
-
+    /* randomly trash a few of the planets items */
     if (ratio > 2 && left1 > (left2 / 2)) {
         for (ii = 1; ii < NUMITEMS; ++ii) {
             j = (unsigned long) gernd() % 15;
@@ -2814,15 +2799,13 @@ int FUNC attack_men(unsigned long num) {
     plptr->items[I_TROOPS].qty = left2; outprfge(ALWAYS, usrnum);
     clrprf();
 
-/* inform the player if he is not in game */
-
+    /* inform the player if he is not in game */
     if (ratio > 5L) /* big enough to let spy report on it */
         call_4_help(TRUE, won);
     else if (ratio > 1L)
         call_4_help(FALSE, won);
 
-
-/* dont mail him unless its significant*/
+    /* dont mail him unless its significant*/
     if (ratio > 1L) {
         mail.type = MESG02;
         strncpy(mail.userid, plptr->userid, UIDSIZ);
@@ -2851,21 +2834,16 @@ int FUNC attack_men(unsigned long num) {
 }
 
 int FUNC attack_fig(unsigned long num) {
-
-    double r;
-    int won = 0;
-    unsigned long j,
+double r;
+int won = 0;
+unsigned long j,
             left1,
             left2,
             kill1,
             kill2,
             ratio;
-
-
-    float fl1, fl2, fl3;
-
-
-    int ii;
+float fl1, fl2, fl3;
+int ii;
 
     warsptr->items[I_FIGHTER] -= num;
     sprintf(gechrbuf, "%ld", num);
@@ -2877,10 +2855,8 @@ int FUNC attack_fig(unsigned long num) {
     kill1 = 0;
     kill2 = 0;
 
-/* figure out the proportion of this attack*/
-
-/* there is a bug here */
-
+    /* figure out the proportion of this attack*/
+    /* TODO: there is a bug here */
     if (left2 > 0) {
         fl1 = left1;
         fl2 = left2;
@@ -2889,17 +2865,14 @@ int FUNC attack_fig(unsigned long num) {
     } else
         ratio = 0;
 
-
-/* If there are more than 500 troops - shoot down some fighters */
+    /* If there are more than 500 troops - shoot down some fighters */
     if (left1 > 0 && plptr->items[I_TROOPS].qty > 500 && (gernd() % 5 - 1) > 0) {
         prfmsg(ATTACKF8);
         r = rndm(plattrf1) + .05; /*.188) */
         kill1 += (unsigned long) ((double) left1 * r);
     }
 
-/* if there are fighters on the planet then they will shoot down some of
-   the attackers */
-
+    /* if there are fighters on the planet then they will shoot down some of the attackers */
     if (left2 > 0L) {
         /* this specifies the planet fighters kill ratio -
 	   at least 20% and as much as 120.0% */
@@ -2931,8 +2904,7 @@ int FUNC attack_fig(unsigned long num) {
         left2 -= kill2;
     }
 
-/* must be at least 5% to do damage to items on the planet */
-
+    /* must be at least 5% to do damage to items on the planet */
     if (ratio > 5) {
         for (ii = 0; ii < NUMITEMS; ++ii) {
             j = (unsigned long) gernd() % 15;
@@ -2959,8 +2931,7 @@ int FUNC attack_fig(unsigned long num) {
         prfmsg(ATTACKF6, gechrbuf);
     }
 
-    outprfge(ALWAYS, usrnum);
-    clrprf();
+    outprfge(ALWAYS, usrnum); clrprf();
 
     if (ratio > 5) /* big enough to let spy report on it */
         call_4_help(TRUE, won);
@@ -2991,7 +2962,6 @@ int FUNC attack_fig(unsigned long num) {
 
         mailit(1);
     }
-
     setsect(warsptr);
     pkey.plnum = plnum;
     gesdb(GEUPDATE, &pkey, (GALSECT *) &planet);
@@ -3037,18 +3007,13 @@ void FUNC wonplnt() {
 /**************************************************************************
 ** Roster Command                                                        **
 **************************************************************************/
-
 void FUNC cmd_geroster() {
-
-    char tmpbuf2[2];
-
-    int i = 0;
-    int j;
+char tmpbuf2[2];
+int i = 0;
+int j;
 
     setbtv(gebb5);
-
     strncpy(tmpbuf2, KEY, 1);
-
     j = gemaxlist;
 
     if (margc == 2 && sameas(margv[1], "all"))
@@ -3084,7 +3049,6 @@ void FUNC cmd_geroster() {
 /**************************************************************************
 ** Planet command                                                        **
 **************************************************************************/
-
 void FUNC cmd_planet() {
     setbtv(gebb2);
 
@@ -3106,14 +3070,11 @@ void FUNC cmd_planet() {
     }
 }
 
-
 /**************************************************************************
 ** Sell goods                                                             **
 **************************************************************************/
-
 void FUNC cmd_sell() {
-
-    int i;
+int i;
 
     if (warsptr->where < 10) {
         prfmsg(SELL1); outprfge(ALWAYS, usrnum);
@@ -3125,9 +3086,7 @@ void FUNC cmd_sell() {
         return;
     }
 
-
     plnum = warsptr->where - 10;
-
     getplanetdat(usrnum);
 
     if (neutral(&warsptr->coord) && plnum == 1) /*must be Zygor-3*/
@@ -3146,8 +3105,8 @@ void FUNC cmd_sell() {
 }
 
 void FUNC sell(int item) {
-    unsigned long amt;
-    long doll, fee;
+unsigned long amt;
+long doll, fee;
 
     if ((amt = atol(margv[1])) > 0L) {
         if (warsptr->items[item] >= amt) {
@@ -4500,36 +4459,57 @@ int i;
 }
 
 void FUNC list_planets() {
-SCANTAB *sptr;
-WARSHP *wptr;
-int i, j;
-int zothusn;
-char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
+int x, y;
 
-    prf("start ship list\r");
-    prf("Shp ShpNo ShpNm Xsect Ysect Xcoord Ycoord Heading Speed\r");
-
-    /* loop through all ships */
-    for(zothusn = 0; zothusn < nships; zothusn++) {
-        /* get a pointer to the ship */
-        wptr = warshpoff(zothusn);
-        /* is this user still in the game? */
-        if(ingegame(zothusn)) {
-            /* yep let's load the sector this ship is in */
-            setsect(wptr);
-            /* let's queue a record for xmit */
-            prf(
-                mask,
-                wptr->userid,
-                wptr->shipno,
-                wptr->shipname,
-                xsect, ysect, xcord, ycord,
-                spr("%ld", (long) wptr->heading),
-                spr("%ld", (long) wptr->speed)
-            );
+    getsector(&warsptr->coord);
+    if( sector.numplan != 0 ){
+        prf("num type userid env res xsect ysect xcoord ycoord name\r");
+        for( plnum = 1; plnum <= sector.numplan; plnum++ ) {
+            if(!getplanet(&warsptr->coord, plnum)) {
+                // result in global "planet"
+                plptr = &planet;
+                switch( plptr->type ) {
+                    case PLTYPE_PLNT:
+                        prf(
+                            "%d,%d,%s,%d,%d,%d,%d,%d,%d,'%s'\r",
+                            plnum,
+                            plptr->type,
+                            (plptr->userid[0] != 0) ? plptr->userid : "Unowned",
+                            plptr->enviorn,
+                            plptr->resource,
+                            plptr->xsect,
+                            plptr->ysect,
+                            coord1(plptr->coord.xcoord),
+                            coord1(plptr->coord.ycoord),
+                            (plptr->name[0] != 0) ? plptr->name : "Unnamed"
+                        );
+                        break;
+                    case PLTYPE_WORM:
+                        memcpy(&worm, &planet, sizeof(GALWORM));
+                        prf(
+                            "%d,%d,%d,%d,%d,%d,%d,'%s'\r",
+                            plnum,
+                            worm.type,
+                            worm.visible,
+                            worm.xsect,
+                            worm.ysect,
+                            coord1(worm.coord.xcoord),
+                            coord1(worm.coord.ycoord),
+                            (worm.name[0] != 0) ? worm.name : "Unnamed"
+                        );
+                        break;
+                    default:
+                        prf("WARN: unknown PL TYPE %d\r", plptr->type);
+                        break;
+                }
+            } else {
+                prf("WARN: call to getplanet failed\r");
+            }
         }
+    } else {
+        prf("no planets in sector\r");
     }
-    prf("end ship list\r"); outprfge(ALWAYS, usrnum);
+    outprfge(ALWAYS, usrnum);
 }
 
 void FUNC list_ships() {
@@ -4604,7 +4584,8 @@ int i = 0;
 void (*cmd_index[])(void) = {
 	list_ships,
 	data_cmd_list_ship,
-    data_cmd_scan_table
+    data_cmd_scan_table,
+    list_planets
 };
 	//prf("In data_cmd_a() and margv[2] is: %s\r", margv[2]);
 
@@ -4614,7 +4595,7 @@ void (*cmd_index[])(void) = {
 	//outprfge(ALWAYS, usrnum);
 
 	// TODO: replace lousy safety check
-	if( i >= 0 && i <= 2 ) {
+	if( i >= 0 && i <= 3 ) {
 		(*cmd_index[i])();
 		return;
 	}
