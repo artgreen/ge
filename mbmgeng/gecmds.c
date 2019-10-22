@@ -95,7 +95,7 @@ char *item_name[NUMITEMS] = {"men",
                              "gold",
                              "spy"};
 
-void cmd_gehelp(), cmd_cloak(), cmd_gehelp(), cmd_impulse(), cmd_phas(),
+void    cmd_cloak(), cmd_gehelp(), cmd_impulse(), cmd_phas(),
         cmd_report(), cmd_rotate(), cmd_send(), cmd_scan(), cmd_shields(),
         cmd_warp(), cmd_torp(), cmd_missl(), cmd_decoy(), cmd_flux(), cmd_set(),
         cmd_orbit(), cmd_transfer(), cmd_admin(), cmd_attack(), cmd_geroster(),
@@ -2389,17 +2389,13 @@ unsigned FUNC coord2(double dcoord) {
 
 }
 
-
 int FUNC coord1(double dcoord) {
-
     return ((int) floor(dcoord));
-
 }
 
 /**************************************************************************
 ** Take the shields up or down                                           **
 **************************************************************************/
-
 void FUNC cmd_shields() {
 
     if (shipclass[warsptr->shpclass].max_shlds == 0) {
@@ -2448,7 +2444,6 @@ void FUNC cmd_shields() {
 /**************************************************************************
 ** Turn cloaking on and off                                              **
 **************************************************************************/
-
 void FUNC cmd_cloak() {
 
     if (shipclass[warsptr->shpclass].max_cloak == 0) {
@@ -2498,7 +2493,6 @@ void FUNC cmd_cloak() {
 /**************************************************************************
 ** Transfer goods down                                                   **
 **************************************************************************/
-
 void FUNC cmd_transfer() {
 
     int i;
@@ -2525,139 +2519,86 @@ void FUNC cmd_transfer() {
     prfmsg(TRANSFMT); outprfge(ALWAYS, usrnum);
 }
 
-void trans_down(item)
-
-int item;
-
-{
+void trans_down(int item) {
 unsigned long amt;
 
-plnum = warsptr->where - 10;
+    plnum = warsptr->where - 10;
+    getplanetdat(usrnum);
 
-getplanetdat(usrnum);
+    if(plptr->type == PLTYPE_WORM) {
+        prfmsg(TRANSFR0);
+        outprfge(ALWAYS, usrnum);
+        return;
+    }
 
-if (plptr->type == PLTYPE_WORM)
-{
-prfmsg(TRANSFR0);
-outprfge(ALWAYS,usrnum);
-return;
-}
-
-if (trans_opt ||
-sameas(plptr
-->userid,warsptr->userid))
-{
-if ((
-amt = atol(margv[2])
-) > 0L)
-{
-if (warsptr->items[item] >= amt)
-{
-warsptr->items[item] -=
-amt;
-plptr->items[item].qty +=
-amt;
-sprintf(gechrbuf,
-"%ld",amt);
-prfmsg(TRANSFR5,gechrbuf,item_name[item]);
-setsect(warsptr); /* build PKEY */
-pkey.
-plnum = plnum;
-gesdb(GEUPDATE,&pkey,(GALSECT *)&planet);
-gepdb(GEUPDATE,warsptr->userid,warsptr->shipno,warsptr);
-return;
-}
-else
-{
-prfmsg(TRANSFR1);
-}
-}
-else
-{
-prfmsg(TRANSFR2);
-}
-}
-else
-{
-prfmsg(TRANSFR4);
-}
+    if(trans_opt || sameas(plptr->userid, warsptr->userid)) {
+        if((amt = atol(margv[2])) > 0L) {
+            if(warsptr->items[item] >= amt) {
+                warsptr->items[item] -= amt;
+                plptr->items[item].qty += amt;
+                sprintf(gechrbuf, "%ld", amt);
+                prfmsg(TRANSFR5, gechrbuf, item_name[item]);
+                setsect(warsptr); /* build PKEY */
+                pkey.plnum = plnum;
+                gesdb(GEUPDATE, &pkey, (GALSECT *) &planet);
+                gepdb(GEUPDATE, warsptr->userid, warsptr->shipno, warsptr);
+                return;
+            } else {
+                prfmsg(TRANSFR1);
+            }
+        } else {
+            prfmsg(TRANSFR2);
+        }
+    } else {
+        prfmsg(TRANSFR4);
+    }
 }
 
-void trans_up(item)
-int item;
-
-{
+void trans_up(int item) {
 unsigned long amt;
 
-plnum = warsptr->where - 10;
+    plnum = warsptr->where - 10;
+    getplanetdat(usrnum);
 
-getplanetdat(usrnum);
+    if(plptr->type == PLTYPE_WORM) {
+        prfmsg(TRANSFR0);
+        outprfge(ALWAYS, usrnum);
+        return;
+    }
 
-if (plptr->type == PLTYPE_WORM)
-{
-prfmsg(TRANSFR0);
-outprfge(ALWAYS,usrnum);
-return;
-}
-
-/* you must own this planet or NOBODY must own it to xfer up */
-
-if (
-sameas(plptr
-->userid,warsptr->userid) || plptr->userid[0] == 0)
-{
-if ((
-amt = atol(margv[2])
-) > 0L)
-{
-if (
-chkweight(warsptr, item, amt
-))
-{
-if (plptr->items[item].qty >= amt)
-{
-plptr->items[item].qty -=
-amt;
-warsptr->items[item] +=
-amt;
-sprintf(gechrbuf,
-"%ld",amt);
-prfmsg(TRANSUP5,gechrbuf,item_name[item]);
-setsect(warsptr); /* load PKEY */
-pkey.
-plnum = plnum;
-gesdb(GEUPDATE,&pkey,(GALSECT *)&planet);
-gepdb(GEUPDATE,warsptr->userid,warsptr->shipno,warsptr);
-return;
-}
-else
-{
-prfmsg(TRANSUP1);
-}
-}
-else
-{
-prfmsg(TRANSUP6);
-}
-}
-else
-{
-prfmsg(TRANSUP2);
-}
-}
-else
-{
-prfmsg(TRANSUP4);
-}
+    /* you must own this planet or NOBODY must own it to xfer up */
+   if(sameas(plptr->userid, warsptr->userid) || plptr->userid[0] == 0) {
+        if((amt = atol(margv[2])) > 0L) {
+            if(chkweight(warsptr, item, amt)) {
+                if(plptr->items[item].qty >= amt) {
+                    plptr->items[item].qty -= amt;
+                    warsptr->items[item] += amt;
+                    sprintf(gechrbuf, "%ld", amt);
+                    prfmsg(TRANSUP5, gechrbuf, item_name[item]);
+                    setsect(warsptr); /* load PKEY */
+                    pkey.plnum = plnum;
+                    gesdb(GEUPDATE, &pkey, (GALSECT *) &planet);
+                    gepdb(GEUPDATE, warsptr->userid, warsptr->shipno, warsptr);
+                    return;
+                } else {
+                    prfmsg(TRANSUP1);
+                }
+            } else {
+                prfmsg(TRANSUP6);
+            }
+        } else {
+            prfmsg(TRANSUP2);
+        }
+    } else {
+        prfmsg(TRANSUP4);
+    }
 }
 
 
 /**************************************************************************
 ** abandon a colony                                                      **
 **************************************************************************/
-
 void FUNC cmd_abandon() {
-
     if (warsptr->where < 10) {
         prfmsg(ABAN01); outprfge(ALWAYS, usrnum);
         return;
@@ -2683,27 +2624,22 @@ void FUNC cmd_abandon() {
     }
 }
 
-
 /**************************************************************************
 ** establish a colony or administer it                                   **
 **************************************************************************/
-
 void FUNC cmd_admin() {
-
     if (warsptr->where < 10) {
         prfmsg(ADMIN1); outprfge(ALWAYS, usrnum);
         return;
     }
 
     plnum = warsptr->where - 10;
-
     getplanetdat(usrnum);
 
     if (plptr->type == PLTYPE_WORM) {
         prfmsg(ADMIN2A); outprfge(ALWAYS, usrnum);
         return;
     }
-
 
     if (plptr->userid[0] == 0) {
         if (waruptr->planets >= max_plnts) {
@@ -2723,7 +2659,6 @@ void FUNC cmd_admin() {
 /**************************************************************************
 ** Attack Command                                                        **
 **************************************************************************/
-
 void FUNC cmd_attack() {
 
     int won;
