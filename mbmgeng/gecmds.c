@@ -157,7 +157,6 @@ struct cmd gecmds[] = {
         {"zip", cmd_zipper,   1}
 };
 
-
 /* If you wish to add your own help commands to the list simply add the command
 	name to the list and the name of the message in the MSG file. Also add the
 	command to the list in the message HLPINDEX                Mike           */
@@ -1143,7 +1142,6 @@ int FUNC findshp(char *ptr, int type) {
 }
 
 /* firing in sector NEUTRAL is a big no-no */
-
 void FUNC zaphim(WARSHP *ptr, int usrn) {
     prfmsg(ZAPHIM1); outprfge(ALWAYS, usrn);
     ptr->damage += se100dam;
@@ -1152,7 +1150,6 @@ void FUNC zaphim(WARSHP *ptr, int usrn) {
 /**************************************************************************
 ** Fire decoys                                                          **
 **************************************************************************/
-
 void FUNC cmd_decoy() {
 
     int i;
@@ -1189,11 +1186,9 @@ void FUNC cmd_decoy() {
     prfmsg(DECMANY); outprfge(FILTER, usrnum);
 }
 
-
 /**************************************************************************
 ** Launch Jammer                                                         **
 **************************************************************************/
-
 void FUNC cmd_jammer() {
 
     if (warsptr->cloak > 0) {
@@ -1239,11 +1234,9 @@ void FUNC jam(WARSHP *ptr, int usrn) {
     ptr->cantexit = FIRETICKS;
 }
 
-
 /**************************************************************************
 ** Launch Zipper                                                         **
 **************************************************************************/
-
 void FUNC cmd_zipper() {
 
     if (!shipclass[warsptr->shpclass].has_zip) {
@@ -1292,7 +1285,6 @@ void FUNC zip(WARSHP *ptr, int usrn) {
 /**************************************************************************
 ** Launch Mine                                                         **
 **************************************************************************/
-
 void FUNC cmd_mine() {
     int i;
 
@@ -1338,12 +1330,10 @@ void FUNC cmd_mine() {
 }
 
 /* split out so that cyb's can lay mines too */
-
 int FUNC laymine(WARSHP *ptr, int usrn, int timer) {
     int i, cnt;
 
-/* count up the number of mines this player has layed */
-
+    /* count up the number of mines this player has layed */
     cnt = 0;
 
     for (i = 0; i < nummines; ++i)
