@@ -48,7 +48,8 @@
 /* if FAKESECURE is defined, database security is disabled */
 #define FAKESECURE 1
 
-/* Not sure what the below does yet */
+// AG this looks like it controls background creation of
+// planets every 30 seconds
 /* #define BLDPLNTS 1 */
 
 //#define PHARLAP
@@ -135,7 +136,7 @@ WARSHP *warshp, *warsptr;
 WARUSR *warusr, *waruptr;
 int warusr_ecl, warshp_ecl;
 WARUSR tmpusr;
-GALSECT sector, *sptr1;         // TODO: unused
+GALSECT sector, *sptr1;
 GALPLNT planet;
 GALWORM worm;
 PLANETAB *ptab;
@@ -914,17 +915,14 @@ void FUNC gemidnighta(void) {
 int i;
 int foundit;
 long scr;
-
-    char tmpbuf2[2];
+char tmpbuf2[2];
 
     setmbk(gemb);
-
     if(secure->open_stat == 0)
         return;
-
     geshocst(0, spr("GE:INF:Begin Cleanup"));
 
-/* clear out planet counter */
+    /* clear out planet counter */
     geshocst(1, spr("GE:INF:Cleanup Phase-1"));
     setbtv(gebb5);
     if(qlobtv(0)) {
@@ -942,7 +940,6 @@ long scr;
     }
 
     geshocst(1, spr("GE:INF:Cleanup Phase-2"));
-
     setbtv(gebb2);
 
     if(qlobtv(0)) {
@@ -961,7 +958,6 @@ long scr;
                         gcrbtv(&tmpusr, 0);
 
                         /* now go create the Status Record */
-
                         strncpy(tmpstat.userid, tmpusr.userid, UIDSIZ);
                         tmpstat.class = MAIL_CLASS_PRODRPT;
                         tmpstat.type = MESG20;
@@ -1000,7 +996,6 @@ long scr;
 /* purge mail older than 7 days */
 
     setbtv(gebb4);
-
     i = cofdat(today());
     i -= maildays; /* back up 1 week */
     if(qlobtv(0)) {
@@ -1017,14 +1012,13 @@ long scr;
     geshocst(1, spr("GE:INF:Cleanup Phase-4"));
     setbtv(gebb5);
 
-/* zero out the team count and score */
+    /* zero out the team count and score */
     for(i = 0; i < MAXTEAMS; ++i) {
         teamtab[i].teamcount = 0;
         teamtab[i].teamscore = 0;
     }
 
-/* first count up the members of a team */
-
+    /* first count up the members of a team */
     if(qlobtv(0)) {
         do {
             gcrbtv(&tmpusr, 0);
@@ -1054,8 +1048,7 @@ long scr;
         } while(qnxbtv());
     }
 
-/* update player and team scores */
-
+    /* update player and team scores */
     if(qlobtv(0)) {
         do {
             gcrbtv(&tmpusr, 0);
@@ -1092,25 +1085,22 @@ long scr;
         } while(qnxbtv());
     }
 
-/* remove any teams with no players */
-
+    /* remove any teams with no players */
     for(i = 0; i < MAXTEAMS; ++i) {
         if(teamtab[i].teamcode > 0 && teamtab[i].teamcount == 0) {
             teamtab[i].teamcode = -1;
             geshocst(0, spr("GE:INF:Removed Team %s", teamtab[i].teamname));
         }
     }
-/* update the team scores on disk */
 
+    /* update the team scores on disk */
     update_team_tab();
 
 /* 12/19/91 added to create a roster position data field in the user record
 	which is later used to calculate bonus points. */
 
     i = 0;
-
     setbtv(gebb5);
-
     strncpy(tmpbuf2, KEY, 1);
 
     if(qhibtv(1)) {
@@ -1132,7 +1122,6 @@ long scr;
 }
 
 /* determine the net worth of a planet */
-
 void FUNC calc_networth() {
     unsigned long v;
     v = value_pl();
@@ -1155,7 +1144,6 @@ unsigned FUNC long value_pl() {
 /**************************************************************************
 ** User logged off                                                       **
 **************************************************************************/
-
 int FUNC pwarlof(void) {
     warsptr = warshpoff(usrnum);
     waruptr = warusroff(usrnum);
@@ -1164,19 +1152,15 @@ int FUNC pwarlof(void) {
     return (0);
 }
 
-
-
-
 /**************************************************************************
 ** User hungup routine                                                   **
 **************************************************************************/
 #ifdef PHARLAP
-void  FUNC pwarhup(void)
-{
-warhupa();
-return;
-}
-
+    void  FUNC pwarhup(void)
+    {
+    warhupa();
+    return;
+    }
 #else
 int FUNC warhup(void) {
     warhupa();
@@ -1225,7 +1209,6 @@ void FUNC warhupa(void) {
 /**************************************************************************
 ** System shutdown message                                               **
 **************************************************************************/
-
 #ifdef PHARLAP
     void  FUNC pclswar(void) {
         clswara();
@@ -1259,7 +1242,9 @@ void FUNC clswara(void) {
 ** Main input loop                                                       **
 **************************************************************************/
 int FUNC galemp() {
-    int i, rtn;
+int i, rtn;
+
+#ifndef FAKESECURE
     if(secure->open_stat == 0) {
         prf("\r\n\r\n\r\n");
         prf("The Galactic Empire trial period is over. If you wish to ");
@@ -1269,9 +1254,15 @@ int FUNC galemp() {
         outprfge(ALWAYS, usrnum);
         return (0);
     }
+#endif
+
+    // AG do something to the DB
     setbtv(gebb1);
     setmbk(gemb);
+
+    // AG load the user ship pointer
     warsptr = warshpoff(usrnum);
+    // AG load the user pointer
     waruptr = warusroff(usrnum);
 
     for(i = 0; i < MENUNUM; ++i) {
@@ -1288,7 +1279,7 @@ int FUNC galemp() {
 ** Send message to all ships                                             **
 **************************************************************************/
 void FUNC outwar(int filter, unsigned exclude, unsigned freq) {
-    int i;
+int i;
 
     int zothusn;
     for(zothusn = 0; zothusn < nships; zothusn++) {
@@ -1425,7 +1416,6 @@ int rtn;
 /**************************************************************************
 ** sector Database functions                                             **
 **************************************************************************/
-
 int FUNC gesdb(int func, PKEY *sect, GALSECT *geptr) {
 int rtn;
 long numrecs = 0;
@@ -1533,14 +1523,12 @@ int i, bbad;
 /**************************************************************************
 ** Team Table Database functions                                         **
 **************************************************************************/
-
 void FUNC load_team_tab() {
 char buffer[256];
 FILE *mzfp;
 int i;
 
     /* clear out the memory team table */
-
     for(i = 0; i < MAXTEAMS; ++i) {
         teamtab[i].teamcode = 0;
         teamtab[i].teamname[0] = 0;
@@ -1594,9 +1582,8 @@ int i;
 }
 
 void FUNC update_team_tab() {
-
-    FILE *hdl;
-    int i;
+FILE *hdl;
+int i;
 
     hdl = fopen("mbmgetea.dat", "wt");
 
