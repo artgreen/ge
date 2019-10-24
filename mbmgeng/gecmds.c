@@ -1509,20 +1509,15 @@ void FUNC cmd_report() {
             else
                 prfmsg(REP24, warsptr->phasrtype);
         }
-
         prfmsg(REP24A, warsptr->freq[0], warsptr->freq[1], warsptr->freq[2]);
-
-
         if (shipclass[warsptr->shpclass].max_cloak == 1) {
             if (warsptr->cloak > 0)
                 prfmsg(REP12);
             else
                 prfmsg(REP13);
         }
-
         damage = (unsigned) (warsptr->damage + .5);
         damstr(damage);
-
         prfmsg(REP14, gechrbuf);
         if (warsptr->shieldstat == SHIELDDM)
             prfmsg(REP15);
@@ -1534,9 +1529,7 @@ void FUNC cmd_report() {
             prfmsg(REP18);
         if (warsptr->repair > 0)
             prfmsg(REP18A, warsptr->repair);
-
         prf("Ros Pos: %d\r", waruptr->rospos);
-
     } else if (sameas(margv[1], "inv")) {
         prfmsg(REP38);
 
@@ -1547,7 +1540,6 @@ void FUNC cmd_report() {
                 prf("%s\r", gechrbuf);
             }
         }
-
         sprintf(gechrbuf2, "%ld", calcweight(warsptr));
         prfmsg(REP37, gechrbuf2);
     } else if (sameas(margv[1], "acc")) {
@@ -1594,7 +1586,6 @@ void FUNC damstr(int damage) {
         strcpy(gechrbuf, "heavy");
     else
         strcpy(gechrbuf, "severe");
-
 }
 
 /**************************************************************************
@@ -1935,7 +1926,6 @@ MINE *mptr;
         printmap(); outprfge(ALWAYS, usrnum);
 }
 
-
 void FUNC scan_se() {
     unsigned i, x, y;
     WARSHP *wptr;
@@ -1987,7 +1977,6 @@ void FUNC scan_se() {
     map_planets();
     printmap(); outprfge(ALWAYS, usrnum);
 }
-
 
 void FUNC scan_lo() {
 int x, y;
@@ -2203,10 +2192,10 @@ for (i=0;i<300;++i)
 
 void FUNC pick_letter(SCANTAB *ptr) {
 #define LETSIZE 26
-    char letters[LETSIZE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
-                             'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-    char lettmp[LETSIZE];
-    int i, j;
+char letters[LETSIZE] = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+                         'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+char lettmp[LETSIZE];
+int i, j;
 
 
 /* init the temp tab */
@@ -2287,7 +2276,7 @@ void FUNC printmap() {
 // AG               prf(".[31m%c.[37m", map[i][j]);
                 prf("%c", map[i][j]);
             } else if (mapc[i][j] == '2') {
-//                prf(".[33m%c.[37m", map[i][j]);
+// AG               prf(".[33m%c.[37m", map[i][j]);
                 prf("%c", map[i][j]);
             } else {
                 prf("%c", map[i][j]);
