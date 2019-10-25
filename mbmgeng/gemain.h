@@ -100,7 +100,7 @@
 
 #define TONFACT 15000.0      /* divisor for ton factor */
 
-#define SSMAX    10000
+#define SSMAX    10000          /* scaling factor for a sector */
 
 #define SNMSIZ  25
 
@@ -251,7 +251,6 @@
 #endif
 
 #define COORD struct _coord
-extern
 COORD {
     double xcoord;
     double ycoord;
