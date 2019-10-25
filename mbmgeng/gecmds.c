@@ -106,10 +106,9 @@ void    cmd_cloak(), cmd_gehelp(), cmd_impulse(), cmd_phas(),
         cmd_team(), cmd_spy(), cmd_jettison();
 
 #define GECMDSIZ (sizeof(gecmds)/sizeof(struct cmd))
-
-struct cmd gecmds[] = {
 /*    command     function    0=payers only */
 /*    -------     ----------- ------------- */
+struct cmd gecmds[] = {
         {"?",   cmd_gehelp,   1},
         {"aba", cmd_abandon,  0},
         {"abo", cmd_abort,    1},
@@ -139,7 +138,6 @@ struct cmd gecmds[] = {
         {"pri", cmd_price,    0},
         {"ren", cmd_rename,   0},
         {"rep", cmd_report,   1},
-/*{"rg#",				cmd_displ,              1},*/
         {"ros", cmd_geroster, 1},
         {"rot", cmd_rotate,   1},
         {"sca", cmd_scan,     1},
@@ -4374,9 +4372,11 @@ int i;
             wptr = warshpoff(sptr->ship[i].shipno);
             setsect(wptr);
             prf(
-                "SR1:%d,%c,%d,%d,%d,%d,%d,%s,%d,%d,%s,%d\r",
+                "ST1:%d,%c,%s,'%s',%d,%d,%d,%d,%d,%s,%d,%d,%s,%d\r",
                 sptr->ship[i].shipno,
                 sptr->ship[i].letter,
+                wptr->userid,
+                wptr->shipname,
                 sptr->ship[i].flag,
                 xsect, ysect, xcord, ycord,
                 spr("%ld", (long) (sptr->ship[i].dist)),
