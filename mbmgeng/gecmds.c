@@ -104,6 +104,7 @@ void    cmd_cloak(), cmd_gehelp(), cmd_impulse(), cmd_phas(),
         cmd_jammer(), cmd_mine(), cmd_abandon(), cmd_zipper(), cmd_lock(),
         cmd_navigate(), cmd_who(), cmd_displ(), cmd_freq(), cmd_cls(), cmd_data(),
         cmd_team(), cmd_spy(), cmd_jettison();
+void hexDump (const char *desc, const void *addr, const int len);
 
 #define GECMDSIZ (sizeof(gecmds)/sizeof(struct cmd))
 /*    command     function    0=payers only */
@@ -2309,7 +2310,7 @@ unsigned coord2(double dcoord) {
 double d1, d2;
 int d3;
 
-    d2 = modf(1 + modf(dcoord, &d1), &d1);
+    d2 = modf(1 + modf(dcoord, &d1), &d1) + 0.000001;  // AWG: added
     d3 = (d2 * SSMAX);
     return ((unsigned) d3);
 }
@@ -4392,16 +4393,20 @@ int i;
 }
 
 void list_planets() {
+int xcoord, ycoord;
 
     prf("start planet list\r");
     getsector(&warsptr->coord);
-    if( sector.numplan != 0 ){
+    if( sector.numplan > 0 ){
 //        prf("num userid env res xsect ysect xcoord ycoord name\r");
         for( plnum = 1; plnum <= sector.numplan; plnum++ ) {
             if(!getplanet(&warsptr->coord, plnum)) {
                 // result in global "planet"
                 plptr = &planet;
-                switch( plptr->type ) {
+                xcoord = coord2(plptr->coord.xcoord);
+                ycoord = coord2(plptr->coord.ycoord);
+
+			    switch( plptr->type ) {
                     case PLTYPE_PLNT:
                         prf(
                             "SP%d:%d,%s,%d,%d,%d,%d,%d,%d,'%s'\r",
@@ -4412,8 +4417,8 @@ void list_planets() {
                             plptr->resource,
                             plptr->xsect,
                             plptr->ysect,
-                            coord1(plptr->coord.xcoord),
-                            coord1(plptr->coord.ycoord),
+                            xcoord,
+                            ycoord,
                             (plptr->name[0] != 0) ? plptr->name : "Unnamed"
                         );
                         break;
@@ -4426,8 +4431,8 @@ void list_planets() {
                             worm.visible,
                             worm.xsect,
                             worm.ysect,
-                            coord1(worm.coord.xcoord),
-                            coord1(worm.coord.ycoord),
+                            xcoord,
+                            ycoord,
                             (worm.name[0] != 0) ? worm.name : "Unnamed"
                         );
                         break;
@@ -4439,8 +4444,6 @@ void list_planets() {
                 prf("WARN: call to getplanet failed\r");
             }
         }
-    } else {
-        prf("no planets in sector\r");
     }
     prf("end planet list\r");
     outprfge(ALWAYS, usrnum);
