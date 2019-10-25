@@ -4290,8 +4290,6 @@ void prn_ship(WARSHP *wptr) {
 int i, j;
 char mask[] = {"SD1:%s,%d,'%s',%d\r"};
 
-    prf("start ship detail\r");
-
 	/* let's queue a record for xmit */
 	prf(
 		mask,
@@ -4357,7 +4355,7 @@ char mask[] = {"SD1:%s,%d,'%s',%d\r"};
 		wptr->destruct,
 		wptr->status);
 
-    prf("end ship detail\r"); outprfge(ALWAYS, usrnum);
+    outprfge(ALWAYS, usrnum);
 }
 
 void data_cmd_scan_table(void) {
@@ -4366,7 +4364,7 @@ WARSHP *wptr;
 int i;
 
     prf("start scan table\r");
-    prf("Range: %s\r", spr("%6ld", shipclass[warsptr->shpclass].scanrange));
+    prf("SR1:%s\r", spr("%6ld", shipclass[warsptr->shpclass].scanrange));
     update_scantab(warsptr, usrnum);
     sptr = &scantab[usrnum];
 
@@ -4376,7 +4374,7 @@ int i;
             wptr = warshpoff(sptr->ship[i].shipno);
             setsect(wptr);
             prf(
-                "%d %c %d %d %d %d %d %s %d %d %s %d\r",
+                "SR1:%d,%c,%d,%d,%d,%d,%d,%s,%d,%d,%s,%d\r",
                 sptr->ship[i].shipno,
                 sptr->ship[i].letter,
                 sptr->ship[i].flag,
@@ -4396,9 +4394,10 @@ int i;
 void FUNC list_planets() {
 int x, y;
 
+    prf("start planet list\r");
     getsector(&warsptr->coord);
     if( sector.numplan != 0 ){
-        prf("num type userid env res xsect ysect xcoord ycoord name\r");
+        prf("num userid env res xsect ysect xcoord ycoord name\r");
         for( plnum = 1; plnum <= sector.numplan; plnum++ ) {
             if(!getplanet(&warsptr->coord, plnum)) {
                 // result in global "planet"
@@ -4406,9 +4405,9 @@ int x, y;
                 switch( plptr->type ) {
                     case PLTYPE_PLNT:
                         prf(
-                            "%d,%d,%s,%d,%d,%d,%d,%d,%d,'%s'\r",
-                            plnum,
+                            "SP%d:%d,%s,%d,%d,%d,%d,%d,%d,'%s'\r",
                             plptr->type,
+                            plnum,
                             (plptr->userid[0] != 0) ? plptr->userid : "Unowned",
                             plptr->enviorn,
                             plptr->resource,
@@ -4422,9 +4421,9 @@ int x, y;
                     case PLTYPE_WORM:
                         memcpy(&worm, &planet, sizeof(GALWORM));
                         prf(
-                            "%d,%d,%d,%d,%d,%d,%d,'%s'\r",
-                            plnum,
+                            "SP%d:%d,%d,%d,%d,%d,%d,'%s'\r",
                             worm.type,
+                            plnum,
                             worm.visible,
                             worm.xsect,
                             worm.ysect,
@@ -4444,6 +4443,7 @@ int x, y;
     } else {
         prf("no planets in sector\r");
     }
+    prf("end planet list\r");
     outprfge(ALWAYS, usrnum);
 }
 
@@ -4452,11 +4452,10 @@ SCANTAB *sptr;
 WARSHP *wptr;
 int i, j;
 int zothusn;
-char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
+char mask[] = {"SS1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
 
     prf("start ship list\r");
-    prf("Shp ShpNo ShpNm Xsect Ysect Xcoord Ycoord Heading Speed\r");
-
+//    prf("Shp ShpNo ShpNm Xsect Ysect Xcoord Ycoord Heading Speed\r");
     /* loop through all ships */
     for(zothusn = 0; zothusn < nships; zothusn++) {
         /* get a pointer to the ship */
@@ -4477,7 +4476,8 @@ char mask[] = {"SD1:%s,%d,'%s',%d,%d,%d,%d,%s,%s\r"};
             );
         }
     }
-    prf("end ship list\r"); outprfge(ALWAYS, usrnum);
+    prf("end ship list\r");
+    outprfge(ALWAYS, usrnum);
 }
 
 void data_cmd_list_ship(void) {
@@ -4488,30 +4488,26 @@ int zothusn;
 		prfmsg(INVCMD); outprfge(ALWAYS, usrnum);
 		return;
 	}
-	//prf("In list_ship() and margv[3] is: %s\r", margv[3]);
-	//outprfge(ALWAYS, usrnum);
 
+    prf("start ship detail\r");
     /* loop through all ships */
     for(zothusn = 0; zothusn < nships; zothusn++) {
-    	// prf("zothusn = %d\r", zothusn); outprfge(ALWAYS, usrnum);
-
         /* get a pointer to the ship */
         wptr = warshpoff(zothusn);
-    	//prf("wptr->userid = %s\r", wptr->userid); outprfge(ALWAYS, usrnum);
 
         /* is this user still in the game? */
         if(ingegame(zothusn)) {
         	/* check and see if the names match */
-        	//prf("'%s' vs. '%s'\r", margv[3], wptr->userid);
-
         	if( sameas(margv[3], wptr->userid) ) {
 				/* yep let's load the sector this ship is in */
 				setsect(wptr);
 				prn_ship(wptr);
-				return;
+				break;
 			}
         }
     }
+    prf("end ship detail\r");
+    outprfge(ALWAYS, usrnum);
 }
 
 void data_cmd_a(void) {
@@ -4522,12 +4518,8 @@ void (*cmd_index[])(void) = {
     data_cmd_scan_table,
     list_planets
 };
-	//prf("In data_cmd_a() and margv[2] is: %s\r", margv[2]);
-
 	// calculate offset into the command index
 	i = *margv[2] - 'a';
-	//prf("i = %d\r", i);
-	//outprfge(ALWAYS, usrnum);
 
 	// TODO: replace lousy safety check
 	if( i >= 0 && i <= 3 ) {
