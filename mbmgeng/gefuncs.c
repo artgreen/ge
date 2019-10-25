@@ -2120,7 +2120,6 @@ char *FUNC username(WARSHP *ptr) {
 }
 
 /* data logger */
-
 void FUNC logthis(char *str) {
 FILE *hdl;
 int idate, itime;
@@ -2143,6 +2142,9 @@ char *c_date, *c_time;
     return;
 }
 
+/*
+ * Return a pointer to the user record for usrn
+ */
 WARUSR *FUNC warusroff(int usrn) {
     if (usrn >= 0 && usrn < nships)
         return ((WARUSR *) ((long) (warusr_ecl + (usrn << 3)) << 16));
@@ -2182,3 +2184,52 @@ char *FUNC showarp(double speed) {
     return (warpbuf);
 }
 
+void hexDump (const char *desc, const void *addr, const int len) {
+int i;
+unsigned char buff[17];
+const unsigned char *pc = (const unsigned char*)addr;
+
+    // Output description if given.
+    if (desc != NULL)
+        prf ("%s:\r", desc);
+
+    if (len == 0) {
+        prf("  ZERO LENGTH\r");
+    }
+    else {
+        if(len < 0) {
+            prf("  NEGATIVE LENGTH: %i\r", len);
+        } else {
+            // Process every byte in the data.
+            for (i = 0; i < len; i++) {
+                // Multiple of 16 means new line (with line offset).
+                if ((i % 16) == 0) {
+                    // Just don't print ASCII for the zeroth line.
+                    if (i != 0)
+                        prf("  %s\r", buff);
+                    // Output the offset.
+                    prf("  %04x ", i);
+                }
+
+                // Now the hex code for the specific character.
+                prf(" %02x", pc[i]);
+
+                // And store a printable ASCII character for later.
+                if (!isprint(pc[i]))
+                    buff[i % 16] = '.';
+                else
+                    buff[i % 16] = pc[i];
+                buff[(i % 16) + 1] = '\0';
+            }
+
+            // Pad out last line if not exactly 16 characters.
+            while ((i % 16) != 0) {
+                prf("   "); i++;
+            }
+
+            // And print the final ASCII bit.
+            prf("  %s\r", buff);
+        }
+    }
+    outprfge(ALWAYS, usrnum);
+}
