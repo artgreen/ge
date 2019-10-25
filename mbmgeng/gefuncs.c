@@ -2184,6 +2184,9 @@ char *FUNC showarp(double speed) {
     return (warpbuf);
 }
 
+/*
+ * 0000  00 00 00 00 05 00 03 00 71 3D 0A D7 A3 70 E5 3F  ........q=...p.?
+ */
 void hexDump (const char *desc, const void *addr, const int len) {
 int i;
 unsigned char buff[17];
