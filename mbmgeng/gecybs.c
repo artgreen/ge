@@ -352,29 +352,29 @@ void FUNC cyb_annoy(WARSHP *ptr, int usrn, int rnd, int first, int last) {
 }
 
 int FUNC cybwhoops(WARSHP *ptr, int zothusn) {
+unsigned err, i;
+err = 0;
 
-    unsigned err, i;
-    err = 0;
-
+    // TODO: Ugh, replace this
     for(i = 0; i < zothusn; ++i)
         gernd();
 
     if((gernd() % (int) (ptr->cybskill)) == 1) {
         err = 1;
-        if(gernd() % 5 == 1) {
+//        if(gernd() % 5 == 1) {
 /*		cyb_annoy(ptr,zothusn,4,CYBWOOP1,CYBWOOP4);*/
-        }
+//        }
     }
     return (err);
 }
 
 int FUNC gebemean(WARSHP *ptr, int usrn) {
 
-/* cyberquads are ALWAYS mean */
+    /* cyberquads are ALWAYS mean */
     if(isquad(ptr))
         return (1);
 
-/* if this player has accumulated 50 kills play harder */
+    /* if this player has accumulated 50 kills play harder */
     if(warusroff(usrn)->kills > CYB_BE_NICE)
         return (1);
 
@@ -386,31 +386,37 @@ int FUNC gebemean(WARSHP *ptr, int usrn) {
 
 /* countdown to database update */
 
-void FUNC db_update(WARSHP *ptr, int usrn) {
+void FUNC
+
+db_update(WARSHP *ptr, int usrn) {
     WARUSR *wuptr;
 
     if(ptr->cybupdate > 1) {
         --ptr->cybupdate;
         return;
-    } else if(ptr->cybupdate == 1) {
-        if(ptr->cybmine == 255) {
-            ptr->speed2b = rndm(d_topspeed); /* change the direction */
-            ptr->head2b = rndm(359.9);
+    } else {
+        if(ptr->cybupdate == 1) {
+            if(ptr->cybmine == 255) {
+                ptr->speed2b = rndm(d_topspeed); /* change the direction */
+                ptr->head2b = rndm(359.9);
+            }
+            ptr->cybupdate = 100 + gernd() % 100;
+            return;
+        } else {
+            if(ptr->cybupdate == 0) {
+                /* am I crazy or does this code never ever get executed???????????*/
+                wuptr = warusroff(usrn);
+                logthis(spr("GE:DBG:Cyb UUpd %s", wuptr->userid));
+                geudb(GEUPDATE, wuptr->userid, wuptr);
+                logthis(spr("GE:DBG:Cyb PUpd %s", ptr->userid));
+                gepdb(GEUPDATE, ptr->userid, ptr->shipno, ptr);
+                ptr->cybupdate = 100 + gernd() % 100;
+                return;
+            } else {
+                // TODO: log something here?
+            }
         }
-        ptr->cybupdate = 100 + gernd() % 100;
-        return;
-    } else
-/* am I crazy or does this code never ever get executed???????????*/
-    if(ptr->cybupdate == 0) {
-        wuptr = warusroff(usrn);
-        logthis(spr("GE:DBG:Cyb UUpd %s", wuptr->userid));
-        geudb(GEUPDATE, wuptr->userid, wuptr);
-        logthis(spr("GE:DBG:Cyb PUpd %s", ptr->userid));
-        gepdb(GEUPDATE, ptr->userid, ptr->shipno, ptr);
-        ptr->cybupdate = 100 + gernd() % 100;
-        return;
     }
-
     ptr->cybupdate = 20;
 }
 
