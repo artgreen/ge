@@ -2231,15 +2231,7 @@ void printmap() {
     for (i = 0; i < MAXY; ++i) {
         prf("   |");
         for (j = 0; j < MAXX; ++j) {
-            if (mapc[i][j] == '1') {
-// AG               prf(".[31m%c.[37m", map[i][j]);
-                prf("%c", map[i][j]);
-            } else if (mapc[i][j] == '2') {
-// AG               prf(".[33m%c.[37m", map[i][j]);
-                prf("%c", map[i][j]);
-            } else {
-                prf("%c", map[i][j]);
-            }
+            prf("%c", map[i][j]);
         }
         prf("|\r");
     }
@@ -3781,14 +3773,6 @@ void cmd_who() {
 }
 
 /**************************************************************************
-** reg command...                                                        **
-**************************************************************************/
-void cmd_displ() {
-    prf("REG ID:%s\rSec_code:%d\rDay:%d of %d\r",
-        stgopt(REGNO), secure->open_stat, secure->days_run, secure->days_tot); outprfge(ALWAYS, usrnum);
-}
-
-/**************************************************************************
 ** Set Command                                                           **
 **************************************************************************/
 void cmd_set() {
@@ -4255,9 +4239,12 @@ static char badteamname[] = {"Invalid Team Code"};
 void cmd_clear() {}
 
 #pragma argsused
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
 void ansifunc(int func) {
     prf("*");
 }
+#pragma clang diagnostic pop
 
 /*
   * Command group A
