@@ -2246,20 +2246,11 @@ int shp;
 int ff;
 
     ff = 0; shp = 0; sptr = &scantab[usrnum];
-
     prfmsg(PLUSFULL);
     for (i = 0; i < MAXY; ++i) {
         prf("   |");
         for (j = 0; j < MAXX; ++j) {
-            if (mapc[i][j] == '1') {
-//                prf(".[31m%c.[37m", map[i][j]);
-                prf("%c", map[i][j]);
-            } else if (mapc[i][j] == '2') {
-//                prf(".[33m%c.[37m", map[i][j]);
-                prf("%c", map[i][j]);
-            } else {
-                prf("%c", map[i][j]);
-            }
+            prf("%c", map[i][j]);
         }
         prf("| ");
         if (sptr->ship[shp].flag == 1) {
@@ -2267,12 +2258,10 @@ int ff;
             if (ff == 0) {
                 prf("  %c  %s   %4d    %4d    %s\r", sptr->ship[shp].letter, spr("%6ld", (long) (sptr->ship[shp].dist)),
                     sptr->ship[shp].bearing, sptr->ship[shp].heading, showarp(sptr->ship[shp].speed));
-
                 if (!waruptr->options[SCANNAMES])
                     shp++;
                 else
                     ff = 1;
-
             } else {
                 prf("     %s\r", username(warshpoff(othusn)));
                 shp++;
@@ -2282,7 +2271,6 @@ int ff;
             prf("                                        \r");
         }
     }
-
     prfmsg(PLUSDASH);
 }
 
@@ -2652,7 +2640,6 @@ unsigned long   i,
     left2 = plptr->items[I_TROOPS].qty;
 
     kill1 = 0;
-    kill2 = 0;
 
     /* figure out the proportion of this attack*/
     if (left2 > 0)
@@ -2789,7 +2776,6 @@ int ii;
     left2 = plptr->items[I_FIGHTER].qty;
 
     kill1 = 0;
-    kill2 = 0;
 
     /* figure out the proportion of this attack*/
     /* TODO: there is a bug here */
