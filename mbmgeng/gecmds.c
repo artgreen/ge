@@ -1179,12 +1179,14 @@ void cmd_jammer() {
     jam(warsptr, usrnum);
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+#pragma argsused
 void jam(WARSHP *ptr, int usrn) {
 WARSHP *wptr;
 int zothusn;
 double ddist;
 
-    usrn = usrn;
     for (zothusn = 0; zothusn < nships; zothusn++) {
         wptr = warshpoff(zothusn);
         ddist = cdistance(&ptr->coord, &wptr->coord);
@@ -1201,6 +1203,7 @@ double ddist;
     --ptr->items[I_JAMMERS];
     ptr->cantexit = FIRETICKS;
 }
+#pragma clang diagnostic pop
 
 /**************************************************************************
 ** Launch Zipper                                                         **
@@ -4251,6 +4254,7 @@ static char badteamname[] = {"Invalid Team Code"};
 
 void cmd_clear() {}
 
+#pragma argsused
 void ansifunc(int func) {
     prf("*");
 }
@@ -4513,7 +4517,7 @@ void data_cmd_b(void) {
  *
 */
 void cmd_data() {
-int i, j;
+int i;
 void (*cmd_index[])(void) = {
 	data_cmd_a,
 	data_cmd_b,
@@ -4580,13 +4584,11 @@ void scan_data1() {
 SCANTAB *sptr;
 WARSHP *wptr;
 int i, j;
-unsigned spd;
 char mask[] = {" %c %d %d %d %d %s %d %d %s %d/%s\r"};
 
     prf("DataScan: Range: %s\r", spr("%6ld", shipclass[warsptr->shpclass].scanrange));
     update_scantab(warsptr, usrnum);
     sptr = &scantab[usrnum];
-    spd = (unsigned) warsptr->speed;
 
     prf("Shp Xsect Ysect Xcoord Ycoord Distance Bearing Heading Speed Class\r");
     setsect(warsptr);
