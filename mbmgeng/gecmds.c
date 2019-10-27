@@ -3903,14 +3903,11 @@ char tmpbuf2[2];
         return;
     } else if (sameas(margv[1], "score")) {
         /*sort the table*/
-        highpos = 0;
-
         for (i = 0; i < MAXTEAMS; ++i) {
             teamtab[i].flag = 0; /* flag the records for sorting*/
         }
 
         /* sort the records*/
-
         for (i = 0; i < MAXTEAMS; ++i) {
             highscore = 0;
             highpos = 0;
@@ -3950,19 +3947,15 @@ char tmpbuf2[2];
                     geudb(GEUPDATE, waruptr->userid, waruptr);
 
                     /* update the team count */
-
                     teamtab[i].teamcount--;
                     if (teamtab[i].teamcount > 65000U) /* roll over */
                         teamtab[i].teamcount = 0;
-
                     /* update the disk copy of team database */
                     update_team_tab();
-
                     return;
                 }
             }
             badfmt(TEAMNOT);
-
         } else {
             badfmt(TEAMNOT);
             return;
