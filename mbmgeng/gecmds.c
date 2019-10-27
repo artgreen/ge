@@ -4264,22 +4264,10 @@ static char badteamname[] = {"Invalid Team Code"};
     return (&badteamname[0]);
 }
 
-void cmd_clear() {
-    /* ansifunc(CLEAR); outprfge(ALWAYS, usrnum); */
-}
+void cmd_clear() {}
 
 void ansifunc(int func) {
-    switch (func) {
-        case HOMEY:
-            /*prf(".[0;0H");*/
-            prf("");
-            break;
-
-        case CLEAR:
-            /*prf(".[2J");*/
-            prf("");
-            break;
-    }
+    prf("*");
 }
 
 /*
