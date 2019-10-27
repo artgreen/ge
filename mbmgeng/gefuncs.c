@@ -43,13 +43,10 @@
  ***************************************************************************/
 
 #ifdef PHARLAP
-
-                                                                                                                        #include "gcomm.h"
+#include "gcomm.h"
 #include "string.h"
 #include "stdio.h"
-
 #else
-
 #include "stdio.h"
 #include "ctype.h"
 #include "dos.h"
@@ -58,7 +55,6 @@
 #include "stdlib.h"
 #include "portable.h"
 #include "dosface.h"
-
 #endif
 
 #include "math.h"
@@ -76,9 +72,8 @@
 /**************************************************************************
 ** Look up the ships this player has                                     **
 **************************************************************************/
-
-void FUNC lookupshp() {
-    int noships, shpno;
+void lookupshp() {
+int noships, shpno;
 
 /* get the user record from GEuser.dat */
 
@@ -132,7 +127,7 @@ void FUNC lookupshp() {
 ** Toss this yokel into the arena - God rest his soul                    **
 **************************************************************************/
 
-void FUNC tossingegame() {
+void tossingegame() {
 
     if (warsptr->cloak != 10) {
         prfmsg(ANNOUN, shipclass[warsptr->shpclass].typename, warsptr->shipname);
@@ -158,7 +153,7 @@ void FUNC tossingegame() {
 ** Initialize all the ship data                                          **
 ** NOTE: waruptr MUST be set to this channel first
 **************************************************************************/
-int FUNC initshp(char *userid, int type) {
+int initshp(char *userid, int type) {
     double ddistance;
     int i, flag;
 
@@ -250,7 +245,7 @@ int FUNC initshp(char *userid, int type) {
     return (0);
 }
 
-int FUNC initusr(char *userid) {
+int initusr(char *userid) {
 
     strncpy(tmpusr.userid, userid, UIDSIZ); /* BJ CHANGED TO UIDSIZ */
     tmpusr.kills = 0;
@@ -270,7 +265,7 @@ int FUNC initusr(char *userid) {
 /**************************************************************************
 ** find and list all the ships a single user has                         **
 **************************************************************************/
-int FUNC findships() {
+int findships() {
 int found;
 SCANTAB *sptr;
 setbtv(gebb1);
@@ -312,7 +307,7 @@ setbtv(gebb1);
 /**************************************************************************
 ** Select the ship to board from the list                                **
 **************************************************************************/
-void FUNC selectship() {
+void selectship() {
     int selection;
     int shpno;
 
@@ -338,7 +333,7 @@ void FUNC selectship() {
 /**************************************************************************
 ** Repair the ship                                                       **
 **************************************************************************/
-void FUNC repairship(WARSHP *ptr, int usrn) {
+void repairship(WARSHP *ptr, int usrn) {
     if (ptr->repair > 0) {
         if (ptr->cantexit > 0) {
             prfmsg(MAINT10);
@@ -374,7 +369,7 @@ void FUNC repairship(WARSHP *ptr, int usrn) {
 ** Rotate the ship                                                       **
 **************************************************************************/
 
-void FUNC rotateship(WARSHP *ptr, int usrn) {
+void rotateship(WARSHP *ptr, int usrn) {
 int angle;
 double rotamt;
 
@@ -402,7 +397,7 @@ double rotamt;
 ** Accelerate the ship                                                   **
 **************************************************************************/
 
-void FUNC accel(WARSHP *ptr, int usrn) {
+void accel(WARSHP *ptr, int usrn) {
 int i, flag, usage;
 double absol();
 double accelrate, decelrate;
@@ -483,7 +478,7 @@ double accelrate, decelrate;
 ** Make the jump to or from hyperspace                                   **
 **************************************************************************/
 
-void FUNC hyperspace(WARSHP *ptr, int usrn, int flag) {
+void hyperspace(WARSHP *ptr, int usrn, int flag) {
 
     int i;
 
@@ -526,7 +521,7 @@ void FUNC hyperspace(WARSHP *ptr, int usrn, int flag) {
 ** Move the ship                                                         **
 **************************************************************************/
 
-void FUNC moveship(WARSHP *ptr, int usrn) {
+void moveship(WARSHP *ptr, int usrn) {
 
     COORD oldsect, newsect;
     int diff, intspeed;
@@ -669,7 +664,7 @@ void FUNC moveship(WARSHP *ptr, int usrn) {
     }
 }
 
-void FUNC telezip(WARSHP *ptr, int usrn) {
+void telezip(WARSHP *ptr, int usrn) {
 /*
 ptr->coord.xcoord       = (rndm((double)(univmax-2)))+1;
 ptr->coord.ycoord       = (rndm((double)(univmax-2)))+1;
@@ -682,7 +677,7 @@ ptr->coord.ycoord       = (rndm((double)(univmax-2)))+1;
 }
 
 
-void FUNC gravity(WARSHP *ptr, int usrn) {
+void gravity(WARSHP *ptr, int usrn) {
     int i;
     double cdistance(), cbearing();
     unsigned dist;
@@ -738,7 +733,7 @@ void FUNC gravity(WARSHP *ptr, int usrn) {
 /* If player is far from the planet they were attacking then they are not
 	being hostile */
 
-void FUNC checkdist(WARSHP *ptr, int usrn) {
+void checkdist(WARSHP *ptr, int usrn) {
     int i;
     double cdistance(), cbearing();
     unsigned dist;
@@ -757,7 +752,7 @@ void FUNC checkdist(WARSHP *ptr, int usrn) {
 }
 
 
-void FUNC refresh(WARSHP *ptr, int usrn) {
+void refresh(WARSHP *ptr, int usrn) {
     int i;
 
     COORD ss, tmpcoord;
@@ -789,7 +784,7 @@ void FUNC refresh(WARSHP *ptr, int usrn) {
 ** Check the damage and repair any - Also service weapons                **
 **************************************************************************/
 
-void FUNC checkdam(WARSHP *ptr, int usrn) {
+void checkdam(WARSHP *ptr, int usrn) {
 
     double preload;
     logthis(spr("GE:Chn %d checkdam %s", usrn, ptr->userid));
@@ -885,7 +880,7 @@ void FUNC checkdam(WARSHP *ptr, int usrn) {
     return;
 }
 
-void FUNC killem(WARSHP *ptr, int usrn) {
+void killem(WARSHP *ptr, int usrn) {
     WARSHP *wptr;
     WARUSR *wuptr;
 
@@ -1059,7 +1054,7 @@ void FUNC killem(WARSHP *ptr, int usrn) {
 /**************************************************************************
 ** Recharge energy pool                                                  **
 **************************************************************************/
-void FUNC recharge(WARSHP *ptr, int usrn) {
+void recharge(WARSHP *ptr, int usrn) {
     usrn = usrn; /* avoid the warning */
     if (ptr->energy < ENGYMAX)
         ptr->energy = ptr->energy + ENGRECHG;
@@ -1072,7 +1067,7 @@ void FUNC recharge(WARSHP *ptr, int usrn) {
 ** Check  flux status                                                  **
 **************************************************************************/
 
-void FUNC fluxstat(WARSHP *ptr, int usrn) {
+void fluxstat(WARSHP *ptr, int usrn) {
 
     if (ptr->energy < ENGYMIN) {
         if (ptr->items[I_FLUXPOD] > 0) {
@@ -1092,7 +1087,7 @@ void FUNC fluxstat(WARSHP *ptr, int usrn) {
 ** Check  shield status                                                  **
 **************************************************************************/
 
-void FUNC shieldstat(WARSHP *ptr, int usrn) {
+void shieldstat(WARSHP *ptr, int usrn) {
 
     if (ptr->shieldstat == SHIELDUP) {
         if (ptr->energy < SHMINPWR) {
@@ -1113,7 +1108,7 @@ void FUNC shieldstat(WARSHP *ptr, int usrn) {
 ** Check  cloak  status                                                  **
 **************************************************************************/
 
-void FUNC cloakstat(WARSHP *ptr, int usrn) {
+void cloakstat(WARSHP *ptr, int usrn) {
 
     if (ptr->cloak > 0) {
         if (ptr->energy < clenguse) {
@@ -1138,7 +1133,7 @@ void FUNC cloakstat(WARSHP *ptr, int usrn) {
 ** Check  mine  status                                                  **
 **************************************************************************/
 
-void FUNC checkmines() {
+void checkmines() {
     int i;
     int zothusn;            /* general purpose other-user channel number */
     WARSHP *wptr;
@@ -1243,7 +1238,7 @@ return(0);
 ** Check  for incoming torpedoes or missiles & track decoys               **
 **************************************************************************/
 
-void FUNC checktm(WARSHP *ptr, int usrn) {
+void checktm(WARSHP *ptr, int usrn) {
     int i, j, flag, power;
 
     MISSILE *mptr;
@@ -1412,7 +1407,7 @@ void FUNC checktm(WARSHP *ptr, int usrn) {
     }
 }
 
-void FUNC acctm(WARSHP *ptr, int usrn, int mt, unsigned char channel) {
+void acctm(WARSHP *ptr, int usrn, int mt, unsigned char channel) {
 
     if (channel != 255) {
         prfmsg(MTACC1 + mt, shpltr(channel, usrn), ptr->shipname);
@@ -1423,7 +1418,7 @@ void FUNC acctm(WARSHP *ptr, int usrn, int mt, unsigned char channel) {
     }
 }
 
-void FUNC cleartm(int channel) {
+void cleartm(int channel) {
     WARSHP *wptr;
     int j;
     int zothusn;
@@ -1450,7 +1445,7 @@ void FUNC cleartm(int channel) {
 ** Check if the ION cannons need to be fired                             **
 **************************************************************************/
 
-void FUNC fireion(WARSHP *ptr, int usrn) {
+void fireion(WARSHP *ptr, int usrn) {
 
     if (ptr->hostile > 1) {
         plnum = ptr->hostile - 10;
@@ -1476,7 +1471,7 @@ void FUNC fireion(WARSHP *ptr, int usrn) {
 ** Self Destruct countdown                                               **
 **************************************************************************/
 
-void FUNC destruct(WARSHP *ptr, int usrn) {
+void destruct(WARSHP *ptr, int usrn) {
     WARSHP *wptr;
     int zothusn;
     double ddist;
@@ -1544,7 +1539,7 @@ void FUNC destruct(WARSHP *ptr, int usrn) {
 /**************************************************************************
 ** Verify percent for validaty                                           **
 **************************************************************************/
-int FUNC valpcnt(char *ptr, unsigned minnum, unsigned maxnum) {
+int valpcnt(char *ptr, unsigned minnum, unsigned maxnum) {
     int val;
     char *inpptr;
 
@@ -1568,7 +1563,7 @@ int FUNC valpcnt(char *ptr, unsigned minnum, unsigned maxnum) {
 ** Verify degree for validity                                            **
 **************************************************************************/
 
-int FUNC valdegree(char *ptr) {
+int valdegree(char *ptr) {
     int val;
 
     if (strlen(ptr) != 0) {
@@ -1586,7 +1581,7 @@ int FUNC valdegree(char *ptr) {
 /**************************************************************************
 ** Assess any random damage                                              **
 **************************************************************************/
-void FUNC randamage(WARSHP *ptr, int usrn) {
+void randamage(WARSHP *ptr, int usrn) {
     int a;
 
     if (ptr->shieldtype == 20)
@@ -1669,7 +1664,7 @@ void FUNC randamage(WARSHP *ptr, int usrn) {
 /**************************************************************************
 ** Determine the damage amount                                           **
 **************************************************************************/
-unsigned FUNC pdamage(WARSHP *wptr, double dist, int foc) {
+unsigned pdamage(WARSHP *wptr, double dist, int foc) {
     double dd, fd, dp, factor, disfact;
     unsigned dam;
 
@@ -1698,7 +1693,7 @@ unsigned FUNC pdamage(WARSHP *wptr, double dist, int foc) {
 /**************************************************************************
 ** set the xsect and ysect coordinates given a ship pntr                 **
 **************************************************************************/
-void FUNC setsect(WARSHP *ptr) {
+void setsect(WARSHP *ptr) {
     xsect = coord1(ptr->coord.xcoord);
     ysect = coord1(ptr->coord.ycoord);
     xcord = coord2(ptr->coord.xcoord);
@@ -1711,7 +1706,7 @@ void FUNC setsect(WARSHP *ptr) {
 /**************************************************************************
 ** move one coord to another (direction is <-- )                **
 **************************************************************************/
-void FUNC movecoord(COORD *pointb, COORD *pointa) {
+void movecoord(COORD *pointb, COORD *pointa) {
     pointb->xcoord = pointa->xcoord;
     pointb->ycoord = pointa->ycoord;
 }
@@ -1719,7 +1714,7 @@ void FUNC movecoord(COORD *pointb, COORD *pointa) {
 /**************************************************************************
 ** Compare two coords to determine if they are equal                     **
 **************************************************************************/
-int FUNC samesect(COORD *pointb, COORD *pointa) {
+int samesect(COORD *pointb, COORD *pointa) {
     int ax, ay, bx, by;
     ax = coord1(pointa->xcoord);
     ay = coord1(pointa->ycoord);
@@ -1733,7 +1728,7 @@ int FUNC samesect(COORD *pointb, COORD *pointa) {
 /**************************************************************************
 ** genearas function. Compare for length of element 1 only                 **
 **************************************************************************/
-int FUNC genearas(char *str1, char *str2) {
+int genearas(char *str1, char *str2) {
     return (sameto(str1, str2));
 /*
 return(!strnicmp(str1,str2,strlen(str1)));
@@ -1743,7 +1738,7 @@ return(!strnicmp(str1,str2,strlen(str1)));
 /**************************************************************************
 ** MAIL functions                                                        **
 **************************************************************************/
-int FUNC mailscan(char *userid, int class) {
+int mailscan(char *userid, int class) {
 
     strncpy(mailkey.userid, userid, UIDSIZ);
     mailkey.class = class;
@@ -1794,7 +1789,7 @@ int mailread(char *userid, int class)
 }
 
 
-void FUNC mailit(int flag) {
+void mailit(int flag) {
     int i;
 
     setmbk(gemb);
@@ -1883,7 +1878,7 @@ void FUNC mailit(int flag) {
     rstmbk();
 }
 
-int FUNC sendit() {
+int sendit() {
 
 /* don't send mail to non-live players */
 
@@ -1930,7 +1925,7 @@ int FUNC sendit() {
 
 }
 
-void FUNC prf2tx(void)                /* xfer prfbuf contents to message text area */
+void prf2tx(void)                /* xfer prfbuf contents to message text area */
 {
     char *cp;
 
@@ -1948,7 +1943,7 @@ void FUNC prf2tx(void)                /* xfer prfbuf contents to message text ar
 }
 
 
-int FUNC sendgemsg(struct message *msgptr, char *usrid) {
+int sendgemsg(struct message *msgptr, char *usrid) {
 
     usrid = usrid;
 
@@ -1966,14 +1961,14 @@ int FUNC sendgemsg(struct message *msgptr, char *usrid) {
 ** Shield functions                                                      **
 **************************************************************************/
 
-void FUNC shieldup(WARSHP *wptr, int usrn) {
+void shieldup(WARSHP *wptr, int usrn) {
     prfmsg(SHLDCHP);
     outprfge(FILTER, usrn);
     wptr->shieldstat = SHIELDUP;
 }
 
 
-void FUNC shielddn(WARSHP *wptr, int usrn) {
+void shielddn(WARSHP *wptr, int usrn) {
     usrn = usrn; /* avoid the warning */
     prfmsg(SHLDDN);
     outprfge(FILTER, usrn);
@@ -1981,7 +1976,7 @@ void FUNC shielddn(WARSHP *wptr, int usrn) {
 }
 
 /* 0% to 100% damage */
-int FUNC shieldhit(WARSHP *wptr, int usrn, int dam) {
+int shieldhit(WARSHP *wptr, int usrn, int dam) {
     int knock;
 
     double dmax,
@@ -2016,7 +2011,7 @@ int FUNC shieldhit(WARSHP *wptr, int usrn, int dam) {
 }
 
 
-void FUNC shieldrep(WARSHP *wptr, int usrn) {
+void shieldrep(WARSHP *wptr, int usrn) {
     wptr->shield += (int) (wptr->shieldtype);
 
     if (wptr->shieldtype == 20)
@@ -2030,7 +2025,7 @@ void FUNC shieldrep(WARSHP *wptr, int usrn) {
     }
 }
 
-void FUNC shieldchg(WARSHP *wptr, int usrn) {
+void shieldchg(WARSHP *wptr, int usrn) {
 /*STATIC*/
     static int maxcharge;
     static int pcnt;
@@ -2061,14 +2056,14 @@ void FUNC shieldchg(WARSHP *wptr, int usrn) {
 }
 
 /* calculate the relative charge the shields are at */
-void FUNC charge(WARSHP *wptr, int *max, int *pct) {
+void charge(WARSHP *wptr, int *max, int *pct) {
     *max = 40 + (wptr->shieldtype * 10);
     *pct = (wptr->shield * 100) / (*max);
 }
 
 /* check if the goods to be added will cause wieght to be exceeded */
 
-int FUNC chkweight(WARSHP *wptr, int itm, long amt) {
+int chkweight(WARSHP *wptr, int itm, long amt) {
     int i;
     long total = 0;
 
@@ -2083,7 +2078,7 @@ int FUNC chkweight(WARSHP *wptr, int itm, long amt) {
 
 /* tell the total weight on board */
 
-long FUNC calcweight(WARSHP *wptr) {
+long calcweight(WARSHP *wptr) {
     int i;
     long total = 0;
 
@@ -2096,7 +2091,7 @@ long FUNC calcweight(WARSHP *wptr) {
 
 /* Figure the ship letter for this user */
 
-char FUNC shpltr(int usrn, int ship) {
+char shpltr(int usrn, int ship) {
     int i;
     SCANTAB *sptr;
 
@@ -2111,7 +2106,7 @@ char FUNC shpltr(int usrn, int ship) {
 
 /* return the proper name for this user given a pointer to the ship */
 
-char *FUNC username(WARSHP *ptr) {
+char *username(WARSHP *ptr) {
     if (shipclass[ptr->shpclass].max_type == CLASSTYPE_CYBORG)  /* CYBORG */
         return (ptr->shipname);
     if (shipclass[ptr->shpclass].max_type == CLASSTYPE_DROID)  /* DROID */
@@ -2120,7 +2115,7 @@ char *FUNC username(WARSHP *ptr) {
 }
 
 /* data logger */
-void FUNC logthis(char *str) {
+void logthis(char *str) {
 FILE *hdl;
 int idate, itime;
 char *c_date, *c_time;
@@ -2145,7 +2140,7 @@ char *c_date, *c_time;
 /*
  * Return a pointer to the user record for usrn
  */
-WARUSR *FUNC warusroff(int usrn) {
+WARUSR *warusroff(int usrn) {
     if (usrn >= 0 && usrn < nships)
         return ((WARUSR *) ((long) (warusr_ecl + (usrn << 3)) << 16));
     else {
@@ -2157,7 +2152,7 @@ WARUSR *FUNC warusroff(int usrn) {
 /*
  * Return a pointer to the ship owned by usrn
  */
-WARSHP *FUNC warshpoff(int usrn) {
+WARSHP *warshpoff(int usrn) {
     if (usrn >= 0 && usrn < nships)
         return ((WARSHP *) ((long) (warshp_ecl + (usrn << 3)) << 16));
     else {
@@ -2167,14 +2162,14 @@ WARSHP *FUNC warshpoff(int usrn) {
     }
 }
 
-double FUNC ton_fact(WARSHP *ptr, double damfact) {
+double ton_fact(WARSHP *ptr, double damfact) {
 double temp;
 
     temp = damfact / ((double) (shipclass[ptr->shpclass].damfact) / 100.0);
     return (temp);
 }
 
-char *FUNC showarp(double speed) {
+char *showarp(double speed) {
     if (speed == 0.0)
         sprintf(warpbuf, "0.00");
     else if ((speed / 1000.0) > 99.999)
