@@ -122,11 +122,9 @@ int noships, shpno;
     tossingegame();
 }
 
-
 /**************************************************************************
 ** Toss this yokel into the arena - God rest his soul                    **
 **************************************************************************/
-
 void tossingegame() {
 
     if (warsptr->cloak != 10) {
@@ -1051,22 +1049,24 @@ void killem(WARSHP *ptr, int usrn) {
     logthis(spr("GE:INF:%s died!", waruptr->userid));
 }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
 /**************************************************************************
 ** Recharge energy pool                                                  **
 **************************************************************************/
 void recharge(WARSHP *ptr, int usrn) {
-    usrn = usrn; /* avoid the warning */
+
     if (ptr->energy < ENGYMAX)
         ptr->energy = ptr->energy + ENGRECHG;
     else
         ptr->energy = ENGYMAX;
 }
+#pragma clang diagnostic pop
 
 
 /**************************************************************************
 ** Check  flux status                                                  **
 **************************************************************************/
-
 void fluxstat(WARSHP *ptr, int usrn) {
 
     if (ptr->energy < ENGYMIN) {
@@ -1086,7 +1086,6 @@ void fluxstat(WARSHP *ptr, int usrn) {
 /**************************************************************************
 ** Check  shield status                                                  **
 **************************************************************************/
-
 void shieldstat(WARSHP *ptr, int usrn) {
 
     if (ptr->shieldstat == SHIELDUP) {
@@ -1107,7 +1106,6 @@ void shieldstat(WARSHP *ptr, int usrn) {
 /**************************************************************************
 ** Check  cloak  status                                                  **
 **************************************************************************/
-
 void cloakstat(WARSHP *ptr, int usrn) {
 
     if (ptr->cloak > 0) {
@@ -1132,7 +1130,6 @@ void cloakstat(WARSHP *ptr, int usrn) {
 /**************************************************************************
 ** Check  mine  status                                                  **
 **************************************************************************/
-
 void checkmines() {
     int i;
     int zothusn;            /* general purpose other-user channel number */
@@ -1213,24 +1210,18 @@ printf("checking mines\r\n");*/
 /**************************************************************************
 ** Use up energy and check functions                                     **
 **************************************************************************/
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunused-parameter"
+int useenergy(WARSHP *ptr, int usrn, int amount) {
+#pragma clang diagnostic pop
 
-int FUNC
-useenergy(ptr, usrn, amount
-)
-
-WARSHP *ptr;
-int usrn, amount;
-
-{
-usrn = usrn; /* avoid the warning */
-if (ptr->energy >= amount+500) /* fudge a bit */
-{
-ptr->energy -=
-amount;
-return(1);
-}
-else
-return(0);
+    if(ptr->energy >= amount + 500) /* fudge a bit */
+    {
+        ptr->energy -=
+            amount;
+        return (1);
+    } else
+        return (0);
 }
 
 
