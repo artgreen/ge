@@ -1131,37 +1131,34 @@ void cloakstat(WARSHP *ptr, int usrn) {
 ** Check  mine  status                                                  **
 **************************************************************************/
 void checkmines() {
-    int i;
-    int zothusn;            /* general purpose other-user channel number */
-    WARSHP *wptr;
-    double ddist, cdistance(), cbearing(), damfact;
-    unsigned udist;
-    MINE *mptr;
+int i;
+int zothusn;            /* general purpose other-user channel number */
+WARSHP *wptr;
+double ddist, cdistance(), cbearing(), damfact;
+unsigned udist;
+MINE *mptr;
+
     setmbk(gemb);
-
-/*DEBUG
-printf("checking mines\r\n");*/
-
-    for (i = 0, mptr = mines; i < nummines; ++mptr, ++i) {
-        if (mptr->channel != 255)  /* if a live mine */
-        {
+    for(i = 0, mptr = mines; i < nummines; ++mptr, ++i) {
+        /* if a live mine */
+        if(mptr->channel != 255) {
             --mptr->timer;
-            if (mptr->timer % 5 == 0) {
-                for (zothusn = 0; zothusn < nships; zothusn++) {
+            if(mptr->timer % 5 == 0) {
+                for(zothusn = 0; zothusn < nships; zothusn++) {
                     wptr = warshpoff(zothusn);
-                    if (ingegame(zothusn)) {
+                    if(ingegame(zothusn)) {
                         ddist = cdistance(&mptr->coord, &wptr->coord);
                         ddist *= 10000;
                         bearing = (int) (cbearing(&wptr->coord, &mptr->coord, wptr->heading) + .5);
                         setsect(wptr);
-                        if (ddist < ((double) MINERANGE) && (xsect != 0 || ysect != 0)) {
+                        if(ddist < ((double) MINERANGE) && (xsect != 0 || ysect != 0)) {
                             udist = (unsigned) ddist;
-                            if (mptr->timer == 0) {
+                            if(mptr->timer == 0) {
                                 ddist = 1.0 - (ddist / ((double) MINERANGE));
-                                if (ddist < 0)
+                                if(ddist < 0)
                                     ddist = 0;
                                 ddist = ddist * ddist * ddist;
-                                if (wptr->shieldstat == SHIELDUP) {
+                                if(wptr->shieldstat == SHIELDUP) {
                                     damfact = (double) (ddist * minedammax);
                                     damfact = ton_fact(wptr, damfact); /* adjust for weight */
                                     damage = damfact;
@@ -1187,14 +1184,14 @@ printf("checking mines\r\n");*/
 							prf("MINE: chn # %d gets credit\r",wptr->lastfired);
 							outprfge(ALWAYS,zothusn);*/
                             } else {
-                                if (wptr->jammer == 0) {
+                                if(wptr->jammer == 0) {
                                     prfmsg(MINE6, bearing, udist);
                                     outprfge(FILTER, zothusn);
-                                    if (wptr->status == GESTAT_AUTO)
+                                    if(wptr->status == GESTAT_AUTO)
                                         wptr->minesnear = TRUE;
                                 }
                             }
-                        } else if (mptr->timer == 0 && wptr->jammer == 0) {
+                        } else if(mptr->timer == 0 && wptr->jammer == 0) {
                             prfmsg(MINE5, bearing);
                             outprfge(FILTER, zothusn);
                         }
@@ -1202,7 +1199,7 @@ printf("checking mines\r\n");*/
                 }
             }
         }
-        if (mptr->timer == 0)
+        if(mptr->timer == 0)
             mptr->channel = 255; /* stomp on it - HARD */
     }
 }
@@ -1224,30 +1221,26 @@ int useenergy(WARSHP *ptr, int usrn, int amount) {
         return (0);
 }
 
-
 /**************************************************************************
 ** Check  for incoming torpedoes or missiles & track decoys               **
 **************************************************************************/
-
 void checktm(WARSHP *ptr, int usrn) {
-    int i, j, flag, power;
+int i, j, flag, power;
+MISSILE *mptr;
+TORPEDO *tptr;
+unsigned *dptr;
+char tmpbuf[20];
+double damfact;
 
-    MISSILE *mptr;
-    TORPEDO *tptr;
-    unsigned *dptr;
-    char tmpbuf[20];
-    double damfact;
-
-/* flag hyper-phasers ready again */
+    /* flag hyper-phasers ready again */
     if (ptr->hypha > 0)
         --(ptr->hypha);
 
-/* knock down battle lock ticks */
+    /* knock down battle lock ticks */
     if (ptr->cantexit > 0)
         --(ptr->cantexit);
 
-/* torpedoes first */
-
+    /* torpedoes first */
     flag = 0;
     for (i = 0, tptr = ptr->ltorps; i < MAXTORPS; ++i, ++tptr) {
         if (tptr->distance > 1) {
