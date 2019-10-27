@@ -63,7 +63,7 @@ char droidname[UIDSIZ];
 ** Droid Init FUnction                                                   **
 **************************************************************************/
 
-void FUNC droid_init(WARSHP *ptr, int usrn, int class) {
+void droid_init(WARSHP *ptr, int usrn, int class) {
 
     if(usrn < 0 || usrn >= nships) {
         logthis(spr("DROID_INIT:bad usrn [%d]", usrn));
@@ -133,7 +133,7 @@ void FUNC droid_init(WARSHP *ptr, int usrn, int class) {
 ** Droid Lives FUnction                                                  **
 **************************************************************************/
 
-void FUNC droid_lives(WARSHP *ptr, int usrn) {
+void droid_lives(WARSHP *ptr, int usrn) {
 
     if(usrn < 0 || usrn >= nships) {
         logthis(spr("DROID_LIVES:bad usrn [%d]", usrn));
@@ -172,7 +172,7 @@ logthis(spr("GE:%s Lives",droidname)); */
 }
 
 /* ptr to sender , usrn = reciever */
-void FUNC droid_annoy(WARSHP *ptr, int usrn, int rnd, int first, int last) {
+void droid_annoy(WARSHP *ptr, int usrn, int rnd, int first, int last) {
 
     if((gernd() % rnd) == 1) {
         prfmsg(first + gernd() % (last - first + 1), ptr->shipname);
@@ -185,7 +185,7 @@ void FUNC droid_annoy(WARSHP *ptr, int usrn, int rnd, int first, int last) {
 ** Lydorian Garbage Scow 																 **
 **************************************************************************/
 
-void FUNC droid_act_class_10(WARSHP *ptr, int usrn) {
+void droid_act_class_10(WARSHP *ptr, int usrn) {
 WARSHP *wptr;
 int zothusn;
 double ddist;
@@ -221,7 +221,7 @@ double ddist;
 ** Murdonian Transport
 **************************************************************************/
 
-void FUNC droid_act_class_11(WARSHP *ptr, int usrn) {
+void droid_act_class_11(WARSHP *ptr, int usrn) {
 WARSHP *wptr;
 int zothusn;
 double ddist;
@@ -303,7 +303,7 @@ double ddist;
 ** Vakory Survey Droid 
 **************************************************************************/
 
-void FUNC droid_act_class_12(WARSHP *ptr, int usrn) {
+void droid_act_class_12(WARSHP *ptr, int usrn) {
 int i, j;
 WARSHP *wptr;
 int zothusn;
@@ -403,16 +403,16 @@ double ddist;
 
 }
 
-void FUNC droid_won(WARSHP *ptr) {
+void droid_won(WARSHP *ptr) {
     ptr->speed2b = rndm(5000.0);
 }
 
-void FUNC droid_died(WARSHP *ptr) {
+void droid_died(WARSHP *ptr) {
     ptr->status = GESTAT_AVAIL;
     logthis(spr("GE:INF:%s Died!", ptr->userid));
 }
 
-int FUNC missl_attached(WARSHP *ptr, int usrn) {
+int missl_attached(WARSHP *ptr, int usrn) {
 int i;
 MISSILE *mptr;
 

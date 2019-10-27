@@ -42,9 +42,7 @@
 #include "math.h"
 #include "portable.h"
 #include "dosface.h"
-
 #endif
-
 #include "majorbbs.h"
 #include "message.h"
 #include "gemain.h"
@@ -54,15 +52,12 @@
 #include "geglobal.h"
 
 /* LOCAL GLOBAL DEFS *****************************************************/
-
 WORMTAB wormtab[MAXPLANETS];
 int wormnum;
 
-void FUNC check_spy() {
+void check_spy() {
     int spycnt, odds, i, j;
-
     long int itemcnt;
-
     double d_itemcnt, d_rptcnt, d_odds;
 
 /* is the spy owned by the planet owner? - if so kill him */
@@ -162,7 +157,7 @@ void FUNC check_spy() {
     }
 }
 
-void FUNC multiply() {
+void multiply() {
     int i, j;
     double qty, men, rate, hrs, fact, tfact, taxfact, maxf;
     long max, cnt;
@@ -335,7 +330,7 @@ void FUNC multiply() {
 /**************************************************************************
 ** look up sector. If not fnd make one... xsect and ysect are used       **
 **************************************************************************/
-int FUNC getsector(COORD *sect) {
+int getsector(COORD *sect) {
     int i;
 
 /* I know when you look at this later Mike you will never remember why
@@ -403,7 +398,7 @@ int FUNC getsector(COORD *sect) {
     return (0);
 }
 
-int FUNC xgetsector(COORD *sect, int wormy) {
+int xgetsector(COORD *sect, int wormy) {
     int p, i, k, j;
     double ddist;
     byte tooclose;
@@ -581,7 +576,7 @@ int FUNC xgetsector(COORD *sect, int wormy) {
     return (FALSE);
 }
 
-void FUNC build_plan_1(int idx) {
+void build_plan_1(int idx) {
 
     setmem(&planet, sizeof(GALPLNT), 0);
 
@@ -644,7 +639,7 @@ void FUNC build_plan_1(int idx) {
     logthis("Zygor build first time");
 }
 
-void FUNC build_plan_2(int idx) {
+void build_plan_2(int idx) {
 
     setmem(&planet, sizeof(GALPLNT), 0);
 
@@ -683,7 +678,7 @@ void FUNC build_plan_2(int idx) {
 
 }
 
-void FUNC build_other(int idx) {
+void build_other(int idx) {
 
     setmem(&planet, sizeof(GALPLNT), 0);
 
@@ -710,7 +705,7 @@ void FUNC build_other(int idx) {
 
 }
 
-void FUNC build_worm(int idx) {
+void build_worm(int idx) {
 
     setmem(&worm, sizeof(GALWORM), 0);
 
@@ -751,7 +746,7 @@ void FUNC build_worm(int idx) {
 ** look up planet.        **
 **************************************************************************/
 
-int FUNC getplanet(COORD *sect, int plnt) {
+int getplanet(COORD *sect, int plnt) {
 
     pkey.xsect = coord1(sect->xcoord);
     pkey.ysect = coord1(sect->ycoord);
@@ -768,7 +763,7 @@ int FUNC getplanet(COORD *sect, int plnt) {
 ** is this players ship in the neutral zone ?    **
 **************************************************************************/
 
-int FUNC neutral(COORD *coord) {
+int neutral(COORD *coord) {
     xsect = coord1(coord->xcoord);
     ysect = coord1(coord->ycoord);
     return (xsect == 0 && ysect == 0);
