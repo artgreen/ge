@@ -4348,11 +4348,13 @@ int xcoord, ycoord;
                 plptr = &planet;
                 xcoord = coord2(plptr->coord.xcoord);
                 ycoord = coord2(plptr->coord.ycoord);
+                bearing = (int) (cbearing(&warsptr->coord, &plptr->coord, warsptr->heading) + .5);
+                ddistance = cdistance(&warsptr->coord, &plptr->coord) * 10000;
 
 			    switch( plptr->type ) {
                     case PLTYPE_PLNT:
                         prf(
-                            "SP%d:%d,%s,%d,%d,%d,%d,%d,%d,'%s'\r",
+                            "SP%d:%d,%s,%d,%d,%d,%d,%d,%d,%d,%s,'%s'\r",
                             plptr->type,
                             plnum,
                             (plptr->userid[0] != 0) ? plptr->userid : "Unowned",
@@ -4362,13 +4364,15 @@ int xcoord, ycoord;
                             plptr->ysect,
                             xcoord,
                             ycoord,
+                            bearing,
+                            spr("%ld", (long) ddistance),
                             (plptr->name[0] != 0) ? plptr->name : "Unnamed"
                         );
                         break;
                     case PLTYPE_WORM:
                         memcpy(&worm, &planet, sizeof(GALWORM));
                         prf(
-                            "SP%d:%d,%d,%d,%d,%d,%d,'%s'\r",
+                            "SP%d:%d,%d,%d,%d,%d,%d,%d,%s,'%s'\r",
                             worm.type,
                             plnum,
                             worm.visible,
@@ -4376,6 +4380,8 @@ int xcoord, ycoord;
                             worm.ysect,
                             xcoord,
                             ycoord,
+                            bearing,
+                            spr("%ld", (long) ddistance),
                             (worm.name[0] != 0) ? worm.name : "Unnamed"
                         );
                         break;
