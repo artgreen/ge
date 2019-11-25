@@ -4300,6 +4300,63 @@ char mask[] = {"SD1:%s,%d,'%s',%d\r"};
     outprfge(ALWAYS, usrnum);
 }
 
+void data_cmd_quick_scan(void) {
+    SCANTAB *sptr;
+    WARSHP *wptr;
+    int i, xcoord, ycoord;
+
+    prf("start quick scan\r");
+    prf("SR1:%s\r", spr("%6ld", shipclass[warsptr->shpclass].scanrange));
+    update_scantab(warsptr, usrnum);
+    sptr = &scantab[usrnum];
+
+     for (i = 0; i < NOSCANTAB; ++i) {
+        if (sptr->ship[i].flag == 1) {
+            wptr = warshpoff(sptr->ship[i].shipno);
+            setsect(wptr);
+            prf(
+                "SH:%d,'%s',%d,%d,%d,%d,%s,%d,%d,%s\r",
+                sptr->ship[i].shipno,
+                wptr->userid,
+                xsect, ysect, xcord, ycord,
+                spr("%ld", (long) (sptr->ship[i].dist)),
+                sptr->ship[i].bearing,
+                sptr->ship[i].heading,
+                showarp(sptr->ship[i].speed)
+            );
+        }
+    }
+    getsector(&warsptr->coord);
+    if( sector.numplan > 0 ) {
+        for( plnum = 1; plnum <= sector.numplan; plnum++ ) {
+            if(!getplanet(&warsptr->coord, plnum)) {
+                // result in global "planet"
+                plptr = &planet;
+                xcoord = coord2(plptr->coord.xcoord);
+                ycoord = coord2(plptr->coord.ycoord);
+                bearing = (int) (cbearing(&warsptr->coord, &plptr->coord, warsptr->heading) + .5);
+                ddistance = cdistance(&warsptr->coord, &plptr->coord) * 10000;
+
+                prf(
+                    "PL:%d:%d,%d,%d,%d,%d,%d,%s\r",
+                    plptr->type,
+                    plnum,
+                    plptr->xsect,
+                    plptr->ysect,
+                    xcoord,
+                    ycoord,
+                    bearing,
+                    spr("%ld", (long) ddistance)
+                );
+            } else {
+                prf("WARN: call to getplanet failed\r");
+            }
+        }
+    }
+    prf("end quick scan\r");
+    outprfge(ALWAYS, usrnum);
+}
+
 void data_cmd_scan_table(void) {
 SCANTAB *sptr;
 WARSHP *wptr;
@@ -4465,13 +4522,14 @@ void (*cmd_index[])(void) = {
 	list_ships,
 	data_cmd_list_ship,
     data_cmd_scan_table,
-    list_planets
+    list_planets,
+    data_cmd_quick_scan
 };
 	// calculate offset into the command index
 	i = *margv[2] - 'a';
 
 	// TODO: replace lousy safety check
-	if( i >= 0 && i <= 3 ) {
+	if( i >= 0 && i <= 4 ) {
 		(*cmd_index[i])();
 		return;
 	}
